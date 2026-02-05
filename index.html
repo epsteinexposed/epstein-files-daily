@@ -79,10 +79,11 @@
         .intro h1::after{content:'';display:block;width:80px;height:4px;background:#dc2626;margin:20px auto 0}
         .intro p{color:#525252;font-size:19px;max-width:600px;margin:0 auto;position:relative}
         .intro p strong{color:#1a1a1a;font-weight:700}
-        .redacted{position:relative;display:inline-block}
-        .redacted::before{content:'';position:absolute;top:50%;left:-4px;right:-4px;height:0.85em;background:#1a1a1a;transform:translateY(-50%);transition:transform 0.4s ease, opacity 0.4s ease}
-        .redacted:hover::before{transform:translateY(-50%) scaleX(0);opacity:0}
-        .redacted-text{position:relative;z-index:1;color:#dc2626;font-weight:800}
+        .redacted{position:relative;display:inline-block;cursor:pointer}
+        .redacted::before{content:'';position:absolute;top:50%;left:-4px;right:-4px;height:1.1em;background:#1a1a1a;transform:translateY(-50%);transition:opacity 0.4s ease;z-index:2}
+        .redacted:hover::before{opacity:0}
+        .redacted-text{color:transparent;font-weight:800;transition:color 0.4s ease}
+        .redacted:hover .redacted-text{color:#dc2626}
 
         .results-count{font-family:'Inter',sans-serif;font-size:14px;color:#6b7280;margin-bottom:24px;display:none}
         .results-count.visible{display:block}
