@@ -57,7 +57,7 @@
         .skip-link:focus{top:0}
 
         header{background:#fafafa;padding:24px 0}
-        .header-inner{max-width:720px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+        .header-inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
         .header-search{display:flex;gap:8px;flex:1;max-width:420px}
         .header-search input{flex:1;padding:10px 14px;border:1px solid #e5e5e5;border-radius:6px;font-size:14px;font-family:'Inter',sans-serif;background:#fff}
         .header-search input:focus{outline:none;border-color:#dc2626}
@@ -71,7 +71,7 @@
         .logo-text .redact-bar{height:5px;background:#dc2626;margin-top:3px;width:100%}
         .logo-text .exposed{font-family:'Courier New',monospace;font-size:10px;font-weight:700;color:#dc2626;letter-spacing:0.5px}
 
-        main{max-width:720px;margin:0 auto;padding:48px 24px}
+        main{max-width:960px;margin:0 auto;padding:48px 24px}
 
         .intro{margin-bottom:48px;padding:0}
         .intro h1{font-family:'Inter',sans-serif;font-size:36px;font-weight:800;margin-bottom:16px;letter-spacing:-0.5px;line-height:1.15}
@@ -82,7 +82,8 @@
         .results-count.visible{display:block}
 
         /* Article Preview Cards */
-        .article-preview{margin-bottom:40px;padding:24px;border-radius:12px;transition:all 0.2s ease;border:1px solid transparent}
+        .article-preview{margin-bottom:24px;padding:24px;padding-bottom:40px;border-radius:12px;transition:all 0.2s ease;border:1px solid transparent;border-bottom:1px solid #e5e5e5}
+        .article-preview:last-of-type{border-bottom:none}
         .article-preview:hover{background:#fff;border-color:#e5e5e5;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
         .article-preview.hidden{display:none}
         .article-preview.featured .article-top{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;margin-bottom:16px}
@@ -121,7 +122,7 @@
         .newsletter-form button{background:#dc2626;color:#fff;border:none;padding:12px 20px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer}
         .newsletter-form button:hover{background:#b91c1c}
 
-        footer{max-width:720px;margin:0 auto;padding:32px 24px;text-align:center}
+        footer{max-width:960px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid #e5e5e5;margin-top:24px}
         footer p{font-family:'Inter',sans-serif;color:#888;font-size:13px}
         footer a{color:#666;text-decoration:none}
         footer a:hover{color:#dc2626}
