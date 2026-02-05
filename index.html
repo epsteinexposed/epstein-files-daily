@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: https://ogp.me/ns#">
 <head>
+    <!-- Ezoic Privacy Scripts (must load first) -->
+    <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+    <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+
+    <!-- Ezoic Header Script -->
+    <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+    <script>
+        window.ezstandalone = window.ezstandalone || {};
+        ezstandalone.cmd = ezstandalone.cmd || [];
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -489,6 +500,13 @@
             // Clear filter button
             clearFromNoResults.addEventListener('click', clearFilter);
         })();
+    </script>
+
+    <!-- Ezoic Ad Display -->
+    <script>
+        ezstandalone.cmd.push(function() {
+            ezstandalone.showAds(101, 102, 103);
+        });
     </script>
 </body>
 </html>
