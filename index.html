@@ -73,10 +73,16 @@
 
         main{max-width:960px;margin:0 auto;padding:48px 24px}
 
-        .intro{margin-bottom:48px;padding:0;text-align:center}
-        .intro h1{font-family:'Inter',sans-serif;font-size:36px;font-weight:800;margin-bottom:16px;letter-spacing:-0.5px;line-height:1.15}
+        .intro{margin-bottom:48px;padding:40px 32px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;overflow:hidden}
+        .intro::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none}
+        .intro h1{font-family:'Inter',sans-serif;font-size:36px;font-weight:800;margin-bottom:16px;letter-spacing:-0.5px;line-height:1.15;position:relative}
         .intro h1::after{content:'';display:block;width:80px;height:4px;background:#dc2626;margin:20px auto 0}
-        .intro p{color:#525252;font-size:19px;max-width:600px;margin:0 auto}
+        .intro p{color:#525252;font-size:19px;max-width:600px;margin:0 auto;position:relative}
+        .intro p strong{color:#1a1a1a;font-weight:700}
+        .redacted{position:relative;display:inline-block}
+        .redacted::before{content:'';position:absolute;top:50%;left:-4px;right:-4px;height:0.85em;background:#1a1a1a;transform:translateY(-50%);transition:transform 0.4s ease, opacity 0.4s ease}
+        .redacted:hover::before{transform:translateY(-50%) scaleX(0);opacity:0}
+        .redacted-text{position:relative;z-index:1;color:#dc2626;font-weight:800}
 
         .results-count{font-family:'Inter',sans-serif;font-size:14px;color:#6b7280;margin-bottom:24px;display:none}
         .results-count.visible{display:block}
@@ -136,9 +142,11 @@
             .logo-text .redact-bar{height:5px}
             .logo-text .exposed{font-size:10px}
             main{padding:32px 16px}
+            .intro{padding:28px 20px}
             .intro h1{font-size:28px}
             .intro h1::after{width:60px;height:3px;margin-top:16px}
             .intro p{font-size:16px}
+            .redacted::before{height:0.8em}
             .header-search{max-width:100%;order:3;width:100%}
             .header-search input{flex:1;padding:12px 14px;font-size:15px}
             .header-search button{padding:12px 18px;font-size:14px}
@@ -177,8 +185,8 @@
 
     <main id="main-content" role="main">
         <header class="intro">
-            <h1>Unearthing Secrets in the Epstein Files</h1>
-            <p>The Department of Justice has released nearly 3.5 million pages of documents, 180,000 images, and 2,000 videos in compliance with the Epstein Files Transparency Act. We are going through everything with a fine tooth comb, sharing what we discover along the way. Five new insights will be published daily.</p>
+            <h1>Unearthing <span class="redacted"><span class="redacted-text">Secrets</span></span> in the Epstein Files</h1>
+            <p>The Department of Justice has released nearly <strong>3.5 million</strong> pages of documents, <strong>180,000</strong> images, and <strong>2,000</strong> videos in compliance with the Epstein Files Transparency Act. We are going through everything with a fine tooth comb, sharing what we discover along the way.</p>
         </header>
 
         <div class="results-count" id="results-count"></div>
