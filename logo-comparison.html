@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Comparison: Current vs Redacted</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #111; color: #fff; padding: 40px 20px; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 24px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 14px; }
+
+        .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1000px; margin: 0 auto; }
+        .column { background: #1a1a1a; border-radius: 16px; padding: 30px; }
+        .column h2 { text-align: center; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: #dc2626; margin-bottom: 30px; }
+
+        .logo-row { display: flex; flex-direction: column; gap: 20px; }
+        .logo-card { background: #fff; border-radius: 8px; padding: 30px; text-align: center; }
+        .logo-card.dark { background: #0f172a; }
+        .logo-card h4 { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; }
+        .logo-card.dark h4 { color: #64748b; }
+
+        .logo-container { min-height: 60px; display: flex; align-items: center; justify-content: center; }
+
+        .pros-cons { margin-top: 25px; padding-top: 20px; border-top: 1px solid #333; }
+        .pros-cons h5 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .pros-cons h5.pro { color: #22c55e; }
+        .pros-cons h5.con { color: #ef4444; margin-top: 15px; }
+        .pros-cons ul { list-style: none; font-size: 13px; color: #999; }
+        .pros-cons li { margin-bottom: 6px; padding-left: 16px; position: relative; }
+        .pros-cons li::before { content: "•"; position: absolute; left: 0; }
+
+        .header-preview { background: #fff; border-radius: 8px; overflow: hidden; margin-top: 20px; }
+        .header-bar { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+        .header-nav { display: flex; gap: 16px; }
+        .header-nav span { font-size: 12px; color: #666; }
+        .preview-body { padding: 20px; background: #fafafa; }
+        .preview-headline { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+        .preview-text { font-size: 11px; color: #666; line-height: 1.5; }
+
+        @media (max-width: 700px) {
+            .comparison { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Current Logo vs Redacted Style</h1>
+    <p class="subtitle">See how each looks across different contexts</p>
+
+    <div class="comparison">
+        <!-- Current Logo Column -->
+        <div class="column">
+            <h2>Current: EE + Magnifying Glass</h2>
+
+            <div class="logo-row">
+                <div class="logo-card">
+                    <div class="logo-container">
+                        <svg width="200" height="50" viewBox="0 0 200 50">
+                            <rect x="0" y="0" width="45" height="45" rx="7" fill="#dc2626"/>
+                            <text x="5" y="32" font-size="24" font-family="Arial,sans-serif" font-weight="bold" fill="white">EE</text>
+                            <circle cx="38" cy="36" r="8" fill="none" stroke="white" stroke-width="2.5"/>
+                            <line x1="43" y1="41" x2="49" y2="47" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                            <text x="55" y="30" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="#1a1a1a">Epstein</text>
+                            <text x="55" y="44" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#dc2626">EXPOSED</text>
+                        </svg>
+                    </div>
+                    <h4>Light Background</h4>
+                </div>
+
+                <div class="logo-card dark">
+                    <div class="logo-container">
+                        <svg width="200" height="50" viewBox="0 0 200 50">
+                            <rect x="0" y="0" width="45" height="45" rx="7" fill="#dc2626"/>
+                            <text x="5" y="32" font-size="24" font-family="Arial,sans-serif" font-weight="bold" fill="white">EE</text>
+                            <circle cx="38" cy="36" r="8" fill="none" stroke="white" stroke-width="2.5"/>
+                            <line x1="43" y1="41" x2="49" y2="47" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                            <text x="55" y="30" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="#fff">Epstein</text>
+                            <text x="55" y="44" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#dc2626">EXPOSED</text>
+                        </svg>
+                    </div>
+                    <h4>Dark Background</h4>
+                </div>
+
+                <div class="logo-card">
+                    <div class="logo-container">
+                        <svg width="50" height="50" viewBox="0 0 50 50">
+                            <rect x="0" y="0" width="50" height="50" rx="8" fill="#dc2626"/>
+                            <text x="5" y="35" font-size="26" font-family="Arial,sans-serif" font-weight="bold" fill="white">EE</text>
+                            <circle cx="42" cy="40" r="8" fill="none" stroke="white" stroke-width="2.5"/>
+                            <line x1="47" y1="45" x2="52" y2="50" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h4>Favicon / App Icon</h4>
+                </div>
+            </div>
+
+            <!-- Site Preview -->
+            <div class="header-preview">
+                <div class="header-bar">
+                    <svg width="140" height="35" viewBox="0 0 140 35">
+                        <rect x="0" y="0" width="32" height="32" rx="5" fill="#dc2626"/>
+                        <text x="4" y="22" font-size="17" font-family="Arial,sans-serif" font-weight="bold" fill="white">EE</text>
+                        <circle cx="27" cy="26" r="5" fill="none" stroke="white" stroke-width="2"/>
+                        <line x1="30" y1="29" x2="34" y2="33" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <text x="40" y="21" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#1a1a1a">Epstein Exposed</text>
+                    </svg>
+                    <div class="header-nav">
+                        <span>Home</span>
+                        <span>Archive</span>
+                        <span>About</span>
+                    </div>
+                </div>
+                <div class="preview-body">
+                    <div class="preview-headline">Commerce Secretary Lutnick Brought His Kids to Epstein's Island</div>
+                    <div class="preview-text">Howard Lutnick's story just completely fell apart with new DOJ file revelations...</div>
+                </div>
+            </div>
+
+            <div class="pros-cons">
+                <h5 class="pro">Strengths</h5>
+                <ul>
+                    <li>Investigation / journalism vibe</li>
+                    <li>Distinctive icon for social media</li>
+                    <li>Works at any size</li>
+                    <li>Already established on your site</li>
+                </ul>
+                <h5 class="con">Considerations</h5>
+                <ul>
+                    <li>More "news site" than "exposé"</li>
+                    <li>Friendly/approachable feel</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Redacted Style Column -->
+        <div class="column">
+            <h2>Redacted Style</h2>
+
+            <div class="logo-row">
+                <div class="logo-card">
+                    <div class="logo-container">
+                        <svg width="200" height="50" viewBox="0 0 200 50">
+                            <text x="0" y="32" font-family="Inter,sans-serif" font-size="26" font-weight="800" fill="#1a1a1a">EPSTEIN</text>
+                            <rect x="0" y="38" width="105" height="6" fill="#dc2626"/>
+                            <text x="112" y="43" font-family="'Courier New',monospace" font-size="9" font-weight="700" fill="#dc2626">EXPOSED</text>
+                        </svg>
+                    </div>
+                    <h4>Light Background</h4>
+                </div>
+
+                <div class="logo-card dark">
+                    <div class="logo-container">
+                        <svg width="200" height="50" viewBox="0 0 200 50">
+                            <text x="0" y="32" font-family="Inter,sans-serif" font-size="26" font-weight="800" fill="#fff">EPSTEIN</text>
+                            <rect x="0" y="38" width="105" height="6" fill="#dc2626"/>
+                            <text x="112" y="43" font-family="'Courier New',monospace" font-size="9" font-weight="700" fill="#dc2626">EXPOSED</text>
+                        </svg>
+                    </div>
+                    <h4>Dark Background</h4>
+                </div>
+
+                <div class="logo-card">
+                    <div class="logo-container">
+                        <svg width="50" height="50" viewBox="0 0 50 50">
+                            <rect x="0" y="0" width="50" height="50" rx="8" fill="#1a1a1a"/>
+                            <text x="25" y="26" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="900" fill="#fff">EE</text>
+                            <rect x="8" y="32" width="34" height="4" fill="#dc2626"/>
+                        </svg>
+                    </div>
+                    <h4>Favicon / App Icon</h4>
+                </div>
+            </div>
+
+            <!-- Site Preview -->
+            <div class="header-preview">
+                <div class="header-bar">
+                    <svg width="150" height="35" viewBox="0 0 150 35">
+                        <text x="0" y="22" font-family="Inter,sans-serif" font-size="18" font-weight="800" fill="#1a1a1a">EPSTEIN</text>
+                        <rect x="0" y="26" width="72" height="4" fill="#dc2626"/>
+                        <text x="78" y="29" font-family="'Courier New',monospace" font-size="7" font-weight="700" fill="#dc2626">EXPOSED</text>
+                    </svg>
+                    <div class="header-nav">
+                        <span>Home</span>
+                        <span>Archive</span>
+                        <span>About</span>
+                    </div>
+                </div>
+                <div class="preview-body">
+                    <div class="preview-headline">Commerce Secretary Lutnick Brought His Kids to Epstein's Island</div>
+                    <div class="preview-text">Howard Lutnick's story just completely fell apart with new DOJ file revelations...</div>
+                </div>
+            </div>
+
+            <div class="pros-cons">
+                <h5 class="pro">Strengths</h5>
+                <ul>
+                    <li>Declassified / leaked docs vibe</li>
+                    <li>More serious, hard-hitting tone</li>
+                    <li>Unique, memorable design</li>
+                    <li>Ties to the DOJ file theme</li>
+                </ul>
+                <h5 class="con">Considerations</h5>
+                <ul>
+                    <li>Less distinctive as small icon</li>
+                    <li>Requires a change from current</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
