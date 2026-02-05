@@ -83,17 +83,6 @@
         .search-bar button{background:#dc2626;color:#fff;border:none;padding:14px 24px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;transition:background 0.2s}
         .search-bar button:hover{background:#b91c1c}
 
-        .frequent-searches{font-family:'Inter',sans-serif}
-        .frequent-searches-label{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;font-weight:600}
-        .search-tags{display:flex;flex-wrap:wrap;gap:8px}
-        .search-tag{background:#f3f4f6;color:#374151;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:2px solid transparent;transition:all 0.2s;text-decoration:none}
-        .search-tag:hover{background:#e5e7eb;border-color:#d1d5db}
-        .search-tag.active{background:#dc2626;color:#fff;border-color:#dc2626}
-
-        .clear-filter{display:none;background:transparent;color:#dc2626;border:2px solid #dc2626;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-        .clear-filter:hover{background:#fef2f2}
-        .clear-filter.visible{display:inline-block}
-
         .results-count{font-family:'Inter',sans-serif;font-size:14px;color:#6b7280;margin-top:16px;display:none}
         .results-count.visible{display:block}
 
@@ -153,8 +142,6 @@
             .search-bar{flex-direction:column}
             .search-bar input{padding:12px 14px;font-size:15px}
             .search-bar button{width:100%;padding:12px}
-            .search-tags{gap:6px}
-            .search-tag{padding:6px 12px;font-size:12px}
             .article-preview h2{font-size:20px}
             .article-preview .lede{font-size:15px}
             .article-tag{padding:3px 8px;font-size:10px}
@@ -197,18 +184,6 @@
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="Search by name (e.g., Musk, Clinton, Bannon...)" aria-label="Search articles by name">
                 <button type="button" id="search-btn">Search</button>
-            </div>
-            <div class="frequent-searches">
-                <div class="frequent-searches-label">Most Searched Names</div>
-                <div class="search-tags">
-                    <button class="search-tag" data-name="trump">Trump</button>
-                    <button class="search-tag" data-name="bannon">Bannon</button>
-                    <button class="search-tag" data-name="clinton">Clinton</button>
-                    <button class="search-tag" data-name="musk">Musk</button>
-                    <button class="search-tag" data-name="bezos">Bezos</button>
-                    <button class="search-tag" data-name="gates">Gates</button>
-                    <button class="clear-filter" id="clear-filter">✕ Clear</button>
-                </div>
             </div>
             <div class="results-count" id="results-count"></div>
         </section>
@@ -308,15 +283,11 @@
         (function() {
             const searchInput = document.getElementById('search-input');
             const searchBtn = document.getElementById('search-btn');
-            const searchTags = document.querySelectorAll('.search-tag');
-            const clearFilterBtn = document.getElementById('clear-filter');
             const clearFromNoResults = document.getElementById('clear-from-no-results');
             const articles = document.querySelectorAll('.article-preview');
             const noResults = document.getElementById('no-results');
             const resultsCount = document.getElementById('results-count');
             const articleTags = document.querySelectorAll('.article-tag');
-
-            let activeFilter = '';
 
             // Handle clickable article tags
             articleTags.forEach(tag => {
@@ -325,7 +296,6 @@
                     const name = tag.textContent.toLowerCase();
                     searchInput.value = name;
                     filterArticles(name);
-                    // Update URL without reload
                     history.pushState({}, '', '?search=' + name);
                 });
             });
@@ -340,7 +310,6 @@
 
             function filterArticles(searchTerm) {
                 searchTerm = searchTerm.toLowerCase().trim();
-                activeFilter = searchTerm;
                 let visibleCount = 0;
 
                 articles.forEach(article => {
@@ -363,13 +332,11 @@
 
                 // Update UI
                 if (searchTerm) {
-                    clearFilterBtn.classList.add('visible');
                     resultsCount.classList.add('visible');
                     resultsCount.textContent = visibleCount === 1
                         ? `Showing 1 article matching "${searchTerm}"`
                         : `Showing ${visibleCount} articles matching "${searchTerm}"`;
                 } else {
-                    clearFilterBtn.classList.remove('visible');
                     resultsCount.classList.remove('visible');
                 }
 
@@ -379,15 +346,6 @@
                 } else {
                     noResults.classList.remove('visible');
                 }
-
-                // Update active tag state
-                searchTags.forEach(tag => {
-                    if (tag.dataset.name === searchTerm) {
-                        tag.classList.add('active');
-                    } else {
-                        tag.classList.remove('active');
-                    }
-                });
             }
 
             function clearFilter() {
@@ -407,17 +365,7 @@
                 }
             });
 
-            // Quick search tag clicks
-            searchTags.forEach(tag => {
-                tag.addEventListener('click', () => {
-                    const name = tag.dataset.name;
-                    searchInput.value = name;
-                    filterArticles(name);
-                });
-            });
-
-            // Clear filter buttons
-            clearFilterBtn.addEventListener('click', clearFilter);
+            // Clear filter button
             clearFromNoResults.addEventListener('click', clearFilter);
         })();
     </script>
