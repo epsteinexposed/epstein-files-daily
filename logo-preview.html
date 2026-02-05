@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Epstein Unsealed - Logo Preview</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Georgia, serif;
+            color: white;
+        }
+        .logo-container {
+            margin: 40px;
+            padding: 30px;
+            border: 1px solid #333;
+            border-radius: 10px;
+        }
+        h2 {
+            color: #d4af37;
+            margin-top: 40px;
+        }
+        .alt-logo {
+            margin: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Option 1: Broken Seal with EU</h2>
+    <div class="logo-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="400" height="160">
+            <!-- Broken Seal Circle (left half) -->
+            <path d="M 30 40 A 22 22 0 0 1 52 18 A 22 22 0 0 1 52 62 A 22 22 0 0 1 30 40"
+                  fill="none" stroke="#8B0000" stroke-width="3" stroke-dasharray="4,2"/>
+            <!-- Broken Seal Circle (right half - offset) -->
+            <path d="M 58 38 A 22 22 0 0 0 36 16 A 22 22 0 0 0 36 60 A 22 22 0 0 0 58 38"
+                  fill="none" stroke="#8B0000" stroke-width="3" stroke-dasharray="4,2"
+                  transform="translate(4, 2)"/>
+            <!-- Crack lines -->
+            <line x1="44" y1="20" x2="48" y2="35" stroke="#8B0000" stroke-width="2"/>
+            <line x1="44" y1="60" x2="50" y2="45" stroke="#8B0000" stroke-width="2"/>
+            <!-- EU Letters -->
+            <text x="47" y="48" font-family="Georgia, serif" font-size="28" font-weight="bold"
+                  fill="#d4af37" text-anchor="middle">EU</text>
+            <!-- Site name -->
+            <text x="85" y="35" font-family="Georgia, serif" font-size="16" font-weight="bold"
+                  fill="#ffffff">EPSTEIN</text>
+            <text x="85" y="55" font-family="Georgia, serif" font-size="16" font-weight="bold"
+                  fill="#d4af37">UNSEALED</text>
+        </svg>
+    </div>
+
+    <h2>Option 2: Stamp Style</h2>
+    <div class="logo-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 80" width="440" height="160">
+            <!-- Outer stamp rectangle -->
+            <rect x="10" y="10" width="200" height="60" fill="none" stroke="#8B0000" stroke-width="3" rx="5"/>
+            <!-- Inner stamp rectangle -->
+            <rect x="16" y="16" width="188" height="48" fill="none" stroke="#8B0000" stroke-width="1" rx="3"/>
+            <!-- UNSEALED text -->
+            <text x="110" y="52" font-family="Impact, sans-serif" font-size="32" fill="#8B0000"
+                  text-anchor="middle" letter-spacing="4">UNSEALED</text>
+            <!-- Epstein small text -->
+            <text x="110" y="28" font-family="Georgia, serif" font-size="12" fill="#d4af37"
+                  text-anchor="middle" letter-spacing="6">EPSTEIN</text>
+        </svg>
+    </div>
+
+    <h2>Option 3: Wax Seal Cracked</h2>
+    <div class="logo-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="480" height="160">
+            <!-- Wax seal blob shape -->
+            <ellipse cx="45" cy="40" rx="32" ry="30" fill="#8B0000"/>
+            <!-- Crack through seal -->
+            <path d="M 25 20 L 35 35 L 28 40 L 38 45 L 30 55 L 40 60"
+                  stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M 55 18 L 50 30 L 58 38 L 48 45 L 55 55 L 50 65"
+                  stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- EU in seal -->
+            <text x="45" y="48" font-family="Georgia, serif" font-size="24" font-weight="bold"
+                  fill="#d4af37" text-anchor="middle">EU</text>
+            <!-- Site name -->
+            <text x="90" y="35" font-family="Georgia, serif" font-size="18" font-weight="bold"
+                  fill="#ffffff">EPSTEIN</text>
+            <text x="90" y="57" font-family="Georgia, serif" font-size="18" font-weight="bold"
+                  fill="#d4af37">UNSEALED</text>
+        </svg>
+    </div>
+
+</body>
+</html>
