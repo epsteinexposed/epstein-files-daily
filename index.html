@@ -71,12 +71,26 @@
         .mobile-filter-toggle{display:none;background:var(--accent);color:#fff;border:none;padding:12px 20px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
 
         /* BIG BOLD LOGO */
-        .logo{display:flex;align-items:center;gap:0;text-decoration:none;background:var(--accent);padding:12px 24px;transition:background 0.2s}
+        .logo{display:flex;align-items:center;gap:0;text-decoration:none;background:var(--accent);padding:12px 24px;transition:background 0.2s;flex-shrink:0}
         .logo:hover{background:#b91c1c}
         .logo-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center}
         .logo-icon svg{width:56px;height:56px}
         .logo-text{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;color:#fff;display:flex;flex-direction:column;line-height:1;text-transform:uppercase;letter-spacing:1px}
         .logo-text .daily{font-size:14px;font-weight:600;letter-spacing:3px;opacity:0.9;margin-top:2px}
+
+        /* HEADER CENTER - SEARCH + TRENDING */
+        .header-center{flex:1;display:flex;align-items:center;gap:20px;padding:0 24px}
+        .header-search{display:flex;gap:0;max-width:320px}
+        .header-search input{flex:1;padding:10px 14px;border:none;background:#1a1a1a;color:#fff;font-size:14px;font-family:'Inter',sans-serif;min-width:180px}
+        .header-search input:focus{outline:none;background:#252525}
+        .header-search input::placeholder{color:#666}
+        .header-search button{background:#333;color:#fff;border:none;padding:10px 16px;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+        .header-search button:hover{background:var(--accent)}
+        .trending{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+        .trending-label{font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px}
+        .trending-names{display:flex;gap:8px;flex-wrap:wrap}
+        .trending-name{background:#333;color:#fff;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;border:none;font-family:'Inter',sans-serif}
+        .trending-name:hover{background:var(--accent)}
 
         /* BREAKING NEWS BAR */
         .breaking-bar{background:#1a1a1a;padding:8px 20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
@@ -193,6 +207,7 @@
             .mobile-filter-toggle{display:block}
             .logo-text{font-size:24px}
             .logo-text .daily{font-size:11px}
+            .header-center{display:none}
         }
         @media(max-width:600px){
             .logo{padding:10px 16px}
@@ -226,6 +241,21 @@
                 </div>
                 <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
             </a>
+            <div class="header-center">
+                <div class="header-search">
+                    <input type="text" id="header-search-input" placeholder="Search names..." aria-label="Search articles">
+                    <button type="button" id="header-search-btn">GO</button>
+                </div>
+                <div class="trending">
+                    <span class="trending-label">Trending:</span>
+                    <div class="trending-names">
+                        <button class="trending-name" data-name="elon musk">MUSK</button>
+                        <button class="trending-name" data-name="bill clinton">CLINTON</button>
+                        <button class="trending-name" data-name="prince andrew">PRINCE ANDREW</button>
+                        <button class="trending-name" data-name="steve bannon">BANNON</button>
+                    </div>
+                </div>
+            </div>
             <div class="header-controls">
                 <button type="button" id="mobile-filter-toggle" class="mobile-filter-toggle">☰ FILTER</button>
             </div>
@@ -551,6 +581,8 @@
 
             const searchInput = document.getElementById('search-input');
             const searchBtn = document.getElementById('search-btn');
+            const headerSearchInput = document.getElementById('header-search-input');
+            const headerSearchBtn = document.getElementById('header-search-btn');
             const clearFromNoResults = document.getElementById('clear-from-no-results');
             const clearFilterBtn = document.getElementById('clear-filter');
             const articles = document.querySelectorAll('.article-preview');
@@ -743,6 +775,41 @@
             // Clear filter buttons
             clearFromNoResults.addEventListener('click', clearFilter);
             clearFilterBtn.addEventListener('click', clearFilter);
+
+            // Header search
+            headerSearchBtn.addEventListener('click', () => {
+                const term = headerSearchInput.value;
+                searchInput.value = term;
+                filterArticles(term);
+                updateActiveTag(term);
+                if (term) history.pushState({}, '', '?search=' + encodeURIComponent(term));
+            });
+            headerSearchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const term = headerSearchInput.value;
+                    searchInput.value = term;
+                    filterArticles(term);
+                    updateActiveTag(term);
+                    if (term) history.pushState({}, '', '?search=' + encodeURIComponent(term));
+                }
+            });
+
+            // Trending name buttons
+            document.querySelectorAll('.trending-name').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const name = btn.dataset.name;
+                    searchInput.value = name;
+                    headerSearchInput.value = name;
+                    filterArticles(name);
+                    updateActiveTag(name);
+                    history.pushState({}, '', '?search=' + encodeURIComponent(name));
+                });
+            });
+
+            // Sync header search with sidebar search on load
+            if (searchParam) {
+                headerSearchInput.value = searchParam;
+            }
         })();
     </script>
 
