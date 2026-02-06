@@ -64,9 +64,10 @@ Use template from `references/article-template.html`. Elements:
 - Size: 1200x630 pixels (standard og:image size)
 - Background: Cream/off-white color (RGB: 250, 250, 247)
 - Header: Dark slate bar (RGB: 51, 65, 85) with "📁 DOJ EPSTEIN FILES — [DOC_ID].pdf"
+- **RED ACCENT BAR**: 18px wide on left side, from below header to bottom (RGB: 220, 38, 38)
 - Content: Email-style format with To/From/Date fields - LARGE text (32pt)
 - Highlight: Key damning quote with yellow background (RGB: 255, 247, 140) - LARGE bold text (38pt)
-- **INCLUDE LOGO** in bottom right corner: "EE" box + "EPSTEIN" text with red bar underneath
+- **NO LOGO** in bottom right corner
 
 **Thumbnail Code Example:**
 ```python
@@ -88,16 +89,13 @@ def create_thumbnail(filename, doc_id, to_field, from_field, date_field, highlig
     draw.rectangle([(0, 0), (1200, 50)], fill=(51, 65, 85))
     draw.text((20, 12), f"📁 DOJ EPSTEIN FILES — {doc_id}", font=font_header, fill=(255, 255, 255))
 
+    # Red accent bar on left side (below header)
+    draw.rectangle([(0, 50), (18, 630)], fill=(220, 38, 38))
+
     # Email fields (To/From/Date) - start at y=95, increment by 50
     # Yellow highlighted quote with text wrapping
 
-    # Logo in bottom right - "EE" box + "EPSTEIN" + red bar
-    logo_x = 1200 - 160
-    logo_y = 630 - 60
-    draw.rectangle([(logo_x, logo_y), (logo_x + 40, logo_y + 40)], fill=(51, 65, 85))
-    draw.text((logo_x + 8, logo_y + 6), "EE", font=font_logo, fill=(255, 255, 255))
-    draw.text((logo_x + 50, logo_y + 8), "EPSTEIN", font=font_logo, fill=(51, 65, 85))
-    draw.rectangle([(logo_x + 50, logo_y + 36), (logo_x + 140, logo_y + 42)], fill=(220, 38, 38))
+    # NO LOGO
 
     img.save(f"images/{filename}", 'PNG')
 ```
@@ -162,7 +160,7 @@ git push
 ## Summary of Key Rules
 
 1. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news (PBS, CBS, CNN, etc.)
-2. **Thumbnails**: Cream background, DOJ document style, LARGE text, EE EPSTEIN logo with red bar
+2. **Thumbnails**: Cream background, DOJ document style, LARGE text, red accent bar on left, NO logo
 3. **Tags**: Full names only (Firstname Lastname), NO company/country names
 4. **Image path**: `images/[name]-[topic].png` with cache-busting `?v=1`
 5. **og:image**: Point to `https://epstein-exposed.com/images/[thumbnail].png`
