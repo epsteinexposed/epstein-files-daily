@@ -55,8 +55,8 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a1a' rx='15' width='100' height='100'/><circle cx='42' cy='42' r='32' fill='%232a2a2a' stroke='white' stroke-width='3'/><text x='42' y='48' font-size='28' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>EF</text><rect x='18' y='52' width='48' height='6' fill='%23dc2626'/><line x1='66' y1='66' x2='88' y2='88' stroke='white' stroke-width='6' stroke-linecap='round'/></svg>">
 
     <style>
-        :root{--bg:#fafafa;--bg-card:#fff;--text:#1a1a1a;--text-muted:#525252;--text-light:#888;--border:#e5e5e5;--search-bg:#fff;--redact-bg:#1a1a1a;--tag-bg:#1e293b}
-        [data-theme="dark"]{--bg:#121212;--bg-card:#1e1e1e;--text:#e5e5e5;--text-muted:#a0a0a0;--text-light:#888;--border:#333;--search-bg:#2a2a2a;--redact-bg:#e5e5e5;--tag-bg:#374151}
+        :root{--bg:#fafafa;--bg-card:#fff;--text:#1a1a1a;--text-muted:#525252;--text-light:#888;--border:#e5e5e5;--search-bg:#fff;--redact-bg:#1a1a1a;--tag-bg:#1e293b;--sidebar-bg:#fff}
+        [data-theme="dark"]{--bg:#121212;--bg-card:#1e1e1e;--text:#e5e5e5;--text-muted:#a0a0a0;--text-light:#888;--border:#333;--search-bg:#2a2a2a;--redact-bg:#e5e5e5;--tag-bg:#374151;--sidebar-bg:#1a1a1a}
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Newsreader',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.7;transition:background 0.3s,color 0.3s}
         a{color:inherit}
@@ -65,15 +65,11 @@
         .skip-link:focus{top:0}
 
         header[role="banner"]{background:var(--bg);padding:20px 0;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border);transition:background 0.3s,border-color 0.3s}
-        .header-inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-        .header-search{display:flex;gap:10px;flex:1;max-width:560px;align-items:center}
-        .header-search input{flex:1;padding:14px 18px;border:1px solid var(--border);border-radius:8px;font-size:16px;font-family:'Inter',sans-serif;background:var(--search-bg);color:var(--text);transition:background 0.3s,border-color 0.3s,color 0.3s}
+        .header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+        .header-controls{display:flex;gap:10px;align-items:center}
         .dark-toggle{background:none;border:2px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:18px;line-height:1;transition:border-color 0.3s}
         .dark-toggle:hover{border-color:#dc2626}
-        .header-search input:focus{outline:none;border-color:#dc2626}
-        .header-search input::placeholder{color:#9ca3af}
-        .header-search button{background:#dc2626;color:#fff;border:none;padding:14px 22px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer}
-        .header-search button:hover{background:#b91c1c}
+        .mobile-filter-toggle{display:none;background:#dc2626;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer}
         .logo{display:flex;align-items:center;gap:16px;text-decoration:none}
         .logo-icon{width:68px;height:68px;background:#1a1a1a;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative}
         .logo-icon svg{width:60px;height:60px}
@@ -81,7 +77,51 @@
         .logo-text .redact-bar{height:6px;background:#dc2626;margin-top:4px;width:100%}
         .logo-text .daily{font-family:'Courier New',monospace;font-size:12px;font-weight:700;color:#dc2626;letter-spacing:0.5px}
 
-        main{max-width:960px;margin:0 auto;padding:48px 24px}
+        /* Main layout with sidebar */
+        .page-wrapper{max-width:1200px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:280px 1fr;gap:32px}
+
+        /* Sidebar styles */
+        .sidebar{position:sticky;top:100px;height:fit-content;display:flex;flex-direction:column;gap:24px}
+        .sidebar-section{background:var(--sidebar-bg);border:1px solid var(--border);border-radius:12px;padding:20px;transition:background 0.3s,border-color 0.3s}
+        .sidebar-section h3{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+        .sidebar-section h3 svg{width:16px;height:16px}
+
+        /* Sidebar search */
+        .sidebar-search{display:flex;flex-direction:column;gap:10px}
+        .sidebar-search input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-family:'Inter',sans-serif;background:var(--search-bg);color:var(--text);transition:background 0.3s,border-color 0.3s,color 0.3s}
+        .sidebar-search input:focus{outline:none;border-color:#dc2626}
+        .sidebar-search input::placeholder{color:#9ca3af}
+        .sidebar-search button{background:#dc2626;color:#fff;border:none;padding:12px 16px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;width:100%}
+        .sidebar-search button:hover{background:#b91c1c}
+
+        /* Tag filters */
+        .tag-filters{display:flex;flex-direction:column;gap:6px}
+        .tag-filter{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);transition:background 0.2s;text-decoration:none}
+        .tag-filter:hover{background:var(--bg)}
+        .tag-filter.active{background:#dc2626;color:#fff}
+        .tag-filter .count{font-size:12px;color:var(--text-light);background:var(--bg);padding:2px 8px;border-radius:10px}
+        .tag-filter.active .count{background:rgba(255,255,255,0.2);color:#fff}
+        .show-more-tags{font-family:'Inter',sans-serif;font-size:13px;color:#dc2626;background:none;border:none;cursor:pointer;padding:8px 0;font-weight:600}
+        .show-more-tags:hover{text-decoration:underline}
+        .tag-filter.hidden{display:none}
+        .clear-filter{font-family:'Inter',sans-serif;font-size:13px;color:var(--text-muted);background:none;border:none;cursor:pointer;padding:8px 12px;margin-top:8px;text-align:left}
+        .clear-filter:hover{color:#dc2626}
+
+        /* Recent articles in sidebar */
+        .recent-articles{display:flex;flex-direction:column;gap:12px}
+        .recent-article{display:block;text-decoration:none;padding:8px 0;border-bottom:1px solid var(--border)}
+        .recent-article:last-child{border-bottom:none}
+        .recent-article-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text);line-height:1.4;transition:color 0.2s}
+        .recent-article:hover .recent-article-title{color:#dc2626}
+        .recent-article-date{font-family:'Inter',sans-serif;font-size:11px;color:var(--text-light);margin-top:4px}
+
+        /* Archive links */
+        .archive-links{display:flex;flex-direction:column;gap:6px}
+        .archive-link{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);transition:background 0.2s;text-decoration:none}
+        .archive-link:hover{background:var(--bg)}
+        .archive-link .count{font-size:12px;color:var(--text-light)}
+
+        main{flex:1;min-width:0}
 
         .intro{margin-bottom:48px;padding:40px 32px;text-align:center;background:var(--bg-card);border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;overflow:hidden;transition:background 0.3s}
         .intro::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none}
@@ -146,11 +186,17 @@
         .ad-slot-size{font-size:13px;color:var(--text-muted)}
         .ad-slot.leaderboard{min-height:90px;display:flex;flex-direction:column;justify-content:center}
         .ad-slot.in-feed{min-height:120px;display:flex;flex-direction:column;justify-content:center}
-        footer{max-width:960px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid var(--border);margin-top:24px;transition:border-color 0.3s}
+        footer{max-width:1200px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid var(--border);margin-top:24px;transition:border-color 0.3s}
         footer p{font-family:'Inter',sans-serif;color:var(--text-light);font-size:13px}
         footer a{color:var(--text-muted);text-decoration:none}
         footer a:hover{color:#dc2626}
 
+        @media(max-width:900px){
+            .page-wrapper{grid-template-columns:1fr;gap:24px}
+            .sidebar{position:relative;top:0;display:none}
+            .sidebar.mobile-open{display:flex}
+            .mobile-filter-toggle{display:block}
+        }
         @media(max-width:600px){
             header[role="banner"]{padding:16px 0}
             .header-inner{padding:0 16px;gap:12px}
@@ -159,15 +205,12 @@
             .logo-text{font-size:20px}
             .logo-text .redact-bar{height:5px}
             .logo-text .daily{font-size:10px}
-            main{padding:32px 16px}
+            .page-wrapper{padding:24px 16px}
             .intro{padding:28px 20px}
             .intro h1{font-size:28px}
             .intro h1::after{width:60px;height:3px;margin-top:16px}
             .intro p{font-size:16px}
             .redacted::before{height:0.8em}
-            .header-search{max-width:100%;order:3;width:100%}
-            .header-search input{flex:1;padding:12px 14px;font-size:15px}
-            .header-search button{padding:12px 18px;font-size:14px}
             .article-preview{padding:16px;margin-bottom:24px}
             .article-preview.featured .article-top{grid-template-columns:1fr}
             .article-preview h2{font-size:22px}
@@ -183,7 +226,7 @@
 
     <header role="banner">
         <div class="header-inner">
-            <a href="index.html" class="logo" aria-label="Epstein Exposed - Home">
+            <a href="index.html" class="logo" aria-label="Epstein Files Daily - Home">
                 <div class="logo-icon" aria-hidden="true">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="42" cy="42" r="32" fill="#2a2a2a" stroke="white" stroke-width="3"/>
@@ -194,16 +237,54 @@
                 </div>
                 <span class="logo-text">EPSTEIN FILES<span class="redact-bar"></span><span class="daily">DAILY</span></span>
             </a>
-            <div class="header-search">
-                <input type="text" id="search-input" placeholder="Search by name (e.g., Musk, Clinton, Bannon...)" aria-label="Search articles">
-                <button type="button" id="search-btn">Search</button>
+            <div class="header-controls">
+                <button type="button" id="mobile-filter-toggle" class="mobile-filter-toggle">☰ Filters</button>
                 <button type="button" id="dark-toggle" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
             </div>
         </div>
     </header>
 
-    <main id="main-content" role="main">
-        <header class="intro">
+    <div class="page-wrapper">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <!-- Search Section -->
+            <div class="sidebar-section">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg> Search</h3>
+                <div class="sidebar-search">
+                    <input type="text" id="search-input" placeholder="Search names..." aria-label="Search articles">
+                    <button type="button" id="search-btn">Search</button>
+                </div>
+            </div>
+
+            <!-- Filter by Person -->
+            <div class="sidebar-section">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Filter by Person</h3>
+                <div class="tag-filters" id="tag-filters">
+                    <!-- Tags will be populated by JavaScript -->
+                </div>
+                <button class="clear-filter" id="clear-filter" style="display:none">✕ Clear filter</button>
+            </div>
+
+            <!-- Recent Articles -->
+            <div class="sidebar-section">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Recent</h3>
+                <div class="recent-articles" id="recent-articles">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Archive -->
+            <div class="sidebar-section">
+                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Archive</h3>
+                <div class="archive-links" id="archive-links">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main id="main-content" role="main">
+            <header class="intro">
             <h1>Unearthing <span class="redacted"><span class="redacted-text">the Truth</span></span> in the Epstein Files</h1>
             <p>The Department of Justice has released nearly <span class="redacted"><span class="redacted-text">3.5 million</span></span> pages of documents, <span class="redacted"><span class="redacted-text">180,000</span></span> images, and <span class="redacted"><span class="redacted-text">2,000</span></span> videos in compliance with the Epstein Files Transparency Act. We are going through everything with a fine tooth comb, sharing what we discover along the way.</p>
         </header>
@@ -465,7 +546,8 @@
                 <button type="submit">Subscribe</button>
             </form>
         </section>
-    </main>
+        </main>
+    </div><!-- end page-wrapper -->
 
     <footer role="contentinfo">
         <p>&copy; 2026 Epstein Files Daily · <a href="archive.html">Archive</a> · <a href="about.html">About</a> · <a href="privacy.html">Privacy</a></p>
@@ -498,22 +580,129 @@
                 }
             });
 
+            // Mobile filter toggle
+            const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
+            const sidebar = document.getElementById('sidebar');
+            mobileFilterToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('mobile-open');
+                mobileFilterToggle.textContent = sidebar.classList.contains('mobile-open') ? '✕ Close' : '☰ Filters';
+            });
+
             const searchInput = document.getElementById('search-input');
             const searchBtn = document.getElementById('search-btn');
             const clearFromNoResults = document.getElementById('clear-from-no-results');
+            const clearFilterBtn = document.getElementById('clear-filter');
             const articles = document.querySelectorAll('.article-preview');
             const noResults = document.getElementById('no-results');
             const resultsCount = document.getElementById('results-count');
-            const articleTags = document.querySelectorAll('.article-tag');
+            const tagFiltersContainer = document.getElementById('tag-filters');
+            const recentArticlesContainer = document.getElementById('recent-articles');
+            const archiveLinksContainer = document.getElementById('archive-links');
 
-            // Handle clickable article tags
-            articleTags.forEach(tag => {
+            // Build tag counts from articles
+            const tagCounts = {};
+            const articleData = [];
+            const monthCounts = {};
+
+            articles.forEach(article => {
+                const tags = article.dataset.tags.split(',').map(t => t.trim().toLowerCase());
+                const title = article.querySelector('h2 a').textContent;
+                const href = article.querySelector('h2 a').getAttribute('href');
+                const dateEl = article.querySelector('.article-date');
+                const dateStr = dateEl ? dateEl.getAttribute('datetime') : '';
+                const displayDate = dateEl ? dateEl.textContent : '';
+
+                // Count tags
+                tags.forEach(tag => {
+                    if (tag) {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    }
+                });
+
+                // Store article data for recent articles
+                articleData.push({ title, href, date: dateStr, displayDate });
+
+                // Count by month
+                if (dateStr) {
+                    const monthKey = dateStr.substring(0, 7); // YYYY-MM
+                    monthCounts[monthKey] = (monthCounts[monthKey] || 0) + 1;
+                }
+            });
+
+            // Sort tags by count (descending)
+            const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+            const MAX_VISIBLE_TAGS = 8;
+
+            // Render tag filters
+            sortedTags.forEach(([tag, count], index) => {
+                const tagEl = document.createElement('a');
+                tagEl.href = '#';
+                tagEl.className = 'tag-filter' + (index >= MAX_VISIBLE_TAGS ? ' hidden' : '');
+                tagEl.dataset.tag = tag;
+                const displayName = tag.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                tagEl.innerHTML = `<span>${displayName}</span><span class="count">${count}</span>`;
+                tagEl.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    searchInput.value = tag;
+                    filterArticles(tag);
+                    updateActiveTag(tag);
+                    history.pushState({}, '', '?search=' + encodeURIComponent(tag));
+                });
+                tagFiltersContainer.appendChild(tagEl);
+            });
+
+            // Add "Show more" button if needed
+            if (sortedTags.length > MAX_VISIBLE_TAGS) {
+                const showMoreBtn = document.createElement('button');
+                showMoreBtn.className = 'show-more-tags';
+                showMoreBtn.textContent = `Show ${sortedTags.length - MAX_VISIBLE_TAGS} more`;
+                showMoreBtn.addEventListener('click', () => {
+                    document.querySelectorAll('.tag-filter.hidden').forEach(el => el.classList.remove('hidden'));
+                    showMoreBtn.style.display = 'none';
+                });
+                tagFiltersContainer.appendChild(showMoreBtn);
+            }
+
+            // Update active tag styling
+            function updateActiveTag(activeTag) {
+                document.querySelectorAll('.tag-filter').forEach(el => {
+                    el.classList.toggle('active', el.dataset.tag === activeTag.toLowerCase());
+                });
+                clearFilterBtn.style.display = activeTag ? 'block' : 'none';
+            }
+
+            // Render recent articles (top 5)
+            articleData.slice(0, 5).forEach(article => {
+                const el = document.createElement('a');
+                el.href = article.href;
+                el.className = 'recent-article';
+                el.innerHTML = `<div class="recent-article-title">${article.title.length > 60 ? article.title.substring(0, 60) + '...' : article.title}</div><div class="recent-article-date">${article.displayDate}</div>`;
+                recentArticlesContainer.appendChild(el);
+            });
+
+            // Render archive links
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            Object.entries(monthCounts)
+                .sort((a, b) => b[0].localeCompare(a[0])) // Sort newest first
+                .forEach(([monthKey, count]) => {
+                    const [year, month] = monthKey.split('-');
+                    const monthName = monthNames[parseInt(month) - 1];
+                    const el = document.createElement('a');
+                    el.href = `archive.html?month=${monthKey}`;
+                    el.className = 'archive-link';
+                    el.innerHTML = `<span>${monthName} ${year}</span><span class="count">${count}</span>`;
+                    archiveLinksContainer.appendChild(el);
+                });
+
+            // Handle clickable article tags in main content
+            document.querySelectorAll('.article-tag').forEach(tag => {
                 tag.addEventListener('click', (e) => {
                     e.preventDefault();
                     const name = tag.textContent.toLowerCase();
                     searchInput.value = name;
                     filterArticles(name);
-                    history.pushState({}, '', '?search=' + name);
+                    updateActiveTag(name);
+                    history.pushState({}, '', '?search=' + encodeURIComponent(name));
                 });
             });
 
@@ -523,6 +712,7 @@
             if (searchParam) {
                 searchInput.value = searchParam;
                 filterArticles(searchParam);
+                updateActiveTag(searchParam);
             }
 
             function filterArticles(searchTerm) {
@@ -568,22 +758,27 @@
             function clearFilter() {
                 searchInput.value = '';
                 filterArticles('');
+                updateActiveTag('');
+                history.pushState({}, '', window.location.pathname);
             }
 
             // Search button click
             searchBtn.addEventListener('click', () => {
                 filterArticles(searchInput.value);
+                updateActiveTag(searchInput.value);
             });
 
             // Enter key in search input
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     filterArticles(searchInput.value);
+                    updateActiveTag(searchInput.value);
                 }
             });
 
-            // Clear filter button
+            // Clear filter buttons
             clearFromNoResults.addEventListener('click', clearFilter);
+            clearFilterBtn.addEventListener('click', clearFilter);
         })();
     </script>
 
