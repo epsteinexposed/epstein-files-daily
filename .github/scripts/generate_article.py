@@ -439,6 +439,15 @@ def main():
     # Update covered topics
     update_covered_topics(article_data)
 
+    # Save article info for Twitter bot
+    latest_info = {
+        "headline": article_data['headline'],
+        "slug": article_data['slug'],
+        "date": article_data['date_iso']
+    }
+    write_file('latest_article.json', json.dumps(latest_info))
+    print("Saved latest_article.json for Twitter bot")
+
     print("\n✅ Article generation complete!")
 
 if __name__ == "__main__":
