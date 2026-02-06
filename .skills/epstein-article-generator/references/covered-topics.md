@@ -4,6 +4,14 @@ Articles already published on Epstein Exposed. **DO NOT repeat these stories.**
 
 ## Published Articles
 
+### 13. LeonBlack - Apollo CEO Leon Black Paid Epstein $158 Million fo...
+- **File:** `leon-black-apollo-payments.html`
+- **Headline:** Apollo CEO Leon Black Paid Epstein $158 Million for 'Tax Advice' - DOJ Files Reveal Shocking Details
+- **Published:** February 06, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
 ### 1. Elon Musk - Emails requesting party invites
 - **File:** `musk-epstein-emails.html`
 - **Headline:** "What Day Will Be the Wildest Party?" Elon Musk's Desperate Texts to Epstein Exposed
