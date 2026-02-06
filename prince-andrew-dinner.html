@@ -26,6 +26,30 @@
 
         <style>
         :root{--bg:#1f1f1f;--bg-card:#252525;--text:#fff;--text-muted:#b0b0b0;--text-light:#777;--border:#333;--accent:#dc2626}
+        /* Light mode theme */
+        html.light-mode{--bg:#f5f5f5;--bg-card:#fff;--text:#1a1a1a;--text-muted:#555;--text-light:#777;--border:#ddd}
+        html.light-mode header{background:#fff}
+        html.light-mode .header-search input{background:#f0f0f0;color:#1a1a1a}
+        html.light-mode .header-search input:focus{background:#fff}
+        html.light-mode .header-search input::placeholder{color:#888}
+        html.light-mode .pull-quote{background:#fff}
+        html.light-mode .response-box{background:#fff}
+        html.light-mode .source-box{background:#f0f0f0}
+        html.light-mode .share-section{background:#fff}
+        html.light-mode footer{background:#fff}
+        html.light-mode .theme-toggle{background:#e0e0e0;color:#1a1a1a}
+
+        /* Header controls */
+        .header-controls{display:flex;align-items:center;gap:12px}
+        .header-search{display:flex;gap:0}
+        .header-search input{padding:8px 12px;border:none;background:#1a1a1a;color:#fff;font-size:13px;font-family:'Inter',sans-serif;width:200px}
+        .header-search input:focus{outline:none;background:#252525}
+        .header-search input::placeholder{color:#666}
+        .header-search button{background:#333;color:#fff;border:none;padding:8px 14px;font-family:'Inter',sans-serif;font-weight:700;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+        .header-search button:hover{background:var(--accent)}
+        .theme-toggle{background:#333;color:#fff;border:none;padding:8px 12px;font-family:'Inter',sans-serif;font-weight:600;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.2s}
+        .theme-toggle:hover{background:var(--accent)}
+        .theme-toggle svg{width:14px;height:14px}
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
         a{color:inherit}
@@ -112,6 +136,8 @@
         footer a:hover{color:var(--accent)}
 
         @media(max-width:600px){
+            .header-controls{flex-wrap:wrap;gap:8px}
+            .header-search input{width:140px}
             article.article h1{font-size:26px}
             article.article .lede{font-size:16px}
             .logo{padding:10px 16px;margin-left:-16px}
@@ -133,7 +159,7 @@
     </style>
 </head>
 <body>
-        <header>
+            <header>
         <div class="header-inner">
             <a href="index.html" class="logo">
                 <div class="logo-icon">
@@ -146,10 +172,17 @@
                 </div>
                 <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
             </a>
-            <nav>
-                <a href="index.html">Home</a>
-                <a href="archive.html">Archive</a>
-            </nav>
+            <div class="header-controls">
+                <form class="header-search" action="index.html" method="get">
+                    <input type="text" name="search" placeholder="Search names..." aria-label="Search articles">
+                    <button type="submit">GO</button>
+                </form>
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark mode">
+                    <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <span id="theme-text">LIGHT</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -258,6 +291,34 @@
         <footer>
         <p>&copy; 2026 Epstein Files Daily · <a href="archive.html">Archive</a> · <a href="privacy.html">Privacy</a></p>
     </footer>
+
+
+    <script>
+        (function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeText = document.getElementById('theme-text');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const html = document.documentElement;
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                html.classList.add('light-mode');
+                themeText.textContent = 'DARK';
+                themeIconDark.style.display = 'none';
+                themeIconLight.style.display = 'block';
+            }
+
+            themeToggle.addEventListener('click', () => {
+                html.classList.toggle('light-mode');
+                const isLight = html.classList.contains('light-mode');
+                themeText.textContent = isLight ? 'DARK' : 'LIGHT';
+                themeIconDark.style.display = isLight ? 'none' : 'block';
+                themeIconLight.style.display = isLight ? 'block' : 'none';
+                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            });
+        })();
+    </script>
 
 </body>
 </html>
