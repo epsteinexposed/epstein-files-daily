@@ -49,173 +49,162 @@
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a1a' rx='15' width='100' height='100'/><circle cx='42' cy='42' r='32' fill='%232a2a2a' stroke='white' stroke-width='3'/><text x='42' y='48' font-size='28' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>EF</text><rect x='18' y='52' width='48' height='6' fill='%23dc2626'/><line x1='66' y1='66' x2='88' y2='88' stroke='white' stroke-width='6' stroke-linecap='round'/></svg>">
 
     <style>
-        :root{--bg:#fafafa;--bg-card:#fff;--text:#1a1a1a;--text-muted:#525252;--text-light:#888;--border:#e5e5e5;--search-bg:#fff;--redact-bg:#1a1a1a;--tag-bg:#1e293b;--sidebar-bg:#fff}
-        [data-theme="dark"]{--bg:#121212;--bg-card:#1e1e1e;--text:#e5e5e5;--text-muted:#a0a0a0;--text-light:#888;--border:#333;--search-bg:#2a2a2a;--redact-bg:#e5e5e5;--tag-bg:#374151;--sidebar-bg:#1a1a1a}
+        :root{--bg:#0a0a0a;--bg-card:#141414;--text:#fff;--text-muted:#a0a0a0;--text-light:#666;--border:#2a2a2a;--search-bg:#1a1a1a;--tag-bg:#dc2626;--sidebar-bg:#0f0f0f;--accent:#dc2626}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Newsreader',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.7;transition:background 0.3s,color 0.3s}
-        a{color:inherit}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+        a{color:inherit;text-decoration:none}
 
-        .skip-link{position:absolute;top:-40px;left:0;background:#dc2626;color:#fff;padding:8px 16px;z-index:100;font-family:'Inter',sans-serif;font-size:14px;text-decoration:none}
+        .skip-link{position:absolute;top:-40px;left:0;background:#dc2626;color:#fff;padding:8px 16px;z-index:100;font-size:14px}
         .skip-link:focus{top:0}
 
-        header[role="banner"]{background:var(--bg);padding:20px 0;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border);transition:background 0.3s,border-color 0.3s}
-        .header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-        .header-controls{display:flex;gap:10px;align-items:center}
-        .dark-toggle{background:none;border:2px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:18px;line-height:1;transition:border-color 0.3s}
-        .dark-toggle:hover{border-color:#dc2626}
-        .mobile-filter-toggle{display:none;background:#dc2626;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer}
-        .logo{display:flex;align-items:center;gap:16px;text-decoration:none}
-        .logo-icon{width:68px;height:68px;background:#1a1a1a;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative}
-        .logo-icon svg{width:60px;height:60px}
-        .logo-text{font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:var(--text);display:flex;flex-direction:column;line-height:1.1;transition:color 0.3s}
-        .logo-text .redact-bar{height:6px;background:#dc2626;margin-top:4px;width:100%}
-        .logo-text .daily{font-family:'Courier New',monospace;font-size:12px;font-weight:700;color:#dc2626;letter-spacing:0.5px}
+        /* BOLD HEADER */
+        header[role="banner"]{background:#000;border-bottom:4px solid var(--accent);position:sticky;top:0;z-index:100}
+        .header-inner{display:flex;align-items:center;justify-content:space-between;padding:0 0 0 0}
+        .header-controls{display:flex;gap:8px;align-items:center;padding-right:20px}
+        .dark-toggle{display:none}
+        .mobile-filter-toggle{display:none;background:var(--accent);color:#fff;border:none;padding:12px 20px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
 
-        /* Main layout with sidebar */
-        .page-wrapper{max-width:1200px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:280px 1fr;gap:32px}
+        /* BIG BOLD LOGO */
+        .logo{display:flex;align-items:center;gap:0;text-decoration:none;background:var(--accent);padding:12px 24px;transition:background 0.2s}
+        .logo:hover{background:#b91c1c}
+        .logo-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center}
+        .logo-icon svg{width:56px;height:56px}
+        .logo-text{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;color:#fff;display:flex;flex-direction:column;line-height:1;text-transform:uppercase;letter-spacing:1px}
+        .logo-text .daily{font-size:14px;font-weight:600;letter-spacing:3px;opacity:0.9;margin-top:2px}
 
-        /* Sidebar styles */
-        .sidebar{position:sticky;top:100px;height:fit-content;display:flex;flex-direction:column;gap:24px}
-        .sidebar-section{background:var(--sidebar-bg);border:1px solid var(--border);border-radius:12px;padding:20px;transition:background 0.3s,border-color 0.3s}
-        .sidebar-section h3{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-        .sidebar-section h3 svg{width:16px;height:16px}
+        /* BREAKING NEWS BAR */
+        .breaking-bar{background:#1a1a1a;padding:8px 20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+        .breaking-label{background:var(--accent);color:#fff;padding:4px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;animation:pulse 2s infinite}
+        .breaking-text{color:var(--text-muted)}
+        .breaking-text strong{color:#fff}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
 
-        /* Sidebar search */
-        .sidebar-search{display:flex;flex-direction:column;gap:10px}
-        .sidebar-search input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-family:'Inter',sans-serif;background:var(--search-bg);color:var(--text);transition:background 0.3s,border-color 0.3s,color 0.3s}
-        .sidebar-search input:focus{outline:none;border-color:#dc2626}
-        .sidebar-search input::placeholder{color:#9ca3af}
-        .sidebar-search button{background:#dc2626;color:#fff;border:none;padding:12px 16px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;width:100%}
+        /* FULL-WIDTH LAYOUT */
+        .page-wrapper{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 80px)}
+
+        /* DARK SIDEBAR - EDGE TO EDGE */
+        .sidebar{background:var(--sidebar-bg);border-right:1px solid var(--border);padding:0;display:flex;flex-direction:column}
+        .sidebar-section{padding:16px 20px;border-bottom:1px solid var(--border)}
+        .sidebar-section:last-child{border-bottom:none}
+        .sidebar-section h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+        .sidebar-section h3 svg{width:14px;height:14px}
+
+        /* SIDEBAR SEARCH */
+        .sidebar-search{display:flex;flex-direction:column;gap:8px}
+        .sidebar-search input{width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--search-bg);color:var(--text);font-size:14px;font-family:'Inter',sans-serif}
+        .sidebar-search input:focus{outline:none;border-color:var(--accent)}
+        .sidebar-search input::placeholder{color:#555}
+        .sidebar-search button{background:var(--accent);color:#fff;border:none;padding:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
         .sidebar-search button:hover{background:#b91c1c}
 
-        /* Tag filters */
-        .tag-filters{display:flex;flex-direction:column;gap:6px}
-        .tag-filter{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);transition:background 0.2s;text-decoration:none}
-        .tag-filter:hover{background:var(--bg)}
-        .tag-filter.active{background:#dc2626;color:#fff}
-        .tag-filter .count{font-size:12px;color:var(--text-light);background:var(--bg);padding:2px 8px;border-radius:10px}
-        .tag-filter.active .count{background:rgba(255,255,255,0.2);color:#fff}
-        .show-more-tags{font-family:'Inter',sans-serif;font-size:13px;color:#dc2626;background:none;border:none;cursor:pointer;padding:8px 0;font-weight:600}
+        /* TAG FILTERS */
+        .tag-filters{display:flex;flex-direction:column;gap:2px}
+        .tag-filter{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text-muted);transition:all 0.15s;border-left:3px solid transparent}
+        .tag-filter:hover{background:#1a1a1a;color:#fff;border-left-color:var(--accent)}
+        .tag-filter.active{background:var(--accent);color:#fff;border-left-color:var(--accent)}
+        .tag-filter .count{font-size:11px;color:#555;background:#1a1a1a;padding:2px 6px}
+        .tag-filter.active .count{background:rgba(0,0,0,0.3);color:#fff}
+        .show-more-tags{font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;padding:8px 10px;font-weight:600;text-align:left}
         .show-more-tags:hover{text-decoration:underline}
         .tag-filter.hidden{display:none}
-        .clear-filter{font-family:'Inter',sans-serif;font-size:13px;color:var(--text-muted);background:none;border:none;cursor:pointer;padding:8px 12px;margin-top:8px;text-align:left}
-        .clear-filter:hover{color:#dc2626}
+        .clear-filter{font-size:12px;color:var(--text-muted);background:none;border:none;cursor:pointer;padding:8px 10px;text-align:left}
+        .clear-filter:hover{color:var(--accent)}
 
-        /* Recent articles in sidebar */
-        .recent-articles{display:flex;flex-direction:column;gap:12px}
-        .recent-article{display:block;text-decoration:none;padding:8px 0;border-bottom:1px solid var(--border)}
+        /* RECENT ARTICLES */
+        .recent-articles{display:flex;flex-direction:column;gap:0}
+        .recent-article{display:block;padding:10px 0;border-bottom:1px solid var(--border)}
         .recent-article:last-child{border-bottom:none}
-        .recent-article-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text);line-height:1.4;transition:color 0.2s}
-        .recent-article:hover .recent-article-title{color:#dc2626}
-        .recent-article-date{font-family:'Inter',sans-serif;font-size:11px;color:var(--text-light);margin-top:4px}
+        .recent-article-title{font-size:12px;font-weight:600;color:var(--text-muted);line-height:1.4;transition:color 0.15s}
+        .recent-article:hover .recent-article-title{color:var(--accent)}
+        .recent-article-date{font-size:10px;color:#555;margin-top:4px}
 
-        /* Archive links */
-        .archive-links{display:flex;flex-direction:column;gap:6px}
-        .archive-link{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);transition:background 0.2s;text-decoration:none}
-        .archive-link:hover{background:var(--bg)}
-        .archive-link .count{font-size:12px;color:var(--text-light)}
+        /* ARCHIVE LINKS */
+        .archive-links{display:flex;flex-direction:column;gap:2px}
+        .archive-link{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;font-size:13px;color:var(--text-muted);transition:all 0.15s;border-left:3px solid transparent}
+        .archive-link:hover{background:#1a1a1a;color:#fff;border-left-color:var(--accent)}
+        .archive-link .count{font-size:11px;color:#555}
 
-        main{flex:1;min-width:0}
+        /* MAIN CONTENT */
+        main{padding:0;background:var(--bg)}
 
-        .intro{margin-bottom:48px;padding:40px 32px;text-align:center;background:var(--bg-card);border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;overflow:hidden;transition:background 0.3s}
-        .intro::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none}
-        .intro h1{font-family:'Inter',sans-serif;font-size:36px;font-weight:800;margin-bottom:16px;letter-spacing:-0.5px;line-height:1.15;position:relative}
-        .intro h1::after{content:'';display:block;width:80px;height:4px;background:#dc2626;margin:20px auto 0}
-        .intro p{color:var(--text-muted);font-size:19px;max-width:600px;margin:0 auto;position:relative;transition:color 0.3s}
-        .intro p strong{color:var(--text);font-weight:700}
-        .redacted{position:relative;display:inline-block;cursor:pointer}
-        .redacted::before{content:'';position:absolute;top:50%;left:-4px;right:-4px;height:1.1em;background:var(--redact-bg);transform:translateY(-50%);transition:opacity 0.4s ease,background 0.3s;z-index:2}
-        .redacted:hover::before{opacity:0}
-        .redacted-text{color:transparent;font-weight:800;transition:color 0.4s ease}
-        .redacted:hover .redacted-text{color:#dc2626}
-
-        .results-count{font-family:'Inter',sans-serif;font-size:14px;color:#6b7280;margin-bottom:24px;display:none}
+        .results-count{font-size:13px;color:var(--text-muted);padding:16px 24px;background:#111;border-bottom:1px solid var(--border);display:none}
         .results-count.visible{display:block}
 
-        /* Article Preview Cards */
-        .article-preview{margin-bottom:24px;padding:24px;padding-bottom:40px;border-radius:12px;transition:all 0.2s ease;border:1px solid transparent;border-bottom:1px solid var(--border)}
-        .article-preview:last-of-type{border-bottom:none}
-        .article-preview:hover{background:var(--bg-card);border-color:var(--border);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+        /* ARTICLE CARDS - TABLOID STYLE */
+        #articles-container{display:flex;flex-direction:column}
+        .article-preview{padding:20px 24px;border-bottom:1px solid var(--border);transition:background 0.15s}
+        .article-preview:hover{background:#111}
         .article-preview.hidden{display:none}
-        .article-preview.featured .article-top{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;margin-bottom:16px}
-        .article-preview .article-thumb{width:100%;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:transform 0.2s ease}
-        .article-preview:hover .article-thumb{transform:scale(1.02)}
-        .article-preview .article-thumb img{width:100%;height:auto;display:block}
-        .article-preview .article-content{flex:1}
+        .article-preview.featured .article-top{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
+        .article-preview .article-thumb{width:100%;overflow:hidden;border:2px solid var(--border)}
+        .article-preview:hover .article-thumb{border-color:var(--accent)}
+        .article-preview .article-thumb img{width:100%;height:auto;display:block;transition:transform 0.3s}
+        .article-preview:hover .article-thumb img{transform:scale(1.03)}
 
-        .article-meta{font-family:'Inter',sans-serif;font-size:12px;color:var(--text-light);margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-        .article-tags{display:flex;flex-wrap:wrap;gap:6px}
-        .article-tag{background:var(--tag-bg);color:#fff;padding:4px 12px;border-radius:4px;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.3px;text-decoration:none;transition:background 0.2s}
-        .article-tag:hover{background:#dc2626}
+        .article-meta{font-size:11px;color:var(--text-light);margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+        .article-tags{display:flex;flex-wrap:wrap;gap:4px}
+        .article-tag{background:var(--accent);color:#fff;padding:3px 8px;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px}
+        .article-tag:hover{background:#b91c1c}
         .article-date{color:var(--text-light)}
         .reading-time{color:var(--text-light)}
 
-        .article-preview h2{font-family:'Inter',sans-serif;font-size:28px;font-weight:800;line-height:1.2;margin-bottom:14px;letter-spacing:-.3px}
-        .article-preview h2 a{text-decoration:none;color:var(--text);transition:color 0.3s}
-        .article-preview h2 a:hover{color:#dc2626}
+        .article-preview h2{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;line-height:1.15;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
+        .article-preview h2 a{color:var(--text);transition:color 0.15s}
+        .article-preview h2 a:hover{color:var(--accent)}
 
-        .article-preview .lede{font-size:19px;color:var(--text-muted);margin-bottom:18px;line-height:1.65;transition:color 0.3s}
+        .article-preview .lede{font-size:15px;color:var(--text-muted);margin-bottom:12px;line-height:1.5}
 
-        .read-more{font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:#dc2626;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-        .read-more:hover{color:#b91c1c}
+        .read-more{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;display:inline-flex;align-items:center;gap:6px}
+        .read-more:hover{color:#fff}
         .read-more::after{content:'→';transition:transform 0.2s}
-        .read-more:hover::after{transform:translateX(3px)}
+        .read-more:hover::after{transform:translateX(4px)}
 
-        .no-results{display:none;text-align:center;padding:60px 20px;font-family:'Inter',sans-serif}
+        .no-results{display:none;text-align:center;padding:60px 20px}
         .no-results.visible{display:block}
-        .no-results h3{font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px}
-        .no-results p{color:var(--text-muted);font-size:15px}
+        .no-results h3{font-size:20px;font-weight:700;margin-bottom:8px}
+        .no-results p{color:var(--text-muted);font-size:14px}
 
-        .newsletter{background:#1a1a1a;border-radius:8px;padding:32px;margin-top:48px;text-align:center}
-        .newsletter h3{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px;color:#fff}
-        .newsletter p{color:#999;font-size:15px;margin-bottom:20px}
-        .newsletter-form{display:flex;gap:10px;max-width:400px;margin:0 auto}
-        .newsletter-form input{flex:1;padding:12px 14px;border:none;border-radius:6px;font-size:15px}
-        .newsletter-form button{background:#dc2626;color:#fff;border:none;padding:12px 20px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer}
-        .newsletter-form button:hover{background:#b91c1c}
+        /* NEWSLETTER - BOLD */
+        .newsletter{background:var(--accent);padding:32px 24px;text-align:center}
+        .newsletter h3{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px;color:#fff;text-transform:uppercase;letter-spacing:1px}
+        .newsletter p{color:rgba(255,255,255,0.8);font-size:14px;margin-bottom:16px}
+        .newsletter-form{display:flex;gap:0;max-width:500px;margin:0 auto}
+        .newsletter-form input{flex:1;padding:14px 16px;border:none;font-size:15px;background:#fff}
+        .newsletter-form button{background:#000;color:#fff;border:none;padding:14px 24px;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+        .newsletter-form button:hover{background:#222}
 
-        /* Ad Placeholders */
-        .ad-slot{background:var(--bg-card);border:2px dashed var(--border);border-radius:8px;padding:20px;margin:32px 0;text-align:center;font-family:'Inter',sans-serif;transition:background 0.3s,border-color 0.3s}
-        .ad-slot-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:8px}
-        .ad-slot-size{font-size:13px;color:var(--text-muted)}
-        .ad-slot.leaderboard{min-height:90px;display:flex;flex-direction:column;justify-content:center}
-        .ad-slot.in-feed{min-height:120px;display:flex;flex-direction:column;justify-content:center}
-        footer{max-width:1200px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid var(--border);margin-top:24px;transition:border-color 0.3s}
-        footer p{font-family:'Inter',sans-serif;color:var(--text-light);font-size:13px}
-        footer a{color:var(--text-muted);text-decoration:none}
-        footer a:hover{color:#dc2626}
+        /* FOOTER */
+        footer{background:#000;padding:24px;text-align:center;border-top:1px solid var(--border)}
+        footer p{color:var(--text-light);font-size:12px}
+        footer a{color:var(--text-muted)}
+        footer a:hover{color:var(--accent)}
 
+        /* MOBILE */
         @media(max-width:900px){
-            .page-wrapper{grid-template-columns:1fr;gap:24px}
-            .sidebar{position:relative;top:0;display:none}
+            .page-wrapper{grid-template-columns:1fr}
+            .sidebar{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;overflow-y:auto}
             .sidebar.mobile-open{display:flex}
             .mobile-filter-toggle{display:block}
+            .logo-text{font-size:24px}
+            .logo-text .daily{font-size:11px}
         }
         @media(max-width:600px){
-            header[role="banner"]{padding:16px 0}
-            .header-inner{padding:0 16px;gap:12px}
-            .logo-icon{width:52px;height:52px}
-            .logo-icon svg{width:46px;height:46px}
+            .logo{padding:10px 16px}
+            .logo-icon{width:44px;height:44px}
+            .logo-icon svg{width:44px;height:44px}
             .logo-text{font-size:20px}
-            .logo-text .redact-bar{height:5px}
             .logo-text .daily{font-size:10px}
-            .page-wrapper{padding:24px 16px}
-            .intro{padding:28px 20px}
-            .intro h1{font-size:28px}
-            .intro h1::after{width:60px;height:3px;margin-top:16px}
-            .intro p{font-size:16px}
-            .redacted::before{height:0.8em}
-            .article-preview{padding:16px;margin-bottom:24px}
+            .breaking-bar{font-size:12px;padding:8px 16px}
+            .article-preview{padding:16px}
             .article-preview.featured .article-top{grid-template-columns:1fr}
-            .article-preview h2{font-size:22px}
-            .article-preview .lede{font-size:16px}
-            .article-tag{padding:3px 8px;font-size:10px}
+            .article-preview h2{font-size:20px}
+            .article-preview .lede{font-size:14px}
             .newsletter{padding:24px 16px}
             .newsletter-form{flex-direction:column}
         }
@@ -229,36 +218,40 @@
             <a href="index.html" class="logo" aria-label="Epstein Files Daily - Home">
                 <div class="logo-icon" aria-hidden="true">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="42" cy="42" r="32" fill="#2a2a2a" stroke="white" stroke-width="3"/>
+                        <circle cx="42" cy="42" r="32" fill="#1a1a1a" stroke="white" stroke-width="3"/>
                         <text x="42" y="48" font-size="28" font-family="Arial,sans-serif" font-weight="bold" fill="white" text-anchor="middle">EF</text>
-                        <rect x="18" y="52" width="48" height="6" fill="#dc2626"/>
+                        <rect x="18" y="52" width="48" height="6" fill="#fff"/>
                         <line x1="66" y1="66" x2="88" y2="88" stroke="white" stroke-width="6" stroke-linecap="round"/>
                     </svg>
                 </div>
-                <span class="logo-text">EPSTEIN FILES<span class="redact-bar"></span><span class="daily">DAILY</span></span>
+                <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
             </a>
             <div class="header-controls">
-                <button type="button" id="mobile-filter-toggle" class="mobile-filter-toggle">☰ Filters</button>
-                <button type="button" id="dark-toggle" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button type="button" id="mobile-filter-toggle" class="mobile-filter-toggle">☰ FILTER</button>
             </div>
         </div>
     </header>
+
+    <div class="breaking-bar">
+        <span class="breaking-label">BREAKING</span>
+        <span class="breaking-text"><strong>3.5 MILLION</strong> pages of DOJ documents now released. We're going through everything.</span>
+    </div>
 
     <div class="page-wrapper">
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
             <!-- Search Section -->
             <div class="sidebar-section">
-                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg> Search</h3>
+                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg> SEARCH</h3>
                 <div class="sidebar-search">
                     <input type="text" id="search-input" placeholder="Search names..." aria-label="Search articles">
-                    <button type="button" id="search-btn">Search</button>
+                    <button type="button" id="search-btn">GO</button>
                 </div>
             </div>
 
             <!-- Filter by Person -->
             <div class="sidebar-section">
-                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Filter by Person</h3>
+                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> NAMES IN THE FILES</h3>
                 <div class="tag-filters" id="tag-filters">
                     <!-- Tags will be populated by JavaScript -->
                 </div>
@@ -267,7 +260,7 @@
 
             <!-- Recent Articles -->
             <div class="sidebar-section">
-                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Recent</h3>
+                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> LATEST</h3>
                 <div class="recent-articles" id="recent-articles">
                     <!-- Will be populated by JavaScript -->
                 </div>
@@ -275,7 +268,7 @@
 
             <!-- Archive -->
             <div class="sidebar-section">
-                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Archive</h3>
+                <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> ARCHIVE</h3>
                 <div class="archive-links" id="archive-links">
                     <!-- Will be populated by JavaScript -->
                 </div>
@@ -284,268 +277,261 @@
 
         <!-- MAIN CONTENT -->
         <main id="main-content" role="main">
-            <header class="intro">
-            <h1>Unearthing <span class="redacted"><span class="redacted-text">the Truth</span></span> in the Epstein Files</h1>
-            <p>The Department of Justice has released nearly <span class="redacted"><span class="redacted-text">3.5 million</span></span> pages of documents, <span class="redacted"><span class="redacted-text">180,000</span></span> images, and <span class="redacted"><span class="redacted-text">2,000</span></span> videos in compliance with the Epstein Files Transparency Act. We are going through everything with a fine tooth comb, sharing what we discover along the way.</p>
-        </header>
+            <div class="results-count" id="results-count"></div>
 
-        <div class="results-count" id="results-count"></div>
-
-        <div id="articles-container">
-            <!-- AUTO-GENERATED ARTICLE: JAMES GORMAN -->
-            <article class="article-preview featured" data-tags="james gorman">
-                <div class="article-top">
-                    <a href="morgan-stanley-james-gorman-epstein-meetings.html" class="article-thumb">
-                        <img src="images/james-gorman-meetings.png?v=5" alt="DOJ files reveal Morgan Stanley CEO James Gorman's secret meetings with Jeffrey Epstein" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=james+gorman" class="article-tag">James Gorman</a>
+            <div id="articles-container">
+                <!-- AUTO-GENERATED ARTICLE: JAMES GORMAN -->
+                <article class="article-preview featured" data-tags="james gorman">
+                    <div class="article-top">
+                        <a href="morgan-stanley-james-gorman-epstein-meetings.html" class="article-thumb">
+                            <img src="images/james-gorman-meetings.png?v=5" alt="DOJ files reveal Morgan Stanley CEO James Gorman's secret meetings with Jeffrey Epstein" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=james+gorman" class="article-tag">James Gorman</a>
+                                </div>
+                                <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
+                                <span class="reading-time">· 5 min read</span>
                             </div>
-                            <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
-                            <span class="reading-time">· 5 min read</span>
+                            <h2><a href="morgan-stanley-james-gorman-epstein-meetings.html">Morgan Stanley CEO James Gorman's Secret Epstein Meetings: Wall Street's Hidden Scandal</a></h2>
+                            <p class="lede">Newly released DOJ files reveal Morgan Stanley's longtime CEO maintained a covert relationship with Jeffrey Epstein that Wall Street kept buried for years.</p>
+                            <a href="morgan-stanley-james-gorman-epstein-meetings.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="morgan-stanley-james-gorman-epstein-meetings.html">Morgan Stanley CEO James Gorman's Secret Epstein Meetings: Wall Street's Hidden Scandal</a></h2>
                     </div>
-                </div>
-                <p class="lede">Newly released DOJ files reveal Morgan Stanley's longtime CEO maintained a covert relationship with Jeffrey Epstein that Wall Street kept buried for years.</p>
-                <a href="morgan-stanley-james-gorman-epstein-meetings.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- AUTO-GENERATED ARTICLE: GLENN DUBIN -->
-            <article class="article-preview featured" data-tags="glenn dubin">
-                <div class="article-top">
-                    <a href="glenn-dubin-epstein-family-ties.html" class="article-thumb">
-                        <img src="images/glenn-dubin-family.png?v=5" alt="DOJ files reveal Glenn Dubin family let Epstein live in their home" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=glenn+dubin" class="article-tag">Glenn Dubin</a>
+                <!-- AUTO-GENERATED ARTICLE: GLENN DUBIN -->
+                <article class="article-preview featured" data-tags="glenn dubin">
+                    <div class="article-top">
+                        <a href="glenn-dubin-epstein-family-ties.html" class="article-thumb">
+                            <img src="images/glenn-dubin-family.png?v=5" alt="DOJ files reveal Glenn Dubin family let Epstein live in their home" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=glenn+dubin" class="article-tag">Glenn Dubin</a>
+                                </div>
+                                <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
+                                <span class="reading-time">· 5 min read</span>
                             </div>
-                            <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
-                            <span class="reading-time">· 5 min read</span>
+                            <h2><a href="glenn-dubin-epstein-family-ties.html">Billionaire Glenn Dubin's Wife Eva Let Epstein Live in Their Home After Prison - Shocking Family Ties Exposed</a></h2>
+                            <p class="lede">The hedge fund billionaire's family had much deeper ties to the convicted sex offender than previously known. DOJ files reveal disturbing details.</p>
+                            <a href="glenn-dubin-epstein-family-ties.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="glenn-dubin-epstein-family-ties.html">Billionaire Glenn Dubin's Wife Eva Let Epstein Live in Their Home After Prison - Shocking Family Ties Exposed</a></h2>
                     </div>
-                </div>
-                <p class="lede">The hedge fund billionaire's family had much deeper ties to the convicted sex offender than previously known. DOJ files reveal disturbing details.</p>
-                <a href="glenn-dubin-epstein-family-ties.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- AUTO-GENERATED ARTICLE: THOMAS PRITZKER -->
-            <article class="article-preview featured" data-tags="thomas pritzker">
-                <div class="article-top">
-                    <a href="thomas-pritzker-hyatt-epstein-connections.html" class="article-thumb">
-                        <img src="images/thomas-pritzker-connections.png?v=5" alt="DOJ files reveal Hyatt heir Thomas Pritzker's secret Epstein business deals" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=thomas+pritzker" class="article-tag">Thomas Pritzker</a>
+                <!-- AUTO-GENERATED ARTICLE: THOMAS PRITZKER -->
+                <article class="article-preview featured" data-tags="thomas pritzker">
+                    <div class="article-top">
+                        <a href="thomas-pritzker-hyatt-epstein-connections.html" class="article-thumb">
+                            <img src="images/thomas-pritzker-connections.png?v=5" alt="DOJ files reveal Hyatt heir Thomas Pritzker's secret Epstein business deals" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=thomas+pritzker" class="article-tag">Thomas Pritzker</a>
+                                </div>
+                                <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
+                                <span class="reading-time">· 5 min read</span>
                             </div>
-                            <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
-                            <span class="reading-time">· 5 min read</span>
+                            <h2><a href="thomas-pritzker-hyatt-epstein-connections.html">Hyatt Hotels Heir Thomas Pritzker's Secret Epstein Business Deals Exposed in DOJ Files</a></h2>
+                            <p class="lede">The billionaire hotel heir's business entanglements with Jeffrey Epstein run deeper than anyone knew. DOJ documents reveal the hidden connections.</p>
+                            <a href="thomas-pritzker-hyatt-epstein-connections.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="thomas-pritzker-hyatt-epstein-connections.html">Hyatt Hotels Heir Thomas Pritzker's Secret Epstein Business Deals Exposed in DOJ Files</a></h2>
                     </div>
-                </div>
-                <p class="lede">The billionaire hotel heir's business entanglements with Jeffrey Epstein run deeper than anyone knew. DOJ documents reveal the hidden connections.</p>
-                <a href="thomas-pritzker-hyatt-epstein-connections.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- AUTO-GENERATED ARTICLE: REID HOFFMAN -->
-            <article class="article-preview featured" data-tags="reid hoffman">
-                <div class="article-top">
-                    <a href="reid-hoffman-linkedin-epstein-donations.html" class="article-thumb">
-                        <img src="images/reid-hoffman-donations.png?v=5" alt="DOJ files reveal LinkedIn founder Reid Hoffman's secret $2 million Epstein donations" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=reid+hoffman" class="article-tag">Reid Hoffman</a>
+                <!-- AUTO-GENERATED ARTICLE: REID HOFFMAN -->
+                <article class="article-preview featured" data-tags="reid hoffman">
+                    <div class="article-top">
+                        <a href="reid-hoffman-linkedin-epstein-donations.html" class="article-thumb">
+                            <img src="images/reid-hoffman-donations.png?v=5" alt="DOJ files reveal LinkedIn founder Reid Hoffman's secret $2 million Epstein donations" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=reid+hoffman" class="article-tag">Reid Hoffman</a>
+                                </div>
+                                <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
+                                <span class="reading-time">· 5 min read</span>
                             </div>
-                            <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
-                            <span class="reading-time">· 5 min read</span>
+                            <h2><a href="reid-hoffman-linkedin-epstein-donations.html">LinkedIn Founder Reid Hoffman's $2 Million Mystery: Secret Epstein Donations Exposed</a></h2>
+                            <p class="lede">Silicon Valley's "nice guy" networker had a secret financial relationship with the convicted sex trafficker. DOJ files expose the money trail.</p>
+                            <a href="reid-hoffman-linkedin-epstein-donations.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="reid-hoffman-linkedin-epstein-donations.html">LinkedIn Founder Reid Hoffman's $2 Million Mystery: Secret Epstein Donations Exposed</a></h2>
                     </div>
-                </div>
-                <p class="lede">Silicon Valley's "nice guy" networker had a secret financial relationship with the convicted sex trafficker. DOJ files expose the money trail.</p>
-                <a href="reid-hoffman-linkedin-epstein-donations.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- AUTO-GENERATED ARTICLE: EHUD BARAK -->
-            <article class="article-preview featured" data-tags="ehud barak">
-                <div class="article-top">
-                    <a href="ehud-barak-epstein-meetings.html" class="article-thumb">
-                        <img src="images/ehud-barak-meetings.png?v=5" alt="DOJ files reveal former Israeli PM Ehud Barak's secret urgent meetings with Epstein" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=ehud+barak" class="article-tag">Ehud Barak</a>
+                <!-- AUTO-GENERATED ARTICLE: EHUD BARAK -->
+                <article class="article-preview featured" data-tags="ehud barak">
+                    <div class="article-top">
+                        <a href="ehud-barak-epstein-meetings.html" class="article-thumb">
+                            <img src="images/ehud-barak-meetings.png?v=5" alt="DOJ files reveal former Israeli PM Ehud Barak's secret urgent meetings with Epstein" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=ehud+barak" class="article-tag">Ehud Barak</a>
+                                </div>
+                                <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
+                                <span class="reading-time">· 5 min read</span>
                             </div>
-                            <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
-                            <span class="reading-time">· 5 min read</span>
+                            <h2><a href="ehud-barak-epstein-meetings.html">Former Israeli PM Ehud Barak's Secret Epstein Meetings: 'I Need to See You Urgently'</a></h2>
+                            <p class="lede">The former Israeli Prime Minister's urgent messages to Epstein reveal a relationship far more extensive than previously disclosed.</p>
+                            <a href="ehud-barak-epstein-meetings.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="ehud-barak-epstein-meetings.html">Former Israeli PM Ehud Barak's Secret Epstein Meetings: 'I Need to See You Urgently'</a></h2>
                     </div>
-                </div>
-                <p class="lede">The former Israeli Prime Minister's urgent messages to Epstein reveal a relationship far more extensive than previously disclosed.</p>
-                <a href="ehud-barak-epstein-meetings.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- AUTO-GENERATED ARTICLE: LEON BLACK -->
-            <article class="article-preview featured" data-tags="leon black">
-                <div class="article-top">
-                    <a href="leon-black-apollo-payments.html" class="article-thumb">
-                        <img src="images/leon-black-payments.png?v=5" alt="DOJ files reveal Apollo CEO Leon Black paid Epstein $158 million for tax advice" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=leon+black" class="article-tag">Leon Black</a>
+                <!-- AUTO-GENERATED ARTICLE: LEON BLACK -->
+                <article class="article-preview featured" data-tags="leon black">
+                    <div class="article-top">
+                        <a href="leon-black-apollo-payments.html" class="article-thumb">
+                            <img src="images/leon-black-payments.png?v=5" alt="DOJ files reveal Apollo CEO Leon Black paid Epstein $158 million for tax advice" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=leon+black" class="article-tag">Leon Black</a>
+                                </div>
+                                <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
+                                <span class="reading-time">· 5 min read</span>
                             </div>
-                            <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
-                            <span class="reading-time">· 5 min read</span>
+                            <h2><a href="leon-black-apollo-payments.html">Apollo CEO Leon Black Paid Epstein $158 Million for 'Tax Advice' - DOJ Files Reveal Shocking Details</a></h2>
+                            <p class="lede">The private equity titan's staggering payments to Epstein went far beyond what was publicly known. New documents expose the full scope.</p>
+                            <a href="leon-black-apollo-payments.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="leon-black-apollo-payments.html">Apollo CEO Leon Black Paid Epstein $158 Million for 'Tax Advice' - DOJ Files Reveal Shocking Details</a></h2>
                     </div>
-                </div>
-                <p class="lede">The private equity titan's staggering payments to Epstein went far beyond what was publicly known. New documents expose the full scope.</p>
-                <a href="leon-black-apollo-payments.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- ARTICLE PREVIEW 1: MUSK (Featured) -->
-            <article class="article-preview featured" data-tags="elon musk">
-                <div class="article-top">
-                    <a href="musk-epstein-emails.html" class="article-thumb">
-                        <img src="images/musk-email.png" alt="Email from Elon Musk to Jeffrey Epstein asking about the wildest party" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=elon+musk" class="article-tag">Elon Musk</a>
+                <!-- ARTICLE PREVIEW 1: MUSK (Featured) -->
+                <article class="article-preview featured" data-tags="elon musk">
+                    <div class="article-top">
+                        <a href="musk-epstein-emails.html" class="article-thumb">
+                            <img src="images/musk-email.png" alt="Email from Elon Musk to Jeffrey Epstein asking about the wildest party" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=elon+musk" class="article-tag">Elon Musk</a>
+                                </div>
+                                <time datetime="2026-02-02" class="article-date">February 2, 2026</time>
+                                <span class="reading-time">· 4 min read</span>
                             </div>
-                            <time datetime="2026-02-02" class="article-date">February 2, 2026</time>
-                            <span class="reading-time">· 4 min read</span>
+                            <h2><a href="musk-epstein-emails.html">"What Day Will Be the Wildest Party?" Elon Musk's Desperate Texts to Epstein Exposed</a></h2>
+                            <p class="lede">The world's richest man spent years trying to score an invite to Epstein's private island—and the receipts are mortifying. Buried in the 3.5 million pages are at least 16 emails between Musk and the convicted pedophile.</p>
+                            <a href="musk-epstein-emails.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="musk-epstein-emails.html">"What Day Will Be the Wildest Party?" Elon Musk's Desperate Texts to Epstein Exposed</a></h2>
                     </div>
-                </div>
-                <p class="lede">The world's richest man spent years trying to score an invite to Epstein's private island—and the receipts are mortifying. Buried in the 3.5 million pages are at least 16 emails between Musk and the convicted pedophile.</p>
-                <a href="musk-epstein-emails.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- ARTICLE PREVIEW 2: BANNON -->
-            <article class="article-preview featured" data-tags="steve bannon,donald trump">
-                <div class="article-top">
-                    <a href="bannon-epstein-texts.html" class="article-thumb">
-                        <img src="images/bannon-texts.png" alt="Text from Steve Bannon asking Epstein for his plane" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=steve+bannon" class="article-tag">Steve Bannon</a>
-                                <a href="?search=donald+trump" class="article-tag">Donald Trump</a>
+                <!-- ARTICLE PREVIEW 2: BANNON -->
+                <article class="article-preview featured" data-tags="steve bannon,donald trump">
+                    <div class="article-top">
+                        <a href="bannon-epstein-texts.html" class="article-thumb">
+                            <img src="images/bannon-texts.png" alt="Text from Steve Bannon asking Epstein for his plane" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=steve+bannon" class="article-tag">Steve Bannon</a>
+                                    <a href="?search=donald+trump" class="article-tag">Donald Trump</a>
+                                </div>
+                                <time datetime="2026-02-01" class="article-date">February 1, 2026</time>
+                                <span class="reading-time">· 5 min read</span>
                             </div>
-                            <time datetime="2026-02-01" class="article-date">February 1, 2026</time>
-                            <span class="reading-time">· 5 min read</span>
+                            <h2><a href="bannon-epstein-texts.html">Steve Bannon Got a Free Apple Watch, Private Planes, and Hundreds of Texts from Epstein</a></h2>
+                            <p class="lede">Trump's former strategist was chatting up the sex trafficker right until weeks before his death—and Epstein knew exactly what he had on them both. "Dangerous," Bannon replied.</p>
+                            <a href="bannon-epstein-texts.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="bannon-epstein-texts.html">Steve Bannon Got a Free Apple Watch, Private Planes, and Hundreds of Texts from Epstein</a></h2>
                     </div>
-                </div>
-                <p class="lede">Trump's former strategist was chatting up the sex trafficker right until weeks before his death—and Epstein knew exactly what he had on them both. "Dangerous," Bannon replied.</p>
-                <a href="bannon-epstein-texts.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
 
-            <!-- ARTICLE PREVIEW 3: LUTNICK -->
-            <article class="article-preview featured" data-tags="howard lutnick">
-                <div class="article-top">
-                    <a href="lutnick-yacht-island.html" class="article-thumb">
-                        <img src="images/lutnick-email.png" alt="Email from Allison Lutnick asking where to anchor at Epstein's island" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=howard+lutnick" class="article-tag">Howard Lutnick</a>
+                <!-- ARTICLE PREVIEW 3: LUTNICK -->
+                <article class="article-preview featured" data-tags="howard lutnick">
+                    <div class="article-top">
+                        <a href="lutnick-yacht-island.html" class="article-thumb">
+                            <img src="images/lutnick-email.png" alt="Email from Allison Lutnick asking where to anchor at Epstein's island" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=howard+lutnick" class="article-tag">Howard Lutnick</a>
+                                </div>
+                                <time datetime="2026-01-31" class="article-date">January 31, 2026</time>
+                                <span class="reading-time">· 3 min read</span>
                             </div>
-                            <time datetime="2026-01-31" class="article-date">January 31, 2026</time>
-                            <span class="reading-time">· 3 min read</span>
+                            <h2><a href="lutnick-yacht-island.html">Commerce Secretary Lutnick Brought His Kids to Epstein's Island on a Yacht. He Said He Cut Ties in 2005.</a></h2>
+                            <p class="lede">Howard Lutnick's story just completely fell apart. Emails show his wife coordinated a Christmas visit on their 188-foot yacht—seven years after he claims he stopped associating with Epstein.</p>
+                            <a href="lutnick-yacht-island.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="lutnick-yacht-island.html">Commerce Secretary Lutnick Brought His Kids to Epstein's Island on a Yacht. He Said He Cut Ties in 2005.</a></h2>
                     </div>
-                </div>
-                <p class="lede">Howard Lutnick's story just completely fell apart. Emails show his wife coordinated a Christmas visit on their 188-foot yacht—seven years after he claims he stopped associating with Epstein.</p>
-                <a href="lutnick-yacht-island.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- ARTICLE PREVIEW 4: PRINCE ANDREW -->
-            <article class="article-preview featured" data-tags="prince andrew,woody allen,katie couric,george stephanopoulos">
-                <div class="article-top">
-                    <a href="prince-andrew-dinner.html" class="article-thumb">
-                        <img src="images/andrew-dinner.png" alt="Email about Prince Andrew dinner party at Epstein's house" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=prince+andrew" class="article-tag">Prince Andrew</a>
-                                <a href="?search=woody+allen" class="article-tag">Woody Allen</a>
-                                <a href="?search=katie+couric" class="article-tag">Katie Couric</a>
-                                <a href="?search=george+stephanopoulos" class="article-tag">George Stephanopoulos</a>
+                <!-- ARTICLE PREVIEW 4: PRINCE ANDREW -->
+                <article class="article-preview featured" data-tags="prince andrew,woody allen,katie couric,george stephanopoulos">
+                    <div class="article-top">
+                        <a href="prince-andrew-dinner.html" class="article-thumb">
+                            <img src="images/andrew-dinner.png" alt="Email about Prince Andrew dinner party at Epstein's house" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=prince+andrew" class="article-tag">Prince Andrew</a>
+                                    <a href="?search=woody+allen" class="article-tag">Woody Allen</a>
+                                    <a href="?search=katie+couric" class="article-tag">Katie Couric</a>
+                                    <a href="?search=george+stephanopoulos" class="article-tag">George Stephanopoulos</a>
+                                </div>
+                                <time datetime="2026-01-31" class="article-date">January 31, 2026</time>
+                                <span class="reading-time">· 4 min read</span>
                             </div>
-                            <time datetime="2026-01-31" class="article-date">January 31, 2026</time>
-                            <span class="reading-time">· 4 min read</span>
+                            <h2><a href="prince-andrew-dinner.html">The Dinner Party: Prince Andrew, Woody Allen, Katie Couric—All at Epstein's House</a></h2>
+                            <p class="lede">A December 2010 email reveals the disgraced royal was staying at the convicted pedophile's Manhattan mansion while A-listers were invited over for dinner. "Jeffrey Epstein, where Andrew is staying."</p>
+                            <a href="prince-andrew-dinner.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="prince-andrew-dinner.html">The Dinner Party: Prince Andrew, Woody Allen, Katie Couric—All at Epstein's House</a></h2>
                     </div>
-                </div>
-                <p class="lede">A December 2010 email reveals the disgraced royal was staying at the convicted pedophile's Manhattan mansion while A-listers were invited over for dinner. "Jeffrey Epstein, where Andrew is staying."</p>
-                <a href="prince-andrew-dinner.html" class="read-more">Read full article</a>
-            </article>
+                </article>
 
-            <!-- AD SLOT 2: In-feed ad after article 4 -->
-
-            <!-- ARTICLE PREVIEW 5: CLINTON -->
-            <article class="article-preview featured" data-tags="bill clinton">
-                <div class="article-top">
-                    <a href="clinton-plane-trips.html" class="article-thumb">
-                        <img src="images/clinton-flights.png" alt="Email about Bill Clinton's 32 plane trips with Epstein" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search=bill+clinton" class="article-tag">Bill Clinton</a>
+                <!-- ARTICLE PREVIEW 5: CLINTON -->
+                <article class="article-preview featured" data-tags="bill clinton">
+                    <div class="article-top">
+                        <a href="clinton-plane-trips.html" class="article-thumb">
+                            <img src="images/clinton-flights.png" alt="Email about Bill Clinton's 32 plane trips with Epstein" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <a href="?search=bill+clinton" class="article-tag">Bill Clinton</a>
+                                </div>
+                                <time datetime="2026-01-30" class="article-date">January 30, 2026</time>
+                                <span class="reading-time">· 3 min read</span>
                             </div>
-                            <time datetime="2026-01-30" class="article-date">January 30, 2026</time>
-                            <span class="reading-time">· 3 min read</span>
+                            <h2><a href="clinton-plane-trips.html">"32 Plane Trips": The Clinton-Epstein Connection in Black and White</a></h2>
+                            <p class="lede">Internal emails show Epstein's team tracking and discussing the former president's extensive flight history on the "Lolita Express." Clinton's team has long maintained he took only a handful of flights.</p>
+                            <a href="clinton-plane-trips.html" class="read-more">Read full article</a>
                         </div>
-                        <h2><a href="clinton-plane-trips.html">"32 Plane Trips": The Clinton-Epstein Connection in Black and White</a></h2>
                     </div>
-                </div>
-                <p class="lede">Internal emails show Epstein's team tracking and discussing the former president's extensive flight history on the "Lolita Express." Clinton's team has long maintained he took only a handful of flights.</p>
-                <a href="clinton-plane-trips.html" class="read-more">Read full article</a>
-            </article>
-        </div>
+                </article>
+            </div>
 
-        <div class="no-results" id="no-results">
-            <h3>No articles found</h3>
-            <p>Try searching for a different name or <button id="clear-from-no-results" style="background:none;border:none;color:#dc2626;font-weight:600;cursor:pointer;font-size:inherit">clear the filter</button></p>
-        </div>
+            <div class="no-results" id="no-results">
+                <h3>No articles found</h3>
+                <p>Try searching for a different name or <button id="clear-from-no-results" style="background:none;border:none;color:#dc2626;font-weight:600;cursor:pointer;font-size:inherit">clear the filter</button></p>
+            </div>
 
-        <section class="newsletter" aria-labelledby="newsletter-heading">
-            <h3 id="newsletter-heading">Get the Files in Your Inbox</h3>
-            <p>New revelations as we find them. No spam. Just receipts.</p>
-            <form class="newsletter-form" action="https://epstein-exposed.us13.list-manage.com/subscribe/post?u=dbf04846cbc14c3a4d734f311&amp;id=a2f4925a23&amp;f_id=00cdace2f0" method="post" target="_blank" aria-label="Newsletter signup">
-                <label for="email-input" class="sr-only" style="position:absolute;left:-9999px">Email address</label>
-                <input type="email" id="email-input" name="EMAIL" placeholder="your@email.com" required autocomplete="email">
-                <div style="position:absolute;left:-5000px" aria-hidden="true"><input type="text" name="b_dbf04846cbc14c3a4d734f311_a2f4925a23" tabindex="-1" value=""></div>
-                <button type="submit">Subscribe</button>
-            </form>
-        </section>
+            <section class="newsletter" aria-labelledby="newsletter-heading">
+                <h3 id="newsletter-heading">Get the Files in Your Inbox</h3>
+                <p>New revelations as we find them. No spam. Just receipts.</p>
+                <form class="newsletter-form" action="https://epstein-exposed.us13.list-manage.com/subscribe/post?u=dbf04846cbc14c3a4d734f311&amp;id=a2f4925a23&amp;f_id=00cdace2f0" method="post" target="_blank" aria-label="Newsletter signup">
+                    <label for="email-input" class="sr-only" style="position:absolute;left:-9999px">Email address</label>
+                    <input type="email" id="email-input" name="EMAIL" placeholder="your@email.com" required autocomplete="email">
+                    <div style="position:absolute;left:-5000px" aria-hidden="true"><input type="text" name="b_dbf04846cbc14c3a4d734f311_a2f4925a23" tabindex="-1" value=""></div>
+                    <button type="submit">SUBSCRIBE</button>
+                </form>
+            </section>
         </main>
     </div><!-- end page-wrapper -->
 
@@ -555,37 +541,12 @@
 
     <script>
         (function() {
-            // Dark mode toggle
-            const darkToggle = document.getElementById('dark-toggle');
-            const html = document.documentElement;
-
-            // Only use dark mode if explicitly saved
-            const savedTheme = localStorage.getItem('theme');
-
-            if (savedTheme === 'dark') {
-                html.setAttribute('data-theme', 'dark');
-                darkToggle.textContent = '☀️';
-            }
-
-            darkToggle.addEventListener('click', () => {
-                const isDark = html.getAttribute('data-theme') === 'dark';
-                if (isDark) {
-                    html.removeAttribute('data-theme');
-                    localStorage.setItem('theme', 'light');
-                    darkToggle.textContent = '🌙';
-                } else {
-                    html.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
-                    darkToggle.textContent = '☀️';
-                }
-            });
-
             // Mobile filter toggle
             const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
             const sidebar = document.getElementById('sidebar');
             mobileFilterToggle.addEventListener('click', () => {
                 sidebar.classList.toggle('mobile-open');
-                mobileFilterToggle.textContent = sidebar.classList.contains('mobile-open') ? '✕ Close' : '☰ Filters';
+                mobileFilterToggle.textContent = sidebar.classList.contains('mobile-open') ? '✕ CLOSE' : '☰ FILTER';
             });
 
             const searchInput = document.getElementById('search-input');
@@ -631,7 +592,7 @@
 
             // Sort tags by count (descending)
             const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
-            const MAX_VISIBLE_TAGS = 8;
+            const MAX_VISIBLE_TAGS = 10;
 
             // Render tag filters
             sortedTags.forEach(([tag, count], index) => {
@@ -647,6 +608,9 @@
                     filterArticles(tag);
                     updateActiveTag(tag);
                     history.pushState({}, '', '?search=' + encodeURIComponent(tag));
+                    // Close mobile sidebar
+                    sidebar.classList.remove('mobile-open');
+                    mobileFilterToggle.textContent = '☰ FILTER';
                 });
                 tagFiltersContainer.appendChild(tagEl);
             });
@@ -655,7 +619,7 @@
             if (sortedTags.length > MAX_VISIBLE_TAGS) {
                 const showMoreBtn = document.createElement('button');
                 showMoreBtn.className = 'show-more-tags';
-                showMoreBtn.textContent = `Show ${sortedTags.length - MAX_VISIBLE_TAGS} more`;
+                showMoreBtn.textContent = `+ ${sortedTags.length - MAX_VISIBLE_TAGS} more`;
                 showMoreBtn.addEventListener('click', () => {
                     document.querySelectorAll('.tag-filter.hidden').forEach(el => el.classList.remove('hidden'));
                     showMoreBtn.style.display = 'none';
@@ -676,7 +640,7 @@
                 const el = document.createElement('a');
                 el.href = article.href;
                 el.className = 'recent-article';
-                el.innerHTML = `<div class="recent-article-title">${article.title.length > 60 ? article.title.substring(0, 60) + '...' : article.title}</div><div class="recent-article-date">${article.displayDate}</div>`;
+                el.innerHTML = `<div class="recent-article-title">${article.title.length > 55 ? article.title.substring(0, 55) + '...' : article.title}</div><div class="recent-article-date">${article.displayDate}</div>`;
                 recentArticlesContainer.appendChild(el);
             });
 
