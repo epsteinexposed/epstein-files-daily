@@ -32,9 +32,11 @@ Search DOJ Epstein files (https://www.justice.gov/epstein) for interesting stori
 
 ### Step 3: Verify Sources
 
+- **ONLY use DOJ sources** - NO external news sources (PBS, CBS, CNN, etc.)
 - Only use real DOJ document IDs (format: EFTAxxxxxxxx.pdf)
 - Verify URLs exist at justice.gov
 - Quote directly from documents
+- All source-box links must point to justice.gov/epstein domains
 
 ### Step 4: Write Article
 
@@ -156,7 +158,8 @@ git push
 
 ## Summary of Key Rules
 
-1. **Thumbnails**: Cream background, DOJ document style, NO logo
-2. **Tags**: Full names only (Firstname Lastname), NO company/country names
-3. **Image path**: `images/[name]-[topic].png` with cache-busting `?v=1`
-4. **og:image**: Point to `https://epstein-exposed.com/images/[thumbnail].png`
+1. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news (PBS, CBS, CNN, etc.)
+2. **Thumbnails**: Cream background, DOJ document style, NO logo
+3. **Tags**: Full names only (Firstname Lastname), NO company/country names
+4. **Image path**: `images/[name]-[topic].png` with cache-busting `?v=1`
+5. **og:image**: Point to `https://epstein-exposed.com/images/[thumbnail].png`
