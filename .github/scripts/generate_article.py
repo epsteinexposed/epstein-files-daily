@@ -70,30 +70,72 @@ YOUR TASK:
    - Punchy and dramatic
    - SEO-optimized with a compelling headline
    - Factual and sourced
-   - In the same style as the existing articles
+
+CRITICAL - USE THIS EXACT HTML STRUCTURE FOR DOCUMENT EVIDENCE BOXES:
+
+<div class="doc-evidence">
+    <div class="doc-header">
+        <span class="doc-id">📄 DOCUMENT_ID.pdf</span>
+        <a href="https://www.justice.gov/epstein/search?search=SEARCH_TERMS" target="_blank">Search DOJ Library →</a>
+    </div>
+    <div class="email-content">
+        <div class="email-meta">
+            <div><strong>From:</strong> Sender Name</div>
+            <div><strong>To:</strong> Recipient Name</div>
+            <div><strong>Date:</strong> Month Day, Year</div>
+        </div>
+        <div class="email-body">
+            <span class="highlight">The most damning quote from the document goes here.</span>
+        </div>
+    </div>
+    <div class="doc-footer">Source: DOJ Epstein Files, Data Set X</div>
+</div>
+
+USE THIS EXACT HTML FOR RESPONSE BOXES:
+
+<aside class="response-box">
+    <div class="label">Person/Organization Response</div>
+    <p>"Their official response or 'No comment was provided.'"</p>
+</aside>
+
+USE THIS EXACT HTML FOR SOURCE BOXES AT THE END:
+
+<div class="source-box">
+    <div class="label">📋 DOJ Documents</div>
+    <ul>
+        <li><a href="https://www.justice.gov/epstein/files/DataSet%20X/DOCUMENT_ID.pdf" target="_blank" rel="noopener">DOCUMENT_ID.pdf — Brief description of what this document shows</a></li>
+    </ul>
+    <a href="https://www.justice.gov/epstein/doj-disclosures/data-set-X-files" class="doj-link" target="_blank" rel="noopener">View DOJ Data Set X →</a>
+</div>
 
 OUTPUT FORMAT:
 Return a JSON object with these exact fields:
 {{
-    "slug": "filename-without-html",
-    "headline": "The Article Headline",
+    "slug": "firstname-lastname-topic",
+    "headline": "The Article Headline - Make it Dramatic and SEO-Friendly",
     "meta_description": "Short SEO description under 160 chars",
-    "lede": "The italicized opening line",
-    "tag": "PersonName",
+    "lede": "A punchy one-liner that hooks the reader",
+    "tag": "LastName",
     "date_iso": "{today.strftime('%Y-%m-%d')}",
     "date_readable": "{today.strftime('%B %d, %Y')}",
-    "article_html": "The full article body HTML (everything inside the <div> after the lede)",
+    "article_html": "The full article body HTML - see structure requirements below",
     "doj_documents": [
-        {{"id": "DOCID123.pdf", "url": "https://...", "description": "What this doc shows"}}
+        {{"id": "EFTA00XXXXXX.pdf", "url": "https://www.justice.gov/epstein/files/DataSet%20X/EFTA00XXXXXX.pdf", "description": "What this doc shows"}}
     ],
     "reading_time": 4
 }}
 
-IMPORTANT:
-- The article_html should use the styling classes from the site: .doc-evidence for document boxes, .response-box for responses, .source-box for sources, h3 for section headers.
-- Include at least one document evidence box with real DOJ document references.
-- Include share buttons section at the end.
-- Make it compelling and shareable.
+ARTICLE STRUCTURE REQUIREMENTS:
+1. Start with 2-3 paragraphs of context
+2. Use <h3> for section headers (styled red, uppercase)
+3. Include AT LEAST 2 document evidence boxes with the EXACT HTML structure shown above
+4. Include at least one response box
+5. End with a source box listing all DOJ documents
+6. Use <strong> tags for names when first mentioned
+7. Use <em> for quotes within paragraphs
+8. Make document IDs realistic (format: EFTA00XXXXXX.pdf)
+9. Reference real DOJ data sets (Data Set 1-12)
+10. Write in punchy, tabloid style - short paragraphs, dramatic reveals
 """
 
     print("Calling Claude API to generate article...")
