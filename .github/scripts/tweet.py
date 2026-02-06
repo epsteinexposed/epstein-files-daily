@@ -20,29 +20,85 @@ def get_twitter_client():
     )
     return client
 
+# Map of names to their Twitter handles
+TWITTER_HANDLES = {
+    "musk": "@elonmusk",
+    "elon musk": "@elonmusk",
+    "bannon": "@SteveBannon",
+    "steve bannon": "@SteveBannon",
+    "lutnick": "@howardlutnick",
+    "howard lutnick": "@howardlutnick",
+    "clinton": "@BillClinton",
+    "bill clinton": "@BillClinton",
+    "trump": "@realDonaldTrump",
+    "donald trump": "@realDonaldTrump",
+    "prince andrew": "@TheDukeOfYork",
+    "andrew": "@TheDukeOfYork",
+    "gates": "@BillGates",
+    "bill gates": "@BillGates",
+    "bezos": "@JeffBezos",
+    "jeff bezos": "@JeffBezos",
+    "zuckerberg": "@faboricep",
+    "mark zuckerberg": "@finkd",
+    "wexner": "@LesBrands",
+    "les wexner": "@LesBrands",
+    "woody allen": "@WoodyAllenFilm",
+    "katie couric": "@katiecouric",
+    "alan dershowitz": "@AlanDersh",
+    "dershowitz": "@AlanDersh",
+    "ghislaine maxwell": "@GhislaineM",
+    "maxwell": "@GhislaineM",
+}
+
+def find_handles_in_text(text):
+    """Find Twitter handles for people mentioned in text."""
+    text_lower = text.lower()
+    handles = []
+    for name, handle in TWITTER_HANDLES.items():
+        if name in text_lower and handle not in handles:
+            handles.append(handle)
+    return handles
+
 def tweet_new_article(headline, url, tag=None):
     """Tweet about a newly published article."""
     client = get_twitter_client()
 
+    # Find handles to tag based on headline
+    handles = find_handles_in_text(headline)
+    handles_str = " ".join(handles[:2])  # Max 2 handles to save space
+
     # Create engaging tweet text (max 280 chars)
     # Leave room for URL (23 chars for t.co)
 
-    templates = [
-        "🚨 BREAKING: {headline}\n\n{url}",
-        "📄 NEW: {headline}\n\n{url}",
-        "🔍 JUST PUBLISHED: {headline}\n\n{url}",
-        "⚠️ {headline}\n\nRead more: {url}",
-        "NEW from the DOJ Epstein files:\n\n{headline}\n\n{url}",
-    ]
-
-    template = random.choice(templates)
-    tweet_text = template.format(headline=headline, url=url)
+    if handles_str:
+        templates = [
+            "🚨 BREAKING: {headline}\n\n{handles}\n\n{url}",
+            "📄 NEW: {headline}\n\n{handles}\n\n{url}",
+            "🔍 JUST PUBLISHED: {headline}\n\n{handles}\n\n{url}",
+            "⚠️ {headline}\n\n{handles}\n\nRead more: {url}",
+            "NEW from the DOJ Epstein files:\n\n{headline}\n\n{handles}\n\n{url}",
+        ]
+        template = random.choice(templates)
+        tweet_text = template.format(headline=headline, handles=handles_str, url=url)
+    else:
+        templates = [
+            "🚨 BREAKING: {headline}\n\n{url}",
+            "📄 NEW: {headline}\n\n{url}",
+            "🔍 JUST PUBLISHED: {headline}\n\n{url}",
+            "⚠️ {headline}\n\nRead more: {url}",
+            "NEW from the DOJ Epstein files:\n\n{headline}\n\n{url}",
+        ]
+        template = random.choice(templates)
+        tweet_text = template.format(headline=headline, url=url)
 
     # Truncate headline if tweet is too long
     if len(tweet_text) > 280:
-        max_headline_len = 280 - len(template.format(headline='', url=url)) - 3
+        max_headline_len = 280 - len(tweet_text) + len(headline) - 3
         truncated_headline = headline[:max_headline_len] + "..."
-        tweet_text = template.format(headline=truncated_headline, url=url)
+        if handles_str:
+            tweet_text = template.format(headline=truncated_headline, handles=handles_str, url=url)
+        else:
+            tweet_text = template.format(headline=truncated_headline, url=url)
 
     response = client.create_tweet(text=tweet_text)
     print(f"Tweeted: {tweet_text}")
@@ -53,21 +109,38 @@ def tweet_reshare(headline, url, original_date=None):
     """Reshare an older article."""
     client = get_twitter_client()
 
-    templates = [
-        "In case you missed it:\n\n{headline}\n\n{url}",
-        "📌 From the archives:\n\n{headline}\n\n{url}",
-        "Worth another look:\n\n{headline}\n\n{url}",
-        "🔁 Icymi: {headline}\n\n{url}",
-        "Still relevant:\n\n{headline}\n\n{url}",
-    ]
+    # Find handles to tag based on headline
+    handles = find_handles_in_text(headline)
+    handles_str = " ".join(handles[:2])  # Max 2 handles to save space
 
-    template = random.choice(templates)
-    tweet_text = template.format(headline=headline, url=url)
+    if handles_str:
+        templates = [
+            "In case you missed it:\n\n{headline}\n\n{handles}\n\n{url}",
+            "📌 From the archives:\n\n{headline}\n\n{handles}\n\n{url}",
+            "Worth another look:\n\n{headline}\n\n{handles}\n\n{url}",
+            "🔁 Icymi: {headline}\n\n{handles}\n\n{url}",
+            "Still relevant:\n\n{headline}\n\n{handles}\n\n{url}",
+        ]
+        template = random.choice(templates)
+        tweet_text = template.format(headline=headline, handles=handles_str, url=url)
+    else:
+        templates = [
+            "In case you missed it:\n\n{headline}\n\n{url}",
+            "📌 From the archives:\n\n{headline}\n\n{url}",
+            "Worth another look:\n\n{headline}\n\n{url}",
+            "🔁 Icymi: {headline}\n\n{url}",
+            "Still relevant:\n\n{headline}\n\n{url}",
+        ]
+        template = random.choice(templates)
+        tweet_text = template.format(headline=headline, url=url)
 
     if len(tweet_text) > 280:
-        max_headline_len = 280 - len(template.format(headline='', url=url)) - 3
+        max_headline_len = 280 - len(tweet_text) + len(headline) - 3
         truncated_headline = headline[:max_headline_len] + "..."
-        tweet_text = template.format(headline=truncated_headline, url=url)
+        if handles_str:
+            tweet_text = template.format(headline=truncated_headline, handles=handles_str, url=url)
+        else:
+            tweet_text = template.format(headline=truncated_headline, url=url)
 
     response = client.create_tweet(text=tweet_text)
     print(f"Reshared: {tweet_text}")
