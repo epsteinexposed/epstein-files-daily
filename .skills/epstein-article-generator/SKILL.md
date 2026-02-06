@@ -64,38 +64,41 @@ Use template from `references/article-template.html`. Elements:
 - Size: 1200x630 pixels (standard og:image size)
 - Background: Cream/off-white color (RGB: 250, 250, 247)
 - Header: Dark slate bar (RGB: 51, 65, 85) with "📁 DOJ EPSTEIN FILES — [DOC_ID].pdf"
-- Content: Email-style format with To/From/Date fields in monospace font
-- Highlight: Key damning quote with yellow background (RGB: 255, 247, 140)
-- **NO LOGO** in bottom right corner
+- Content: Email-style format with To/From/Date fields - LARGE text (32pt)
+- Highlight: Key damning quote with yellow background (RGB: 255, 247, 140) - LARGE bold text (38pt)
+- **INCLUDE LOGO** in bottom right corner: "EE" box + "EPSTEIN" text with red bar underneath
 
 **Thumbnail Code Example:**
 ```python
 from PIL import Image, ImageDraw, ImageFont
+import textwrap
 
-def create_thumbnail(filename, doc_id, to_field, from_field, date_field, body_text, highlight_text):
+def create_thumbnail(filename, doc_id, to_field, from_field, date_field, highlight_text):
     img = Image.new('RGB', (1200, 630), (250, 250, 247))
     draw = ImageDraw.Draw(img)
 
-    # Load fonts
-    font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 22)
-    font_label = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 26)
-    font_value = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
-    font_highlight = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 34)
+    # Load fonts - LARGE sizes
+    font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
+    font_label = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 32)
+    font_value = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
+    font_highlight = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", 38)
+    font_logo = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
 
     # Dark slate header bar
-    draw.rectangle([(0, 0), (1200, 45)], fill=(51, 65, 85))
-    draw.text((18, 10), f"📁 DOJ EPSTEIN FILES — {doc_id}", font=font_header, fill=(255, 255, 255))
+    draw.rectangle([(0, 0), (1200, 50)], fill=(51, 65, 85))
+    draw.text((20, 12), f"📁 DOJ EPSTEIN FILES — {doc_id}", font=font_header, fill=(255, 255, 255))
 
-    # Email fields
-    y = 80
-    draw.text((55, y), "To:", font=font_label, fill=(120, 120, 120))
-    draw.text((145, y), to_field, font=font_value, fill=(40, 40, 40))
-    # ... continue with From, Date fields
+    # Email fields (To/From/Date) - start at y=95, increment by 50
+    # Yellow highlighted quote with text wrapping
 
-    # Yellow highlighted quote
-    # draw.rectangle for yellow background, then text
+    # Logo in bottom right - "EE" box + "EPSTEIN" + red bar
+    logo_x = 1200 - 160
+    logo_y = 630 - 60
+    draw.rectangle([(logo_x, logo_y), (logo_x + 40, logo_y + 40)], fill=(51, 65, 85))
+    draw.text((logo_x + 8, logo_y + 6), "EE", font=font_logo, fill=(255, 255, 255))
+    draw.text((logo_x + 50, logo_y + 8), "EPSTEIN", font=font_logo, fill=(51, 65, 85))
+    draw.rectangle([(logo_x + 50, logo_y + 36), (logo_x + 140, logo_y + 42)], fill=(220, 38, 38))
 
-    # Save to images/ folder
     img.save(f"images/{filename}", 'PNG')
 ```
 
@@ -159,7 +162,7 @@ git push
 ## Summary of Key Rules
 
 1. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news (PBS, CBS, CNN, etc.)
-2. **Thumbnails**: Cream background, DOJ document style, NO logo
+2. **Thumbnails**: Cream background, DOJ document style, LARGE text, EE EPSTEIN logo with red bar
 3. **Tags**: Full names only (Firstname Lastname), NO company/country names
 4. **Image path**: `images/[name]-[topic].png` with cache-busting `?v=1`
 5. **og:image**: Point to `https://epstein-exposed.com/images/[thumbnail].png`
