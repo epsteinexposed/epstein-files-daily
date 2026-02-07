@@ -191,11 +191,12 @@
         .article-preview:hover .article-thumb img{transform:scale(1.03)}
 
         /* TOP STORY - Featured first article */
-        .article-preview.top-story{background:linear-gradient(135deg,#252525 0%,#1f1f1f 100%);border-left:4px solid var(--accent);border-bottom:1px solid var(--border);padding:24px}
-        .article-preview.top-story .article-thumb{border-color:var(--accent)}
+        .article-preview.top-story{background:#252525;border-left:6px solid var(--accent);border-bottom:1px solid var(--border);padding:24px;padding-left:28px;position:relative}
+        .article-preview.top-story .article-top{grid-template-columns:380px 1fr}
+        .article-preview.top-story .article-thumb{border:2px solid var(--accent)}
         .article-preview.top-story h2{font-size:28px}
-        .article-preview.top-story .top-story-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;padding:5px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-        html.light-mode .article-preview.top-story{background:linear-gradient(135deg,#fff 0%,#f5f5f5 100%);border-left-color:var(--accent)}
+        .article-preview.top-story .top-story-badge{position:absolute;top:0;left:0;background:var(--accent);color:#fff;padding:8px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+        html.light-mode .article-preview.top-story{background:#fff;border-left-color:var(--accent)}
 
         /* DUAL THUMBNAIL - Side by Side Layout */
         .article-preview.featured.dual-thumb .article-top{grid-template-columns:500px 1fr}
@@ -369,7 +370,7 @@
                         <img src="images/martha-stewart-parties.png?v=1" alt="DOJ files reveal Martha Stewart's secret Epstein Hamptons parties" loading="lazy">
                     </a>
                     <div class="article-title-section">
-                        <span class="top-story-badge">📌 Latest</span>
+                        <span class="top-story-badge">TOP STORY</span>
                         <div class="article-meta">
                             <div class="article-tags">
                                 <a href="?search=martha+stewart" class="article-tag">Martha Stewart</a>
