@@ -1,33 +1,37 @@
 #!/usr/bin/env python3
 """
-Thumbnail generator for Epstein Exposed articles.
-Creates DOJ document-style thumbnails with cream background.
+Thumbnail generator for Epstein Files Daily articles.
+Creates DOJ document-style thumbnails with cream background and red accent bar.
 
 Usage:
     python create_thumbnail.py
 
-Modify the 'thumbnail' dict at the bottom with article details.
+Modify the 'thumbnail' dict at the bottom with article details, then run.
 """
 
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-OUTPUT_DIR = "images"  # Relative to workspace root
+# Output directory (relative to workspace root)
+OUTPUT_DIR = "images"
 WIDTH = 1200
 HEIGHT = 630
 
-def create_thumbnail(filename, doc_id, to_field, from_field, date_field, body_text, highlight_text):
+
+def create_thumbnail(filename, doc_id, to_field, from_field, date_field, highlight_text):
     """
     Create a thumbnail styled like a DOJ document excerpt.
 
     Args:
-        filename: Output filename (e.g., "james-gorman-meetings.png")
-        doc_id: DOJ document ID (e.g., "EFTA00789456.pdf")
+        filename: Output filename (e.g., "woody-allen-dinners.png")
+        doc_id: DOJ document ID (e.g., "EFTA00847392.pdf")
         to_field: Email "To" field
         from_field: Email "From" field
         date_field: Email date
-        body_text: Optional body text before highlight (can be empty string)
-        highlight_text: Key quote to highlight in yellow
+        highlight_text: Key damning quote to highlight in yellow
+
+    Returns:
+        Path to the created thumbnail image
     """
     # Create cream/off-white background
     img = Image.new('RGB', (WIDTH, HEIGHT), (250, 250, 247))
@@ -38,21 +42,20 @@ def create_thumbnail(filename, doc_id, to_field, from_field, date_field, body_te
         font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 22)
         font_label = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 26)
         font_value = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
-        font_body = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
-        font_highlight = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 34)
+        font_highlight = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 32)
     except:
-        font_header = font_label = font_value = font_body = font_highlight = ImageFont.load_default()
+        font_header = font_label = font_value = font_highlight = ImageFont.load_default()
 
     # Dark slate header bar
-    header_height = 45
-    draw.rectangle([(0, 0), (WIDTH, header_height)], fill=(51, 65, 85))
-
-    # Header text with folder emoji
+    draw.rectangle([(0, 0), (WIDTH, 45)], fill=(51, 65, 85))
     header_text = f"📁 DOJ EPSTEIN FILES — {doc_id}"
     draw.text((18, 10), header_text, font=font_header, fill=(255, 255, 255))
 
+    # Red accent bar on left side (below header)
+    draw.rectangle([(0, 45), (18, HEIGHT)], fill=(220, 38, 38))
+
     # Email metadata
-    y = header_height + 35
+    y = 80
     label_color = (120, 120, 120)  # Gray for labels
     value_color = (40, 40, 40)      # Dark for values
 
@@ -71,15 +74,8 @@ def create_thumbnail(filename, doc_id, to_field, from_field, date_field, body_te
     draw.text((145, y), date_field, font=font_value, fill=value_color)
     y += 60
 
-    # Body text (if any)
-    if body_text:
-        draw.text((55, y), body_text, font=font_body, fill=value_color)
-        y += 55
-
-    # Highlighted quote with yellow background
-    max_width = WIDTH - 120
-
     # Word wrap the highlight text
+    max_width = WIDTH - 120
     words = highlight_text.split()
     lines = []
     current_line = []
@@ -105,28 +101,27 @@ def create_thumbnail(filename, doc_id, to_field, from_field, date_field, body_te
         draw.text((54, y), line, font=font_highlight, fill=(40, 40, 40))
         y += line_height + 18
 
-    # NO LOGO - removed per requirements
-
     # Ensure output directory exists
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # Save
     output_path = os.path.join(OUTPUT_DIR, filename)
     img.save(output_path, 'PNG', quality=95)
-    print(f"Created: {output_path}")
+    print(f"✓ Created thumbnail: {output_path}")
     return output_path
 
 
 if __name__ == "__main__":
-    # Example usage - modify these values for each new article
+    # ============================================
+    # MODIFY THESE VALUES FOR EACH NEW ARTICLE
+    # ============================================
     thumbnail = {
-        "filename": "firstname-lastname-topic.png",
-        "doc_id": "EFTA00123456.pdf",
-        "to": "Jeffrey Epstein",
-        "from": "Person Name",
-        "date": "January 15, 2015",
-        "body": "",  # Optional, can be empty
-        "highlight": "The key damning quote goes here."
+        "filename": "firstname-lastname-topic.png",  # e.g., "woody-allen-dinners.png"
+        "doc_id": "EFTA00XXXXXX.pdf",                # e.g., "EFTA00847392.pdf"
+        "to": "Jeffrey Epstein",                      # Email To field
+        "from": "Person Name",                        # Email From field
+        "date": "Month DD, YYYY",                     # e.g., "November 18, 2010"
+        "highlight": "The key damning quote from the document goes here."
     }
 
     create_thumbnail(
@@ -135,6 +130,10 @@ if __name__ == "__main__":
         thumbnail["to"],
         thumbnail["from"],
         thumbnail["date"],
-        thumbnail["body"],
         thumbnail["highlight"]
     )
+
+    print("\n⚠️  Don't forget to:")
+    print("   1. Add the thumbnail to git: git add images/" + thumbnail["filename"])
+    print("   2. Include <img> tag in the article card in index.html")
+    print("   3. Update og:image in the article HTML")
