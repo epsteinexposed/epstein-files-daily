@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thumbnail Style Options</title>
+    <style>
+        body{font-family:Arial,sans-serif;background:#1a1a1a;color:#fff;padding:40px;margin:0}
+        h1{color:#dc2626;text-align:center;margin-bottom:40px}
+        .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1400px;margin:0 auto}
+        .option{background:#252525;border-radius:12px;overflow:hidden;border:2px solid #333}
+        .option:hover{border-color:#dc2626}
+        .option h2{background:#333;margin:0;padding:15px;font-size:16px;color:#dc2626}
+        .option p{padding:0 15px;font-size:12px;color:#888}
+        .option img{width:100%;display:block;border-top:1px solid #333}
+    </style>
+</head>
+<body>
+    <h1>Thumbnail Style Options - Pick Your Favorite</h1>
+    <div class="grid">
+        <div class="option">
+            <h2>Option 1: Scanned Document</h2>
+            <p>Paper with shadow, CONFIDENTIAL stamp, exhibit marker</p>
+            <img src="option1-scanned-doc.png" alt="Scanned Document">
+        </div>
+        <div class="option">
+            <h2>Option 2: PDF Viewer</h2>
+            <p>Browser PDF interface with toolbar, DOJ header</p>
+            <img src="option2-pdf-viewer.png" alt="PDF Viewer">
+        </div>
+        <div class="option">
+            <h2>Option 3: Outlook Email</h2>
+            <p>Microsoft Outlook interface with blue header, avatar</p>
+            <img src="option3-outlook.png" alt="Outlook Email">
+        </div>
+        <div class="option">
+            <h2>Option 4: Court Document</h2>
+            <p>SDNY court filing, case number, UNDER SEAL stamp</p>
+            <img src="option4-court-doc.png" alt="Court Document">
+        </div>
+        <div class="option">
+            <h2>Option 5: FBI Declassified</h2>
+            <p>FBI letterhead, redaction bars, DECLASSIFIED stamp</p>
+            <img src="option5-fbi-doc.png" alt="FBI Declassified">
+        </div>
+        <div class="option">
+            <h2>Option 6: Typewriter Original</h2>
+            <p>Aged paper, monospace text, handwritten annotation</p>
+            <img src="option6-typewriter.png" alt="Typewriter Original">
+        </div>
+    </div>
+</body>
+</html>
