@@ -114,341 +114,154 @@ grep "var(--bg)" your-article.html | head -1
 
 **⚠️ THIS STEP IS REQUIRED - DO NOT SKIP**
 
-Choose the appropriate thumbnail style based on the source material:
+**DEFAULT STYLE: Realistic Email Screenshot (Times New Roman)**
 
-| Style | Use When |
-|-------|----------|
-| 📧 **Email** | Email correspondence, memos, personal communications |
-| ✈️ **Flight Log** | Lolita Express records, travel logs, passenger lists |
-| 💰 **Wire Transfer** | Financial records, payments, donations, money trails |
-| 📅 **Calendar** | Meetings, appointments, dinner parties, scheduled events |
-| 💬 **Text Message** | Text conversations, chat logs, informal communications |
+All thumbnails should use this clean, news-style format that looks like actual DOJ document screenshots.
 
 **Thumbnail filename format**: `firstname-lastname-topic.png` (lowercase, hyphens)
 
 ---
 
-#### 📧 STYLE 1: EMAIL (Default)
-Use for: Email correspondence, memos, personal communications
+#### 📧 REALISTIC EMAIL THUMBNAIL (Default - Use for ALL articles)
+
+This creates a clean, realistic email screenshot using Times New Roman font with yellow highlights and a red DOJ caption bar.
 
 ```python
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-def create_email_thumbnail(filename, doc_id, to_field, from_field, date_field, highlight_text):
-    WIDTH, HEIGHT = 1200, 630
-    img = Image.new('RGB', (WIDTH, HEIGHT), (250, 250, 247))
+def get_serif_font(size, bold=False):
+    """Get Times New Roman equivalent (Liberation Serif)"""
+    if bold:
+        path = "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf"
+    else:
+        path = "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf"
+    try:
+        return ImageFont.truetype(path, size)
+    except:
+        return ImageFont.load_default()
+
+def get_sans_font(size, bold=False):
+    """Get sans-serif font for caption"""
+    if bold:
+        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    else:
+        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+    try:
+        return ImageFont.truetype(path, size)
+    except:
+        return ImageFont.load_default()
+
+def create_realistic_email_thumbnail(
+    output_path,
+    from_name,
+    to_name,
+    date,
+    subject,
+    body_lines,
+    highlights=[],
+    doc_number="4521"
+):
+    """Create realistic email thumbnail with Times New Roman"""
+
+    width, height = 380, 280
+    img = Image.new('RGB', (width, height), '#ffffff')
     draw = ImageDraw.Draw(img)
 
-    try:
-        font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
-        font_label = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 32)
-        font_value = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
-        font_highlight = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 38)
-    except:
-        font_header = font_label = font_value = font_highlight = ImageFont.load_default()
+    # Fonts
+    label_font = get_serif_font(11)
+    value_font = get_serif_font(11, bold=True)
+    body_font = get_serif_font(12)
+    caption_font = get_sans_font(10, bold=True)
+    caption_font_small = get_sans_font(9)
 
-    # Dark slate header
-    draw.rectangle([(0, 0), (WIDTH, 50)], fill=(51, 65, 85))
-    draw.text((20, 12), f"📁 DOJ EPSTEIN FILES — {doc_id}", font=font_header, fill=(255, 255, 255))
+    y = 18
+    left_margin = 20
+    label_width = 45
 
-    # Red accent bar
-    draw.rectangle([(0, 50), (18, HEIGHT)], fill=(220, 38, 38))
+    # Header fields
+    fields = [
+        ("From:", from_name),
+        ("To:", to_name),
+        ("Date:", date),
+        ("Re:", subject)
+    ]
 
-    # Email fields
-    y = 95
-    for label, value in [("To:", to_field), ("From:", from_field), ("Date:", date_field)]:
-        draw.text((55, y), label, font=font_label, fill=(120, 120, 120))
-        draw.text((160, y), value, font=font_value, fill=(40, 40, 40))
-        y += 50
-    y += 20
+    for label, value in fields:
+        draw.text((left_margin, y), label, fill='#666666', font=label_font)
+        draw.text((left_margin + label_width, y), value, fill='#333333', font=value_font)
+        y += 18
 
-    # Highlighted quote with word wrap
-    max_width = WIDTH - 120
-    words = highlight_text.split()
-    lines, current_line = [], []
-    for word in words:
-        test_line = ' '.join(current_line + [word])
-        bbox = draw.textbbox((0, 0), test_line, font=font_highlight)
-        if bbox[2] - bbox[0] > max_width and current_line:
-            lines.append(' '.join(current_line))
-            current_line = [word]
-        else:
-            current_line.append(word)
-    if current_line: lines.append(' '.join(current_line))
+    # Divider line
+    y += 5
+    draw.line([left_margin, y, width - left_margin, y], fill='#e0e0e0', width=1)
+    y += 12
 
-    for line in lines:
-        bbox = draw.textbbox((0, 0), line, font=font_highlight)
-        draw.rectangle([(50, y - 5), (60 + bbox[2] - bbox[0], y + bbox[3] - bbox[1] + 10)], fill=(255, 247, 140))
-        draw.text((55, y), line, font=font_highlight, fill=(40, 40, 40))
-        y += bbox[3] - bbox[1] + 22
+    # Body text with highlights
+    for line in body_lines:
+        if line == "":
+            y += 8
+            continue
 
-    os.makedirs("images", exist_ok=True)
-    img.save(f"images/{filename}", 'PNG')
-    print(f"Created: images/{filename}")
+        # Check if this line contains highlighted text
+        line_has_highlight = False
+        for hl in highlights:
+            if hl.lower() in line.lower():
+                line_has_highlight = True
+                idx = line.lower().find(hl.lower())
+                before = line[:idx]
+                highlight_text = line[idx:idx+len(hl)]
+                after = line[idx+len(hl):]
+
+                x = left_margin
+                if before:
+                    draw.text((x, y), before, fill='#333333', font=body_font)
+                    x += draw.textlength(before, font=body_font)
+
+                # Draw highlight background
+                hl_width = draw.textlength(highlight_text, font=body_font)
+                draw.rectangle([x-2, y-1, x + hl_width + 2, y + 15], fill='#fff59d')
+                draw.text((x, y), highlight_text, fill='#333333', font=body_font)
+                x += hl_width
+
+                if after:
+                    draw.text((x, y), after, fill='#333333', font=body_font)
+                break
+
+        if not line_has_highlight:
+            draw.text((left_margin, y), line, fill='#333333', font=body_font)
+
+        y += 18
+
+    # Red caption bar at bottom
+    caption_height = 32
+    draw.rectangle([0, height - caption_height, width, height], fill='#dc2626')
+    draw.text((left_margin, height - caption_height + 9), "DOJ Document Release", fill='#ffffff', font=caption_font)
+    draw.text((width - 60, height - caption_height + 10), f"#{doc_number}", fill='#ffcccc', font=caption_font_small)
+
+    os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else "images", exist_ok=True)
+    img.save(output_path, quality=95)
+    print(f"Created: {output_path}")
 
 # Usage:
-create_email_thumbnail("person-topic.png", "EFTA00123456.pdf", "Jeffrey Epstein", "Person Name", "March 15, 2005", "The damning quote here")
+create_realistic_email_thumbnail(
+    "images/person-topic.png",
+    from_name="Jeffrey Epstein",
+    to_name="Person Name",
+    date="March 15, 2005",
+    subject="Meeting Request",
+    body_lines=[
+        "Dear Person,",
+        "",
+        "Looking forward to our meeting",
+        "at the island next week.",
+        "",
+        "Keep this between us."
+    ],
+    highlights=["the island", "between us"],
+    doc_number="4521"
+)
 ```
-
----
-
-#### ✈️ STYLE 2: FLIGHT LOG
-Use for: Lolita Express records, travel logs, passenger lists
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-import os
-
-def create_flight_thumbnail(filename, doc_id, flight_date, origin, destination, passengers, highlight_passenger):
-    WIDTH, HEIGHT = 1200, 630
-    img = Image.new('RGB', (WIDTH, HEIGHT), (245, 245, 240))
-    draw = ImageDraw.Draw(img)
-
-    try:
-        font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
-        font_mono = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 22)
-        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
-        font_stamp = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 48)
-    except:
-        font_header = font_mono = font_medium = font_stamp = ImageFont.load_default()
-
-    # Navy header
-    draw.rectangle([(0, 0), (WIDTH, 55)], fill=(25, 55, 95))
-    draw.text((20, 14), f"✈️ LOLITA EXPRESS — FLIGHT MANIFEST", font=font_header, fill=(255, 255, 255))
-    draw.text((WIDTH - 250, 18), doc_id, font=font_mono, fill=(180, 200, 220))
-
-    # Red accent
-    draw.rectangle([(0, 55), (12, HEIGHT)], fill=(220, 38, 38))
-
-    # Table header
-    y = 80
-    draw.rectangle([(30, y), (WIDTH - 30, y + 45)], fill=(230, 235, 245))
-    cols = [50, 200, 400, 600, 900]
-    for col, header in zip(cols, ["DATE", "FROM", "TO", "PASSENGERS", "TAIL#"]):
-        draw.text((col, y + 10), header, font=font_mono, fill=(60, 60, 80))
-
-    # Flight row (highlighted)
-    y += 55
-    draw.rectangle([(30, y), (WIDTH - 30, y + 50)], fill=(255, 247, 140))
-    for col, val in zip(cols, [flight_date, origin, destination, highlight_passenger, "N908JE"]):
-        draw.text((col, y + 12), val, font=font_mono, fill=(40, 40, 40))
-
-    # Additional passengers
-    y += 70
-    draw.text((50, y), "Full passenger manifest:", font=font_medium, fill=(80, 80, 80))
-    y += 40
-    draw.text((50, y), passengers, font=font_medium, fill=(40, 40, 40))
-
-    # CLASSIFIED stamp
-    draw.text((800, 400), "CLASSIFIED", font=font_stamp, fill=(220, 38, 38))
-
-    # Footer
-    draw.rectangle([(0, HEIGHT - 50), (WIDTH, HEIGHT)], fill=(240, 240, 235))
-    draw.text((30, HEIGHT - 38), f"Source: DOJ Epstein Document Release — {doc_id}", font=font_mono, fill=(120, 120, 120))
-
-    os.makedirs("images", exist_ok=True)
-    img.save(f"images/{filename}", 'PNG')
-    print(f"Created: images/{filename}")
-
-# Usage:
-create_flight_thumbnail("person-flight.png", "EFTA00923847.pdf", "03/15/2002", "TETERBORO", "ST. THOMAS", "J. Epstein, G. Maxwell, Person Name, +2 others", "PERSON NAME")
-```
-
----
-
-#### 💰 STYLE 3: WIRE TRANSFER
-Use for: Financial records, payments, donations, money trails
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-import os
-
-def create_wire_thumbnail(filename, doc_id, date, sender, recipient, amount, memo):
-    WIDTH, HEIGHT = 1200, 630
-    img = Image.new('RGB', (WIDTH, HEIGHT), (250, 252, 255))
-    draw = ImageDraw.Draw(img)
-
-    try:
-        font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
-        font_mono = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 24)
-        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 28)
-        font_amount = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", 42)
-        font_stamp = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 38)
-    except:
-        font_header = font_mono = font_medium = font_amount = font_stamp = ImageFont.load_default()
-
-    # Green header (bank style)
-    draw.rectangle([(0, 0), (WIDTH, 55)], fill=(0, 80, 60))
-    draw.text((20, 14), "💰 WIRE TRANSFER CONFIRMATION", font=font_header, fill=(255, 255, 255))
-
-    # Gold accent
-    draw.rectangle([(0, 55), (12, HEIGHT)], fill=(180, 140, 20))
-
-    # Transfer details
-    y = 90
-    for label, value in [("Date:", date), ("Originator:", sender), ("Beneficiary:", recipient)]:
-        draw.text((50, y), label, font=font_mono, fill=(100, 100, 100))
-        draw.text((280, y), value, font=font_medium, fill=(30, 30, 30))
-        y += 50
-
-    # Highlighted amount
-    y += 20
-    draw.rectangle([(40, y - 10), (550, y + 70)], fill=(255, 247, 140))
-    draw.text((50, y), "AMOUNT:", font=font_mono, fill=(100, 100, 100))
-    draw.text((280, y + 5), amount, font=font_amount, fill=(180, 50, 50))
-
-    # Memo
-    y += 100
-    draw.rectangle([(40, y), (WIDTH - 40, y + 70)], fill=(245, 245, 250), outline=(200, 200, 210))
-    draw.text((60, y + 20), f'MEMO: "{memo}"', font=font_medium, fill=(60, 60, 60))
-
-    # SUBPOENAED stamp
-    draw.text((800, 180), "SUBPOENAED", font=font_stamp, fill=(220, 38, 38))
-
-    # Footer
-    draw.rectangle([(0, HEIGHT - 50), (WIDTH, HEIGHT)], fill=(240, 245, 250))
-    draw.text((30, HEIGHT - 38), f"Source: DOJ Epstein Financial Records — {doc_id}", font=font_mono, fill=(120, 120, 120))
-
-    os.makedirs("images", exist_ok=True)
-    img.save(f"images/{filename}", 'PNG')
-    print(f"Created: images/{filename}")
-
-# Usage:
-create_wire_thumbnail("person-payment.png", "EFTA01284756.pdf", "September 14, 2008", "GRATITUDE AMERICA LTD", "PERSON NAME", "$2,500,000.00", "Consulting services")
-```
-
----
-
-#### 📅 STYLE 4: CALENDAR
-Use for: Meetings, appointments, dinner parties, scheduled events
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-import os
-
-def create_calendar_thumbnail(filename, doc_id, month, day, weekday, appointments, notes):
-    WIDTH, HEIGHT = 1200, 630
-    img = Image.new('RGB', (WIDTH, HEIGHT), (250, 250, 247))
-    draw = ImageDraw.Draw(img)
-
-    try:
-        font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
-        font_day = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 72)
-        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
-        font_time = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
-        font_mono = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 20)
-    except:
-        font_header = font_day = font_medium = font_time = font_mono = ImageFont.load_default()
-
-    # Purple header
-    draw.rectangle([(0, 0), (WIDTH, 55)], fill=(90, 50, 120))
-    draw.text((20, 14), "📅 EPSTEIN PERSONAL CALENDAR", font=font_header, fill=(255, 255, 255))
-
-    # Purple accent
-    draw.rectangle([(0, 55), (12, HEIGHT)], fill=(140, 80, 180))
-
-    # Calendar day box
-    draw.rectangle([(40, 80), (180, 220)], fill=(245, 240, 250), outline=(140, 80, 180), width=3)
-    draw.text((70, 90), month, font=font_medium, fill=(140, 80, 180))
-    draw.text((65, 130), day, font=font_day, fill=(60, 30, 80))
-    draw.text((60, 195), weekday, font=font_mono, fill=(100, 100, 100))
-
-    # Appointments (list of tuples: time, description, highlight)
-    y = 90
-    for time, desc, highlight in appointments:
-        if highlight:
-            draw.rectangle([(210, y - 5), (WIDTH - 50, y + 40)], fill=(255, 247, 140))
-        draw.text((220, y), time, font=font_time, fill=(140, 80, 180))
-        draw.text((370, y + 2), desc, font=font_medium, fill=(40, 40, 40))
-        y += 55
-
-    # Notes section
-    y += 30
-    draw.rectangle([(40, y), (WIDTH - 40, y + 80)], fill=(255, 255, 245), outline=(200, 200, 190))
-    draw.text((60, y + 15), "NOTES:", font=font_mono, fill=(150, 150, 150))
-    draw.text((60, y + 45), f'"{notes}"', font=font_medium, fill=(60, 60, 60))
-
-    # Footer
-    draw.rectangle([(0, HEIGHT - 50), (WIDTH, HEIGHT)], fill=(245, 240, 250))
-    draw.text((30, HEIGHT - 38), f"Source: DOJ Epstein Document Release — {doc_id}", font=font_mono, fill=(120, 120, 120))
-
-    os.makedirs("images", exist_ok=True)
-    img.save(f"images/{filename}", 'PNG')
-    print(f"Created: images/{filename}")
-
-# Usage (appointments is list of tuples: time, description, highlight_bool):
-create_calendar_thumbnail("person-dinner.png", "EFTA00384756.pdf", "MAR", "14", "Monday",
-    [("2:00 PM", "Person Name - tea at 71st St", True), ("8:00 PM", "Dinner: Person, Guest1, Guest2", False)],
-    "Call Ghislaine re: arrangements")
-```
-
----
-
-#### 💬 STYLE 5: TEXT MESSAGE
-Use for: Text conversations, chat logs, informal communications
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-import os
-
-def create_text_thumbnail(filename, doc_id, contact_name, messages):
-    WIDTH, HEIGHT = 1200, 630
-    img = Image.new('RGB', (WIDTH, HEIGHT), (30, 30, 35))
-    draw = ImageDraw.Draw(img)
-
-    try:
-        font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
-        font_contact = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 28)
-        font_msg = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
-        font_time = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 14)
-        font_mono = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 16)
-    except:
-        font_header = font_contact = font_msg = font_time = font_mono = ImageFont.load_default()
-
-    # Status bar
-    draw.rectangle([(0, 0), (WIDTH, 55)], fill=(20, 20, 25))
-    draw.text((20, 14), "💬 TEXT MESSAGES — RECOVERED FROM DEVICE", font=font_header, fill=(255, 255, 255))
-
-    # Contact header
-    draw.rectangle([(0, 55), (WIDTH, 110)], fill=(45, 45, 50))
-    draw.ellipse([(30, 65), (90, 125)], fill=(80, 80, 90))
-    initials = ''.join([n[0] for n in contact_name.split()[:2]])
-    draw.text((45, 78), initials, font=font_contact, fill=(200, 200, 200))
-    draw.text((110, 72), contact_name, font=font_contact, fill=(255, 255, 255))
-
-    # Messages (list of tuples: text, timestamp, is_outgoing, is_highlighted)
-    y = 130
-    for text, timestamp, is_outgoing, is_highlighted in messages:
-        x = 450 if is_outgoing else 40
-        max_w = WIDTH - 490 if is_outgoing else 700
-        bg_color = (0, 120, 255) if is_outgoing else (60, 60, 65)
-
-        # Message bubble
-        draw.rounded_rectangle([(x, y), (x + max_w, y + 70)], radius=15, fill=bg_color)
-        if is_highlighted:
-            draw.rectangle([(x - 5, y - 5), (x + max_w + 5, y + 75)], outline=(255, 220, 50), width=3)
-        draw.text((x + 15, y + 12), text[:60], font=font_msg, fill=(255, 255, 255))
-        draw.text((x + 15, y + 45), timestamp, font=font_time, fill=(180, 180, 180))
-        y += 90
-
-    # Footer
-    draw.rectangle([(0, HEIGHT - 50), (WIDTH, HEIGHT)], fill=(20, 20, 25))
-    draw.text((30, HEIGHT - 38), f"Source: DOJ Digital Forensics — {doc_id}", font=font_mono, fill=(120, 120, 120))
-
-    os.makedirs("images", exist_ok=True)
-    img.save(f"images/{filename}", 'PNG')
-    print(f"Created: images/{filename}")
-
-# Usage (messages is list of tuples: text, timestamp, is_outgoing, is_highlighted):
-create_text_thumbnail("person-texts.png", "EFTA02847561.pdf", "Person Name", [
-    ("Got the girls for the trip", "Mar 12, 3:42 PM", False, False),
-    ("Perfect. Same arrangement as before", "Mar 12, 3:45 PM", True, True),
-    ("Confirmed for Saturday", "Mar 12, 4:12 PM", False, True)
-])
-```
-
----
 
 **After creating thumbnail, verify it exists:**
 ```bash
@@ -548,12 +361,7 @@ git push
 1. **TEMPLATE IS MANDATORY**: ALWAYS copy `references/article-template.html` - NEVER write HTML from scratch
 2. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding
 3. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news
-4. **Thumbnails**: MANDATORY - Choose appropriate style based on source material:
-   - 📧 Email: correspondence, memos
-   - ✈️ Flight Log: travel records, passenger lists
-   - 💰 Wire Transfer: financial records, payments
-   - 📅 Calendar: meetings, appointments, dinners
-   - 💬 Text Message: chat logs, informal communications
+4. **Thumbnails**: MANDATORY - Use the realistic email screenshot style (Times New Roman, yellow highlights, red DOJ caption bar)
 5. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
 6. **Article cards**: MUST include `<img>` thumbnail tag
 7. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
