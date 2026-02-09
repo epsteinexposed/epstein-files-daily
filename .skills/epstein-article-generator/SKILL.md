@@ -14,8 +14,7 @@ Generate daily news roundups for epsteinfilesdaily.com that aggregate coverage f
 
 Each "article" is a **daily roundup** containing:
 - **Date-based headline** (e.g., "February 9: Silicon Valley's Epstein Problem Gets Worse")
-- **3-4 sentence lede** summarizing the biggest revelations of the day
-- **5-8 links** to external news sources with brief context
+- **4-6 bullet points** — each a distinct story with inline source link
 - **Name-only tags** for building name pages (e.g., "Peter Thiel", "Elon Musk")
 
 ---
@@ -49,42 +48,30 @@ Extract all **person names** mentioned in the coverage. These become your tags.
 - NO last names only (not "Thiel", "Musk")
 - Tags are used to build name-specific pages
 
-### Step 3: Write the Lede
+### Step 3: Write the Bullets
 
-Write 3-4 bullet points highlighting the most important revelations:
+Write **4-6 bullet points**, each a distinct story with an inline source link at the end:
 
 ```html
 <ul class="lede-bullets">
-    <li><strong>Peter Thiel</strong> appears in thousands of documents spanning years of lunch meetings from 2014-2017. Emails show Epstein's team coordinating visits to Thiel's San Francisco office and arranging private dinners.</li>
-    <li><strong>Sergey Brin</strong> received outreach from Ghislaine Maxwell after meeting at TED 2003. Maxwell's emails describe the Google co-founder as someone she wanted to "cultivate" for Epstein's network.</li>
-    <li><strong>Elon Musk</strong> was invited to a private dinner at Michelin-starred Baumé in Palo Alto alongside Zuckerberg and Thiel. The restaurant was bought out entirely for the exclusive gathering.</li>
+    <li><strong>Peter Thiel</strong> appears in thousands of documents spanning years of lunch meetings from 2014-2017. Emails show Epstein's team coordinating visits to Thiel's San Francisco office and arranging private dinners. <a href="https://cnbc.com/..." target="_blank" class="source-link">CNBC →</a></li>
+
+    <li><strong>20+ tech executives</strong> maintained regular contact with Epstein — far more than previously known. The documents reveal systematic cultivation of Silicon Valley's most powerful figures. <a href="https://nbcnews.com/..." target="_blank" class="source-link">NBC News →</a></li>
+
+    <li><strong>Elon Musk</strong> was invited to a private dinner at Michelin-starred Baumé in Palo Alto with Zuckerberg and Thiel. The restaurant was bought out entirely for the exclusive gathering in August 2015. <a href="https://sfchronicle.com/..." target="_blank" class="source-link">SF Chronicle →</a></li>
+
+    <li><strong>Sergey Brin</strong> received outreach from Ghislaine Maxwell after meeting at TED 2003. Maxwell's emails describe the Google co-founder as someone she wanted to "cultivate." <a href="https://pbs.org/..." target="_blank" class="source-link">PBS →</a></li>
 </ul>
 ```
 
-**Lede guidelines:**
-- 3-4 bullets maximum — scannable, not overwhelming
-- Lead each bullet with a **bolded name**
-- **2-4 sentences per bullet** — give enough context to understand the significance
+**Bullet guidelines:**
+- **4-6 bullets** per roundup — each a distinct story
+- Lead each bullet with a **bolded name** or subject
+- **2-4 sentences per bullet** — enough context to understand the significance
+- End each bullet with an **inline source link** (format: `SOURCE →`)
 - Be specific with dates, places, and details
 
-### Step 4: Create Link Cards
-
-Each link card includes:
-- **Source name** (e.g., "NBC NEWS", "SF CHRONICLE")
-- **Headline** (link to original article)
-- **Brief context** (1-2 sentences explaining what this story adds)
-
-```html
-<div class="link-card">
-    <span class="source">NBC NEWS</span>
-    <h3><a href="https://..." target="_blank">Jeffrey Epstein files reveal deep tech ties</a></h3>
-    <p>First major report on the new DOJ release, detailing connections to Musk, Gates, Thiel, and Brin.</p>
-</div>
-```
-
-**Aim for 5-8 links per roundup** - enough to be comprehensive without overwhelming.
-
-### Step 5: Generate Date Thumbnail
+### Step 4: Generate Date Thumbnail
 
 Use the auto-generation script:
 
@@ -129,19 +116,13 @@ This creates `images/daily-feb-9-2026.png` with:
 
             <h1>[Month Day]: [Theme Headline]</h1>
 
-            <p class="lede">[3-4 sentence summary]</p>
-
-            <section class="links-section">
-                <h2>Today's Coverage</h2>
-
-                <div class="link-card">
-                    <span class="source">[SOURCE NAME]</span>
-                    <h3><a href="[URL]" target="_blank">[Headline]</a></h3>
-                    <p>[Brief context]</p>
-                </div>
-
-                <!-- More link cards (5-8 total) -->
-            </section>
+            <ul class="lede-bullets">
+                <li><strong>[Name]</strong> [2-4 sentences with details]. <a href="[URL]" target="_blank" class="source-link">SOURCE →</a></li>
+                <li><strong>[Name]</strong> [2-4 sentences with details]. <a href="[URL]" target="_blank" class="source-link">SOURCE →</a></li>
+                <li><strong>[Name]</strong> [2-4 sentences with details]. <a href="[URL]" target="_blank" class="source-link">SOURCE →</a></li>
+                <li><strong>[Name]</strong> [2-4 sentences with details]. <a href="[URL]" target="_blank" class="source-link">SOURCE →</a></li>
+                <!-- 4-6 bullets total -->
+            </ul>
         </article>
     </main>
 
@@ -173,9 +154,10 @@ Add the new roundup card to index.html:
             </div>
             <h2><a href="daily-[month]-[day]-[year].html">[Month Day]: [Theme Headline]</a></h2>
             <ul class="lede-bullets">
-                <li><strong>[Name]</strong> [2-4 sentences with specific details, dates, and context]</li>
-                <li><strong>[Name]</strong> [2-4 sentences with specific details, dates, and context]</li>
-                <li><strong>[Name]</strong> [2-4 sentences with specific details, dates, and context]</li>
+                <li><strong>[Name]</strong> [2-4 sentences]. <a href="[URL]" target="_blank" class="source-link">SOURCE →</a></li>
+                <li><strong>[Name]</strong> [2-4 sentences]. <a href="[URL]" target="_blank" class="source-link">SOURCE →</a></li>
+                <li><strong>[Name]</strong> [2-4 sentences]. <a href="[URL]" target="_blank" class="source-link">SOURCE →</a></li>
+                <li><strong>[Name]</strong> [2-4 sentences]. <a href="[URL]" target="_blank" class="source-link">SOURCE →</a></li>
             </ul>
             <a href="daily-[month]-[day]-[year].html" class="read-more">Read full roundup</a>
         </div>
@@ -245,11 +227,11 @@ Name pages aggregate all roundups mentioning a specific person. These are built 
 
 ## Key Rules
 
-1. **3+ links minimum**: Don't publish a roundup with fewer than 3 genuinely new stories
-2. **5-8 links ideal**: Comprehensive but not overwhelming
-3. **Names only for tags**: Build name pages, not category pages
-4. **Real sources only**: Link to actual news coverage, not fabricated articles
-5. **Brief context**: 1-2 sentences per link, not full summaries
+1. **4-6 bullets per roundup**: Each bullet is a distinct story with inline source link
+2. **2-4 sentences per bullet**: Enough context to understand the significance
+3. **Inline source links**: Every bullet ends with `<a class="source-link">SOURCE →</a>`
+4. **Names only for tags**: Build name pages, not category pages
+5. **Real sources only**: Link to actual news coverage, not fabricated articles
 6. **Daily thumbnails**: Auto-generate with date and theme
 
 ---
@@ -260,6 +242,11 @@ Name pages aggregate all roundups mentioning a specific person. These are built 
 - Roundup: `daily-feb-9-2026.html`
 - Thumbnail: `images/daily-feb-9-2026.png`
 - Name page: `name-peter-thiel.html`
+
+**Bullet format:**
+```html
+<li><strong>Name</strong> [2-4 sentences]. <a href="URL" target="_blank" class="source-link">SOURCE →</a></li>
+```
 
 **Thumbnail generation:**
 ```bash
@@ -272,6 +259,6 @@ python generate_daily_thumb.py "Feb 9, 2026" "Silicon Valley Ties"
 - Links: to name pages (`name-peter-thiel.html`)
 
 **Don't publish if:**
-- Fewer than 3 new links
+- Fewer than 4 distinct stories
 - No significant new revelations
 - Just rehashing old news
