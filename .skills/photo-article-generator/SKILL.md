@@ -133,10 +133,10 @@ git push
 - Accent color: `#7c3aed` (purple)
 
 **Video Articles (Red theme)**:
-- Badge: `background:#dc2626` with "🎬 Video"
-- Evidence box border: `border:2px solid #dc2626`
-- Header bar: `background:#dc2626`
-- Accent color: `#dc2626` (red)
+- Badge: `background:#b91c1c` with "🎬 Video"
+- Evidence box border: `border:2px solid #b91c1c`
+- Header bar: `background:#b91c1c`
+- Accent color: `#b91c1c` (red)
 
 ## References
 
