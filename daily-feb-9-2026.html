@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -233,8 +233,9 @@
             const themeIconLight = document.getElementById('theme-icon-light');
             const html = document.documentElement;
 
+            // Default to light mode, only use dark if explicitly saved
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
+            if (savedTheme !== 'dark') {
                 html.classList.add('light-mode');
                 themeText.textContent = 'DARK';
                 themeIconDark.style.display = 'none';
