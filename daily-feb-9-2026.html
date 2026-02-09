@@ -311,9 +311,9 @@
             const themeIconLight = document.getElementById('theme-icon-light');
             const html = document.documentElement;
 
-            // Default to light mode, only use dark if explicitly saved
+            // Default to dark mode, only use light if explicitly saved
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme !== 'dark') {
+            if (savedTheme === 'light') {
                 html.classList.add('light-mode');
                 themeText.textContent = 'DARK';
                 themeIconDark.style.display = 'none';
