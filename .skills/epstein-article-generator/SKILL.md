@@ -55,17 +55,17 @@ Write 3-4 bullet points highlighting the most important revelations:
 
 ```html
 <ul class="lede-bullets">
-    <li><strong>Peter Thiel</strong> appears in thousands of pages with lunch meetings spanning 2014-2017</li>
-    <li><strong>Sergey Brin</strong> received outreach from Ghislaine Maxwell after meeting at TED in 2003</li>
-    <li><strong>Elon Musk</strong> was invited to a Michelin-starred dinner with Epstein and Zuckerberg</li>
+    <li><strong>Peter Thiel</strong> appears in thousands of documents spanning years of lunch meetings from 2014-2017. Emails show Epstein's team coordinating visits to Thiel's San Francisco office and arranging private dinners.</li>
+    <li><strong>Sergey Brin</strong> received outreach from Ghislaine Maxwell after meeting at TED 2003. Maxwell's emails describe the Google co-founder as someone she wanted to "cultivate" for Epstein's network.</li>
+    <li><strong>Elon Musk</strong> was invited to a private dinner at Michelin-starred Baumé in Palo Alto alongside Zuckerberg and Thiel. The restaurant was bought out entirely for the exclusive gathering.</li>
 </ul>
 ```
 
 **Lede guidelines:**
 - 3-4 bullets maximum — scannable, not overwhelming
-- Lead each bullet with a bolded name
-- One key fact per bullet — be specific
-- No fluff — just the most damning details
+- Lead each bullet with a **bolded name**
+- **2-4 sentences per bullet** — give enough context to understand the significance
+- Be specific with dates, places, and details
 
 ### Step 4: Create Link Cards
 
@@ -173,9 +173,9 @@ Add the new roundup card to index.html:
             </div>
             <h2><a href="daily-[month]-[day]-[year].html">[Month Day]: [Theme Headline]</a></h2>
             <ul class="lede-bullets">
-                <li><strong>[Name]</strong> [key fact]</li>
-                <li><strong>[Name]</strong> [key fact]</li>
-                <li><strong>[Name]</strong> [key fact]</li>
+                <li><strong>[Name]</strong> [2-4 sentences with specific details, dates, and context]</li>
+                <li><strong>[Name]</strong> [2-4 sentences with specific details, dates, and context]</li>
+                <li><strong>[Name]</strong> [2-4 sentences with specific details, dates, and context]</li>
             </ul>
             <a href="daily-[month]-[day]-[year].html" class="read-more">Read full roundup</a>
         </div>
