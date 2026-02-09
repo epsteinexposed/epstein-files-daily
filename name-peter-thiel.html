@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peter Thiel in the Epstein Files — All Coverage | Epstein Files Daily</title>
+    <meta name="description" content="Every story about Peter Thiel's connections to Jeffrey Epstein. Thousands of documents, lunch meetings, and a $40M investment connection.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f5f5f5;
+            --bg-card: #fff;
+            --text: #1a1a1a;
+            --text-muted: #555;
+            --accent: #dc2626;
+            --border: #ddd;
+            --link: #0066cc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        a { color: var(--link); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Header */
+        header {
+            background: #000;
+            border-bottom: 4px solid var(--accent);
+            padding: 0;
+        }
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            background: var(--accent);
+            padding: 12px 24px;
+            margin-left: -20px;
+            text-decoration: none;
+        }
+        .logo:hover { background: #b91c1c; text-decoration: none; }
+        .logo-text {
+            font-family: 'Oswald', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        .logo-text .daily {
+            font-size: 10px;
+            letter-spacing: 3px;
+            display: block;
+        }
+
+        /* Main */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Profile header */
+        .profile-header {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 30px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            background: #ddd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #999;
+        }
+        .profile-info h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 36px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .profile-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .profile-stats {
+            display: flex;
+            gap: 24px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* Key facts */
+        .key-facts {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .key-facts h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .key-facts ul {
+            list-style: none;
+        }
+        .key-facts li {
+            padding: 8px 0;
+            border-bottom: 1px solid #fde68a;
+            font-size: 14px;
+        }
+        .key-facts li:last-child { border-bottom: none; }
+        .key-facts li strong { color: var(--text); }
+
+        /* Coverage section */
+        .coverage-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .coverage-section h2 {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 12px 20px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .link-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .link-item:last-child { border-bottom: none; }
+        .link-item:hover { background: #fafafa; }
+
+        .link-headline {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+        .link-headline a { color: var(--text); }
+        .link-headline a:hover { color: var(--accent); }
+
+        .link-excerpt {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .link-meta {
+            font-size: 12px;
+            color: #888;
+        }
+        .link-source {
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Related names */
+        .related-names {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 20px;
+        }
+        .related-names h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .related-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .related-tags a {
+            background: #eee;
+            color: var(--text);
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 3px;
+        }
+        .related-tags a:hover {
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        footer p {
+            font-size: 12px;
+            color: #666;
+        }
+        footer a { color: #888; }
+
+        @media (max-width: 600px) {
+            .profile-header {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .profile-photo {
+                margin: 0 auto;
+            }
+            .profile-stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index-aggregator.html" class="logo">
+            <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
+        </a>
+    </div>
+</header>
+
+<main>
+    <a href="index-aggregator.html" class="back-link">← Back to all coverage</a>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-photo">👤</div>
+        <div class="profile-info">
+            <h1>Peter Thiel</h1>
+            <p class="profile-title">Billionaire investor, PayPal co-founder, Palantir co-founder, early Facebook investor</p>
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Documents</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Stories</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">2014-19</div>
+                    <div class="stat-label">Contact Period</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Facts -->
+    <div class="key-facts">
+        <h2>⚡ Key Facts from the Files</h2>
+        <ul>
+            <li><strong>Thousands of documents</strong> — Thiel's name appears in thousands of pages in the DOJ release</li>
+            <li><strong>Multiple lunch meetings</strong> — Calendar entries show "LUNCH w/ Peter Thiel" on multiple dates from 2014-2017</li>
+            <li><strong>$40 million investment connection</strong> — NYT reported Epstein invested $40M in Thiel-connected VC funds in 2015-16</li>
+            <li><strong>Michelin-star dinner</strong> — Planned attendee at exclusive Baumé restaurant buyout with Musk, Zuckerberg (Aug 2015)</li>
+            <li><strong>San Francisco meetings</strong> — Limo booking showed stop at Thiel Capital in SF (April 2016)</li>
+            <li><strong>No island visit</strong> — Thiel rep confirmed he never visited Epstein's private island</li>
+            <li><strong>No wrongdoing alleged</strong> — Authorities have not accused Thiel of any wrongdoing</li>
+        </ul>
+    </div>
+
+    <!-- Major Coverage -->
+    <div class="coverage-section">
+        <h2>📰 Major Coverage</h2>
+
+        <div class="link-item">
+            <div class="link-headline">
+                <a href="https://www.nbcnews.com/tech/tech-news/jeffrey-epstein-files-reveal-deep-tech-ties-musk-gates-rcna257092" target="_blank">
+                    Jeffrey Epstein files reveal deep tech ties, from Musk to Gates
+                </a>
+            </div>
+            <div class="link-excerpt">
+                Peter Thiel appears in thousands of the new Epstein documents. Communications began around 2014 and lasted until around 2019, just months before Epstein was arrested.
+            </div>
+            <div class="link-meta">
+                <span class="link-source">NBC News</span> · February 9, 2026
+            </div>
+        </div>
+
+        <div class="link-item">
+            <div class="link-headline">
+                <a href="https://www.sfchronicle.com/food/restaurants/article/jeffrey-epstein-bay-area-restaurants-21331202.php" target="_blank">
+                    Jeffrey Epstein dined, or tried to dine, at these Bay Area restaurants
+                </a>
+            </div>
+            <div class="link-excerpt">
+                The two-Michelin-star Baumé in Palo Alto closed for an exclusive dinner in August 2015 — whose planned attendees included Epstein, Musk, Zuckerberg, and Thiel.
+            </div>
+            <div class="link-meta">
+                <span class="link-source">SF Chronicle</span> · February 8, 2026
+            </div>
+        </div>
+
+        <div class="link-item">
+            <div class="link-headline">
+                <a href="https://www.cnbc.com/2026/02/09/tech-leaders-epstein-records-silicon-valley-sergey-brin-thiel-sinofsky-reid-hoffman-musk-gates.html" target="_blank">
+                    Epstein's Silicon Valley ties extended beyond just Musk and Gates
+                </a>
+            </div>
+            <div class="link-excerpt">
+                Thiel appears in emails arranging for lunches or other meetups in 2014 through 2017, including at least one lunch at Thiel's San Francisco office.
+            </div>
+            <div class="link-meta">
+                <span class="link-source">CNBC</span> · February 9, 2026
+            </div>
+        </div>
+
+        <div class="link-item">
+            <div class="link-headline">
+                <a href="https://oversightdemocrats.house.gov/news/press-releases/oversight-democrats-release-third-batch-documents-jeffrey-epstein-estate" target="_blank">
+                    Oversight Democrats Release Third Batch of Documents from Jeffrey Epstein Estate
+                </a>
+            </div>
+            <div class="link-excerpt">
+                Congressional release includes documents mentioning Elon Musk, Peter Thiel, Steve Bannon, and Prince Andrew.
+            </div>
+            <div class="link-meta">
+                <span class="link-source">House Oversight Committee</span> · September 2024
+            </div>
+        </div>
+    </div>
+
+    <!-- Earlier Coverage -->
+    <div class="coverage-section">
+        <h2>📁 Earlier Coverage & Background</h2>
+
+        <div class="link-item">
+            <div class="link-headline">
+                <a href="https://www.nytimes.com/2019/10/12/business/jeffrey-epstein-peter-thiel.html" target="_blank">
+                    Epstein invested $40 million in Thiel-connected venture capital funds
+                </a>
+            </div>
+            <div class="link-excerpt">
+                In 2015 and 2016, Epstein invested in two funds managed by a venture capital firm co-founded by Thiel.
+            </div>
+            <div class="link-meta">
+                <span class="link-source">New York Times</span> · October 2019
+            </div>
+        </div>
+
+        <div class="link-item">
+            <div class="link-headline">
+                <a href="https://www.pbs.org/newshour/nation/a-list-of-powerful-men-named-in-the-epstein-files-from-elon-musk-to-former-prince-andrew" target="_blank">
+                    A list of powerful men named in the Epstein files
+                </a>
+            </div>
+            <div class="link-excerpt">
+                Comprehensive overview of prominent individuals mentioned in the DOJ document release.
+            </div>
+            <div class="link-meta">
+                <span class="link-source">PBS NewsHour</span> · January 31, 2026
+            </div>
+        </div>
+    </div>
+
+    <!-- Official Responses -->
+    <div class="coverage-section">
+        <h2>🎤 Official Response</h2>
+        <div class="link-item">
+            <div class="link-excerpt" style="font-style: italic; border-left: 3px solid var(--accent); padding-left: 16px;">
+                A representative for Thiel said the venture capitalist never visited Epstein's infamous private island in the Virgin Islands. Authorities have accused Thiel of no wrongdoing.
+            </div>
+            <div class="link-meta" style="margin-top: 12px;">
+                <span class="link-source">Via NBC News</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Names -->
+    <div class="related-names">
+        <h3>🔗 Related Names</h3>
+        <div class="related-tags">
+            <a href="name-elon-musk.html">Elon Musk</a>
+            <a href="name-bill-gates.html">Bill Gates</a>
+            <a href="name-sergey-brin.html">Sergey Brin</a>
+            <a href="name-reid-hoffman.html">Reid Hoffman</a>
+            <a href="name-mark-zuckerberg.html">Mark Zuckerberg</a>
+            <a href="name-leon-black.html">Leon Black</a>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 Epstein Files Daily · <a href="index-aggregator.html">Home</a> · <a href="all-names.html">All Names</a></p>
+</footer>
+
+</body>
+</html>

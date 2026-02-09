@@ -1,844 +1,274 @@
 ---
-name: epstein-article-generator
+name: epstein-daily-roundup
 description: |
-  Generate new articles for Epstein Files Daily website based on DOJ document releases.
-  TRIGGERS: "write new article", "generate article", "publish article", "daily article", "epstein article"
-  Finds interesting DOJ documents, writes SEO-optimized investigative articles, creates thumbnails, updates the site, and pushes to GitHub.
+  Generate daily news roundups for Epstein Files Daily website.
+  TRIGGERS: "daily roundup", "epstein news", "publish daily", "today's roundup"
+  Aggregates news from multiple sources, writes brief summaries, creates date thumbnails, updates the site, and pushes to GitHub.
 ---
 
-# Epstein Article Generator
+# Epstein Daily Roundup Generator
 
-Generate investigative journalism articles for epsteinfilesdaily.com based on DOJ file releases.
+Generate daily news roundups for epsteinfilesdaily.com that aggregate coverage from multiple news sources.
 
-## 🚨🚨🚨 ABSOLUTE RULE: NO FABRICATED DOCUMENTS 🚨🚨🚨
+## Content Model
 
-**NEVER fabricate, invent, or make up:**
-- Document IDs (e.g., "EFTA01928475.pdf")
-- Email content or quotes
-- Flight logs or passenger lists
-- Financial records or wire transfers
-- Any "evidence" not found in actual DOJ files
-
-**EVERY quote, document reference, and claim MUST come from a real, verifiable DOJ document.**
-
-If you cannot find real documents to support a story, DO NOT WRITE THE STORY.
-
----
-
-## ⚠️ CRITICAL CHECKLIST - VERIFY BEFORE PUBLISHING
-
-Before pushing ANY article, confirm ALL of these are complete:
-
-- [ ] **REAL DOCUMENTS FOUND** - You have actual DOJ document URLs that work
-- [ ] **DOCUMENTS VERIFIED** - You clicked the links and confirmed they exist
-- [ ] **QUOTES ARE REAL** - Every quote comes directly from a real document
-- [ ] **Article created FROM TEMPLATE** - MUST copy `references/article-template.html` as base
-- [ ] **Article has theme-toggle** - Verify with: `grep -c "theme-toggle" article.html` (should return 6)
-- [ ] **Thumbnail image created** in `images/` folder
-- [ ] **index.html updated** with article card INCLUDING thumbnail `<img>` tag
-- [ ] **feed.xml updated** with new `<item>`
-- [ ] **covered-topics.md updated** with new topic
-- [ ] **Tags use FULL NAMES** (e.g., "woody allen" not "allen")
-
-**DO NOT SKIP THE THUMBNAIL** - Articles without thumbnails look broken on the site.
-
-## 🚨 MANDATORY: USE THE TEMPLATE FILE
-
-**NEVER write article HTML from scratch.** ALWAYS:
-1. Read `references/article-template.html` first
-2. Copy it as the base for your new article
-3. Only replace the placeholder content ({{HEADLINE}}, {{SLUG}}, etc.)
-
-The template includes critical features that MUST be present:
-- Dark theme CSS with CSS variables
-- Light/dark mode toggle in header
-- Search bar in header
-- Sticky header with red accent
-- Theme persistence JavaScript
-- Correct "Epstein Files Daily" branding
-- EF favicon (not EE)
-
-**If your article is missing any of these, it will look broken on the site.**
+Each "article" is a **daily roundup** containing:
+- **Date-based headline** (e.g., "February 9: Silicon Valley's Epstein Problem Gets Worse")
+- **3-4 sentence lede** summarizing the biggest revelations of the day
+- **5-8 links** to external news sources with brief context
+- **Name-only tags** for building name pages (e.g., "Peter Thiel", "Elon Musk")
 
 ---
 
 ## Workflow
 
-### Step 1: FIND REAL DOCUMENTS FIRST (MANDATORY)
+### Step 1: Find Today's News
 
-**DO NOT WRITE ANYTHING until you have found real documents.**
-
-1. **Browse the DOJ Epstein files**: https://www.justice.gov/epstein
-2. **Navigate to actual data sets**: https://www.justice.gov/epstein/files
-3. **Find specific PDF documents** with interesting content
-4. **Record the ACTUAL URLs** in this format:
-   ```
-   https://www.justice.gov/epstein/files/DataSet%2010/EFTA01998027.pdf
-   ```
-
-**How to find documents:**
-- Browse data set folders (DataSet 1, DataSet 2, etc.)
-- Look for PDFs containing emails, flight logs, financial records
-- Search for names of interest within documents
-- Note exact file paths and document IDs
-
-**You MUST have at least 2-3 real document URLs before proceeding.**
-
-### Step 2: VERIFY DOCUMENTS EXIST
-
-**Click every document link and confirm:**
-- [ ] The URL loads (not 404)
-- [ ] The document contains what you think it contains
-- [ ] You can quote directly from the actual text
+Search for recent Epstein-related news coverage:
 
 ```bash
-# Test that document URLs work:
-curl -I "https://www.justice.gov/epstein/files/DataSet%2010/EFTA01998027.pdf"
-# Should return HTTP 200, not 404
+# Use web search to find recent coverage
 ```
 
-**If a document doesn't exist, DO NOT USE IT. Find a different one.**
+**Sources to check:**
+- Major news outlets (NBC, CNBC, NYT, WSJ, PBS, etc.)
+- Local newspapers covering specific angles
+- Congressional/government releases
+- Court document releases
 
-### Step 3: Check Covered Topics
+**Minimum requirement:** You need **3+ genuinely new links** to publish a daily roundup. If there aren't enough new stories, don't publish that day.
 
-Read `references/covered-topics.md` to see what's already published. Do NOT repeat stories.
+### Step 2: Identify Names Mentioned
 
-### Step 4: Extract Real Content from Documents
+Extract all **person names** mentioned in the coverage. These become your tags.
 
-**Only after verifying documents, extract:**
-- Actual quotes (copy exact text from PDFs)
-- Real names mentioned in documents
-- Actual dates from correspondence
-- Real document IDs from file names
+**Tag rules:**
+- ONLY use full person names (e.g., "Peter Thiel", "Elon Musk")
+- NO categories (not "Tech", "Silicon Valley", "Politics")
+- NO company names (not "Google", "PayPal")
+- NO last names only (not "Thiel", "Musk")
+- Tags are used to build name-specific pages
 
-**NEVER paraphrase into something the document doesn't say.**
-**NEVER invent quotes or conversations.**
-**NEVER add details not in the source documents.**
+### Step 3: Write the Lede
 
-### Step 5: Write Article (MUST USE TEMPLATE + REAL DOCUMENTS ONLY)
-
-**⚠️ CRITICAL: You MUST use the template file. DO NOT write HTML from scratch.**
-
-**Step 5a: Read the template first**
-```bash
-cat references/article-template.html
-```
-
-**Step 5b: Copy template and replace placeholders**
-
-The template uses these placeholders - replace ALL of them:
-- `{{HEADLINE}}` - Article headline (based on REAL document content)
-- `{{META_DESCRIPTION}}` - SEO description (150-160 chars)
-- `{{SLUG}}` - URL slug (e.g., `martha-stewart-epstein-parties`)
-- `{{THUMBNAIL_FILENAME}}` - Thumbnail filename without extension
-- `{{PERSON_TAG}}` - Person's full name for tag
-- `{{DATE}}` - Publication date
-- `{{ARTICLE_CONTENT}}` - The actual article body (ONLY what's in real documents)
-
-**⚠️ REMINDER: All doc-evidence boxes MUST use real, verified document URLs from Step 1-2.**
-
-**Step 5c: Verify article has required features**
-```bash
-# Must return 6 (theme toggle elements)
-grep -c "theme-toggle" your-article.html
-
-# Must return matches (dark theme CSS)
-grep "var(--bg)" your-article.html | head -1
-```
-
-**Article Elements:**
-- **Headline**: Attention-grabbing, uses quotes from docs when possible
-- **Lede**: 1-2 sentence hook summarizing the revelation
-- **Body**: Opening context, document evidence box, analysis, response box, source box, share buttons
-
-**SEO**: Title <60 chars, meta description 150-160 chars, full name in title/first paragraph
-
-**Style**: Tabloid tone but factual, short paragraphs, pull quotes for damning evidence
-
-### Step 6: Create Thumbnail Image (MANDATORY)
-
-**⚠️ THIS STEP IS REQUIRED - DO NOT SKIP**
-
-**⚠️ IMPORTANT: DO NOT USE ONLY EMAIL THUMBNAILS - CHOOSE THE RIGHT STYLE!**
-
-**Use the ready-to-use script:** `references/create_thumbnail.py`
-
-```python
-# Import and use the thumbnail generator:
-import sys
-sys.path.insert(0, 'references')
-from create_thumbnail import create_email_thumbnail, create_flight_thumbnail, create_wire_thumbnail, create_calendar_thumbnail, create_text_thumbnail
-
-# Then call the appropriate function based on article content (see decision tree below)
-```
-
-## 🎯 THUMBNAIL STYLE DECISION TREE (MUST FOLLOW)
-
-**Step 5a: Determine article type and use the CORRECT thumbnail style:**
-
-| If article is about... | Use this style | Function |
-|------------------------|----------------|----------|
-| 💰 **Money/Payments/Investments/Donations** | WIRE TRANSFER | `create_wire_thumbnail()` |
-| 📅 **Meetings/Dinners/Visits/Appointments** | CALENDAR | `create_calendar_thumbnail()` |
-| ✈️ **Flights/Travel/Island visits** | FLIGHT LOG | `create_flight_thumbnail()` |
-| 💬 **Text conversations/Chats** | TEXT MESSAGE | `create_text_thumbnail()` |
-| 📧 **Emails/Letters/Legal correspondence** | EMAIL | `create_email_thumbnail()` |
-
-**EXAMPLES:**
-- Article about "$10M payment to foundation" → **WIRE TRANSFER** (not email!)
-- Article about "secret dinner meetings" → **CALENDAR** (not email!)
-- Article about "Lolita Express flights" → **FLIGHT LOG** (not email!)
-- Article about "private island visits" → **CALENDAR** (shows appointment)
-- Article about "text messages revealed" → **TEXT MESSAGE** (not email!)
-- Article about "email correspondence" → **EMAIL**
-- Article about "legal retainer agreement" → **EMAIL** (legal correspondence)
-
-**DO NOT default to email for everything! The variety makes the site look professional.**
-
-All thumbnail styles include:
-- White/light background for document authenticity
-- Yellow highlight on incriminating text
-- Dark navy DOJ bar at bottom with document number
-- **Image size: 500x300 pixels** (displayed at 420px width in CSS grid)
-
-**Thumbnail filename format**: `firstname-lastname-topic.png` (lowercase, hyphens)
-
-**CSS Display Size**: Thumbnails display at **420px width** in article cards (same as TOP STORY).
-This is set in index.html: `.article-preview.featured .article-top{grid-template-columns:420px 1fr}`
-
----
-
-#### 📧 AUTHENTIC EMAIL THUMBNAIL (Use for ALL articles)
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-
-def get_font(size, bold=False):
-    if bold:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    else:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-    try:
-        return ImageFont.truetype(path, size)
-    except:
-        return ImageFont.load_default()
-
-def create_authentic_email(output_path, to_email, from_email, sent_date, subject, body_lines, highlight_text=None, doc_number="DOJ-EPSTEIN-004521"):
-    """Create authentic-looking leaked email with yellow highlight and navy DOJ bar"""
-
-    width, height = 500, 300
-    img = Image.new('RGB', (width, height), '#ffffff')
-    draw = ImageDraw.Draw(img)
-
-    label_font = get_font(13, bold=True)
-    value_font = get_font(13)
-    body_font = get_font(13)
-    sig_font = get_font(12)
-    caption_font = get_font(10)
-
-    y = 20
-    left = 25
-    label_width = 70
-
-    # To field
-    draw.text((left, y), "To:", fill='#000', font=label_font)
-    draw.text((left + label_width, y), to_email, fill='#000', font=value_font)
-    y += 24
-
-    # From field
-    draw.text((left, y), "From:", fill='#000', font=label_font)
-    draw.text((left + label_width, y), from_email, fill='#000', font=value_font)
-    y += 24
-
-    # Sent field
-    draw.text((left, y), "Sent:", fill='#000', font=label_font)
-    draw.text((left + label_width, y), sent_date, fill='#000', font=value_font)
-    y += 24
-
-    # Subject field
-    draw.text((left, y), "Subject:", fill='#000', font=label_font)
-    draw.text((left + label_width + 15, y), subject, fill='#000', font=value_font)
-    y += 38
-
-    # Body text with yellow highlight
-    for line in body_lines:
-        if line == "":
-            y += 14
-            continue
-
-        if highlight_text and highlight_text.lower() in line.lower():
-            idx = line.lower().find(highlight_text.lower())
-            before = line[:idx]
-            word = line[idx:idx+len(highlight_text)]
-            after = line[idx+len(highlight_text):]
-
-            x = left
-            if before:
-                draw.text((x, y), before, fill='#000', font=body_font)
-                x += draw.textlength(before, font=body_font)
-
-            # Yellow highlight background
-            word_w = draw.textlength(word, font=body_font)
-            draw.rectangle([x - 2, y - 2, x + word_w + 2, y + 18], fill='#ffff00')
-            draw.text((x, y), word, fill='#000', font=body_font)
-
-            x += word_w
-            if after:
-                draw.text((x, y), after, fill='#000', font=body_font)
-        else:
-            draw.text((left, y), line, fill='#000', font=body_font)
-
-        y += 22
-
-    # BlackBerry signature
-    y += 12
-    draw.text((left, y), "Sent from my BlackBerry® wireless device", fill='#000', font=sig_font)
-
-    # Dark navy bar at bottom with DOJ document number
-    bar_height = 28
-    draw.rectangle([0, height - bar_height, width, height], fill='#1a2744')
-    draw.text((15, height - bar_height + 8), f"U.S. Department of Justice  •  {doc_number}", fill='#ffffff', font=caption_font)
-
-    img.save(output_path, quality=95)
-    print(f"Created: {output_path}")
-
-# Usage:
-create_authentic_email(
-    "images/person-topic.png",
-    to_email="Jeffrey Epstein[jeevacation@gmail.com]",
-    from_email="Person Name[person@email.com]",
-    sent_date="Thur 3/15/2005 2:30:15 PM",
-    subject="Re: Meeting Request",
-    body_lines=[
-        "Looking forward to our meeting",
-        "at the island next week.",
-        "",
-        "Keep this between us."
-    ],
-    highlight_text="between us",
-    doc_number="DOJ-EPSTEIN-004521"
-)
-```
-
----
-
-#### ✈️ AUTHENTIC FLIGHT LOG (Use for travel/flight articles)
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-
-def get_font(size, bold=False):
-    if bold:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    else:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-    try:
-        return ImageFont.truetype(path, size)
-    except:
-        return ImageFont.load_default()
-
-def get_mono(size):
-    try:
-        return ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", size)
-    except:
-        return ImageFont.load_default()
-
-def create_authentic_flight_log(output_path, flight_date, origin, destination, tail_number,
-                                 passengers, highlight_passenger, doc_number="DOJ-EPSTEIN-FL-00847"):
-    """Create authentic flight manifest like actual leaked documents"""
-
-    width, height = 500, 300
-    img = Image.new('RGB', (width, height), '#ffffff')
-    draw = ImageDraw.Draw(img)
-
-    header_font = get_font(11, bold=True)
-    label_font = get_font(11)
-    mono_font = get_mono(11)
-    caption_font = get_font(10)
-
-    y = 15
-    left = 25
-
-    # Document header
-    draw.text((left, y), "FLIGHT MANIFEST - CONFIDENTIAL", fill='#000', font=header_font)
-    y += 25
-
-    # Flight details
-    draw.text((left, y), "Date:", fill='#000', font=label_font)
-    draw.text((left + 80, y), flight_date, fill='#000', font=mono_font)
-    y += 20
-
-    draw.text((left, y), "Origin:", fill='#000', font=label_font)
-    draw.text((left + 80, y), origin, fill='#000', font=mono_font)
-    y += 20
-
-    draw.text((left, y), "Destination:", fill='#000', font=label_font)
-    draw.text((left + 80, y), destination, fill='#000', font=mono_font)
-    y += 20
-
-    draw.text((left, y), "Aircraft:", fill='#000', font=label_font)
-    draw.text((left + 80, y), f"{tail_number} (Gulfstream IV)", fill='#000', font=mono_font)
-    y += 28
-
-    # Passengers header
-    draw.text((left, y), "PASSENGERS:", fill='#000', font=header_font)
-    y += 22
-
-    # List passengers with highlight
-    for i, passenger in enumerate(passengers):
-        text = f"{i+1}. {passenger}"
-        if highlight_passenger and highlight_passenger.lower() in passenger.lower():
-            text_w = draw.textlength(text, font=mono_font)
-            draw.rectangle([left - 2, y - 2, left + text_w + 4, y + 16], fill='#ffff00')
-        draw.text((left, y), text, fill='#000', font=mono_font)
-        y += 18
-
-    # Dark navy DOJ bar at bottom
-    bar_height = 28
-    draw.rectangle([0, height - bar_height, width, height], fill='#1a2744')
-    draw.text((15, height - bar_height + 8), f"U.S. Department of Justice  •  {doc_number}", fill='#ffffff', font=caption_font)
-
-    img.save(output_path, quality=95)
-    print(f"Created: {output_path}")
-
-# Usage:
-create_authentic_flight_log(
-    "images/person-flight.png",
-    flight_date="March 15, 2002",
-    origin="Teterboro, NJ (TEB)",
-    destination="St. Thomas, USVI (STT)",
-    tail_number="N908JE",
-    passengers=["Jeffrey Epstein", "Ghislaine Maxwell", "Person Name", "Guest 1"],
-    highlight_passenger="Person Name",
-    doc_number="DOJ-EPSTEIN-FL-00923"
-)
-```
-
----
-
-#### 💰 AUTHENTIC WIRE TRANSFER (Use for financial/payment articles)
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-
-def get_font(size, bold=False):
-    if bold:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    else:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-    try:
-        return ImageFont.truetype(path, size)
-    except:
-        return ImageFont.load_default()
-
-def create_authentic_wire_transfer(output_path, date, sender, sender_account, recipient,
-                                    recipient_account, amount, memo, highlight_text=None,
-                                    doc_number="DOJ-EPSTEIN-FIN-01284"):
-    """Create authentic wire transfer like actual bank documents"""
-
-    width, height = 500, 300
-    img = Image.new('RGB', (width, height), '#ffffff')
-    draw = ImageDraw.Draw(img)
-
-    header_font = get_font(11, bold=True)
-    label_font = get_font(11)
-    value_font = get_font(11)
-    amount_font = get_font(14, bold=True)
-    caption_font = get_font(10)
-
-    y = 15
-    left = 25
-    label_w = 120
-
-    # Document header
-    draw.text((left, y), "WIRE TRANSFER CONFIRMATION", fill='#000', font=header_font)
-    y += 25
-
-    # Transfer details
-    fields = [
-        ("Date:", date),
-        ("Originator:", sender),
-        ("Account:", sender_account),
-        ("Beneficiary:", recipient),
-        ("Beneficiary Acct:", recipient_account),
-    ]
-
-    for label, value in fields:
-        draw.text((left, y), label, fill='#000', font=label_font)
-        draw.text((left + label_w, y), value, fill='#000', font=value_font)
-        y += 20
-
-    y += 5
-
-    # Amount with highlight
-    draw.text((left, y), "Amount:", fill='#000', font=label_font)
-    amount_x = left + label_w
-    amount_w = draw.textlength(amount, font=amount_font)
-    draw.rectangle([amount_x - 3, y - 3, amount_x + amount_w + 5, y + 20], fill='#ffff00')
-    draw.text((amount_x, y), amount, fill='#000', font=amount_font)
-    y += 28
-
-    # Memo
-    draw.text((left, y), "Memo:", fill='#000', font=label_font)
-    memo_text = f'"{memo}"'
-    if highlight_text and highlight_text.lower() in memo.lower():
-        memo_w = draw.textlength(memo_text, font=value_font)
-        draw.rectangle([left + label_w - 2, y - 2, left + label_w + memo_w + 4, y + 16], fill='#ffff00')
-    draw.text((left + label_w, y), memo_text, fill='#000', font=value_font)
-
-    # Dark navy DOJ bar at bottom
-    bar_height = 28
-    draw.rectangle([0, height - bar_height, width, height], fill='#1a2744')
-    draw.text((15, height - bar_height + 8), f"U.S. Department of Justice  •  {doc_number}", fill='#ffffff', font=caption_font)
-
-    img.save(output_path, quality=95)
-    print(f"Created: {output_path}")
-
-# Usage:
-create_authentic_wire_transfer(
-    "images/person-payment.png",
-    date="September 14, 2008",
-    sender="Gratitude America Ltd",
-    sender_account="****4521",
-    recipient="Person Name",
-    recipient_account="****8834",
-    amount="$2,500,000.00",
-    memo="Consulting services",
-    highlight_text="Consulting",
-    doc_number="DOJ-EPSTEIN-FIN-01284"
-)
-```
-
----
-
-#### 📅 AUTHENTIC CALENDAR (Use for meeting/dinner/event articles)
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-
-def get_font(size, bold=False):
-    if bold:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    else:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-    try:
-        return ImageFont.truetype(path, size)
-    except:
-        return ImageFont.load_default()
-
-def create_authentic_calendar(output_path, month, day, year, day_of_week, appointments,
-                               highlight_text=None, doc_number="DOJ-EPSTEIN-CAL-00384"):
-    """Create authentic calendar page with visual calendar element"""
-
-    width, height = 500, 300
-    img = Image.new('RGB', (width, height), '#ffffff')
-    draw = ImageDraw.Draw(img)
-
-    header_font = get_font(10, bold=True)
-    month_font = get_font(12, bold=True)
-    day_font = get_font(42, bold=True)
-    weekday_font = get_font(10)
-    time_font = get_font(11, bold=True)
-    event_font = get_font(11)
-    caption_font = get_font(10)
-
-    # Document header
-    draw.text((25, 12), "PERSONAL CALENDAR - CONFIDENTIAL", fill='#000', font=header_font)
-
-    # Calendar day box on the left
-    box_x, box_y = 25, 38
-    box_w, box_h = 100, 95
-
-    # Red header bar for month
-    draw.rectangle([box_x, box_y, box_x + box_w, box_y + 25], fill='#cc0000')
-    draw.text((box_x + 25, box_y + 5), month.upper(), fill='#fff', font=month_font)
-
-    # White box for day number
-    draw.rectangle([box_x, box_y + 25, box_x + box_w, box_y + box_h], fill='#fff', outline='#ccc', width=1)
-
-    # Day number centered
-    day_text = str(day)
-    day_w = draw.textlength(day_text, font=day_font)
-    draw.text((box_x + (box_w - day_w) / 2, box_y + 35), day_text, fill='#000', font=day_font)
-
-    # Day of week below
-    weekday_w = draw.textlength(day_of_week, font=weekday_font)
-    draw.text((box_x + (box_w - weekday_w) / 2, box_y + 78), day_of_week, fill='#666', font=weekday_font)
-
-    # Year below box
-    year_text = str(year)
-    year_w = draw.textlength(year_text, font=weekday_font)
-    draw.text((box_x + (box_w - year_w) / 2, box_y + box_h + 5), year_text, fill='#666', font=weekday_font)
-
-    # Appointments on the right side
-    appt_x = 145
-    appt_y = 45
-
-    draw.text((appt_x, appt_y), "APPOINTMENTS:", fill='#000', font=header_font)
-    appt_y += 22
-
-    for time, event in appointments:
-        should_highlight = highlight_text and highlight_text.lower() in event.lower()
-
-        draw.text((appt_x, appt_y), time, fill='#cc0000', font=time_font)
-
-        event_x = appt_x + 70
-        if should_highlight:
-            event_w = draw.textlength(event, font=event_font)
-            draw.rectangle([event_x - 2, appt_y - 2, event_x + event_w + 4, appt_y + 16], fill='#ffff00')
-        draw.text((event_x, appt_y), event, fill='#000', font=event_font)
-        appt_y += 22
-
-    # Dark navy DOJ bar at bottom
-    bar_height = 28
-    draw.rectangle([0, height - bar_height, width, height], fill='#1a2744')
-    draw.text((15, height - bar_height + 8), f"U.S. Department of Justice  •  {doc_number}", fill='#ffffff', font=caption_font)
-
-    img.save(output_path, quality=95)
-    print(f"Created: {output_path}")
-
-# Usage:
-create_authentic_calendar(
-    "images/person-dinner.png",
-    month="MAR",
-    day=14,
-    year=2010,
-    day_of_week="Sunday",
-    appointments=[
-        ("2:00 PM", "Tea with Person Name"),
-        ("5:00 PM", "Call Ghislaine re: arrangements"),
-        ("8:00 PM", "Dinner: Person, Maxwell, guests"),
-    ],
-    highlight_text="Person Name",
-    doc_number="DOJ-EPSTEIN-CAL-00384"
-)
-```
-
----
-
-#### 💬 AUTHENTIC TEXT MESSAGE (Use for text/chat articles)
-
-```python
-from PIL import Image, ImageDraw, ImageFont
-
-def get_font(size, bold=False):
-    if bold:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-    else:
-        path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-    try:
-        return ImageFont.truetype(path, size)
-    except:
-        return ImageFont.load_default()
-
-def create_authentic_text_message(output_path, contact_name, phone_number, messages,
-                                   highlight_text=None, doc_number="DOJ-EPSTEIN-DIG-02847"):
-    """Create authentic text message screenshot like actual forensic extraction"""
-
-    width, height = 500, 300
-    img = Image.new('RGB', (width, height), '#f5f5f5')
-    draw = ImageDraw.Draw(img)
-
-    header_font = get_font(11, bold=True)
-    contact_font = get_font(12, bold=True)
-    msg_font = get_font(11)
-    time_font = get_font(9)
-    caption_font = get_font(10)
-
-    y = 15
-    left = 25
-
-    # Document header
-    draw.text((left, y), "TEXT MESSAGE EXTRACTION - FORENSIC COPY", fill='#000', font=header_font)
-    y += 22
-
-    draw.text((left, y), f"Contact: {contact_name}", fill='#000', font=contact_font)
-    y += 18
-    draw.text((left, y), f"Phone: {phone_number}", fill='#666', font=msg_font)
-    y += 25
-
-    # Messages (sender, text, timestamp)
-    for sender, text, timestamp in messages:
-        is_epstein = sender.lower() == "epstein"
-
-        bubble_x = left if not is_epstein else left + 150
-        bubble_color = '#e5e5ea' if not is_epstein else '#007aff'
-        text_color = '#000' if not is_epstein else '#fff'
-
-        should_highlight = highlight_text and highlight_text.lower() in text.lower()
-
-        text_w = min(draw.textlength(text, font=msg_font), 280)
-        bubble_w = text_w + 20
-
-        if should_highlight:
-            draw.rectangle([bubble_x - 3, y - 3, bubble_x + bubble_w + 5, y + 40], outline='#ffff00', width=3)
-
-        draw.rounded_rectangle([bubble_x, y, bubble_x + bubble_w, y + 35], radius=10, fill=bubble_color)
-        draw.text((bubble_x + 10, y + 8), text[:40], fill=text_color, font=msg_font)
-        draw.text((bubble_x + 10, y + 38), timestamp, fill='#888', font=time_font)
-        y += 55
-
-    # Dark navy DOJ bar at bottom
-    bar_height = 28
-    draw.rectangle([0, height - bar_height, width, height], fill='#1a2744')
-    draw.text((15, height - bar_height + 8), f"U.S. Department of Justice  •  {doc_number}", fill='#ffffff', font=caption_font)
-
-    img.save(output_path, quality=95)
-    print(f"Created: {output_path}")
-
-# Usage (messages format: sender, text, timestamp):
-create_authentic_text_message(
-    "images/person-texts.png",
-    contact_name="Person Name",
-    phone_number="+1 (212) 555-0142",
-    messages=[
-        ("Person", "Got the girls for the trip", "Mar 12, 3:42 PM"),
-        ("Epstein", "Perfect. Same as before", "Mar 12, 3:45 PM"),
-        ("Person", "Confirmed for Saturday", "Mar 12, 4:12 PM"),
-    ],
-    highlight_text="girls",
-    doc_number="DOJ-EPSTEIN-DIG-02847"
-)
-```
-
----
-
-**After creating thumbnail, verify it exists:**
-```bash
-ls -la images/firstname-lastname-topic.png
-```
-
-### Step 7: Save Article
-
-Save HTML to workspace: `firstname-lastname-topic.html` (lowercase, hyphens)
-
-### Step 8: Update Site
-
-#### 8a. Add article card to `index.html`
-
-**IMPORTANT**: The article card MUST include the thumbnail image AND have the correct structure.
-
-**⚠️ CRITICAL LAYOUT RULE**: The `.lede` and `.read-more` elements MUST be INSIDE the `article-title-section` div, NOT outside it. If placed outside, the snippet text will appear BELOW the thumbnail instead of to the right of it.
-
-Use this exact format:
+Write 3-4 sentences summarizing the day's biggest revelations:
 
 ```html
-<!-- AUTO-GENERATED ARTICLE: FIRSTNAME LASTNAME -->
-<article class="article-preview featured" data-tags="firstname lastname">
+<p class="lede">
+    Today's DOJ document release reveals new Silicon Valley connections.
+    Peter Thiel appears in thousands of pages with lunch meetings spanning 2014-2017.
+    Meanwhile, documents show Google co-founder Sergey Brin received outreach from
+    Ghislaine Maxwell after meeting at TED in 2003.
+</p>
+```
+
+**Lede guidelines:**
+- Focus on the most newsworthy revelations
+- Name specific people and connections
+- Be factual and source-based
+- Create urgency without sensationalism
+
+### Step 4: Create Link Cards
+
+Each link card includes:
+- **Source name** (e.g., "NBC NEWS", "SF CHRONICLE")
+- **Headline** (link to original article)
+- **Brief context** (1-2 sentences explaining what this story adds)
+
+```html
+<div class="link-card">
+    <span class="source">NBC NEWS</span>
+    <h3><a href="https://..." target="_blank">Jeffrey Epstein files reveal deep tech ties</a></h3>
+    <p>First major report on the new DOJ release, detailing connections to Musk, Gates, Thiel, and Brin.</p>
+</div>
+```
+
+**Aim for 5-8 links per roundup** - enough to be comprehensive without overwhelming.
+
+### Step 5: Generate Date Thumbnail
+
+Use the auto-generation script:
+
+```bash
+cd /sessions/dreamy-epic-mccarthy/mnt/AI\ experiment
+python generate_daily_thumb.py "Feb 9, 2026" "Silicon Valley Ties"
+```
+
+This creates `images/daily-feb-9-2026.png` with:
+- Red accent bar at top
+- Date prominently displayed
+- Theme text below
+- "EPSTEIN FILES DAILY" branding
+- Document number styling
+
+**Thumbnail filename format:** `daily-[month]-[day]-[year].png` (lowercase)
+
+### Step 6: Create the Roundup HTML
+
+**Use the daily template format:**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[Month Day]: [Theme Headline] | Epstein Files Daily</title>
+    <!-- ... standard meta tags ... -->
+</head>
+<body>
+    <header><!-- Standard header --></header>
+
+    <main>
+        <article class="daily-roundup">
+            <div class="article-meta">
+                <time datetime="YYYY-MM-DD">[Full Date]</time>
+                <div class="tags">
+                    <a href="name-[firstname]-[lastname].html">[Full Name]</a>
+                    <!-- More name tags -->
+                </div>
+            </div>
+
+            <h1>[Month Day]: [Theme Headline]</h1>
+
+            <p class="lede">[3-4 sentence summary]</p>
+
+            <section class="links-section">
+                <h2>Today's Coverage</h2>
+
+                <div class="link-card">
+                    <span class="source">[SOURCE NAME]</span>
+                    <h3><a href="[URL]" target="_blank">[Headline]</a></h3>
+                    <p>[Brief context]</p>
+                </div>
+
+                <!-- More link cards (5-8 total) -->
+            </section>
+        </article>
+    </main>
+
+    <footer><!-- Standard footer --></footer>
+</body>
+</html>
+```
+
+**Filename format:** `daily-[month]-[day]-[year].html` (lowercase)
+
+### Step 7: Update index.html
+
+Add the new roundup card to index.html:
+
+```html
+<!-- DAILY ROUNDUP: [DATE] -->
+<article class="article-preview featured" data-tags="[name1] [name2] [name3]">
     <div class="article-top">
-        <a href="firstname-lastname-topic.html" class="article-thumb">
-            <img src="images/firstname-lastname-topic.png?v=1" alt="DOJ files reveal [description]" loading="lazy">
+        <a href="daily-[month]-[day]-[year].html" class="article-thumb">
+            <img src="images/daily-[month]-[day]-[year].png?v=1" alt="[Date] Epstein news roundup" loading="lazy">
         </a>
         <div class="article-title-section">
             <div class="article-meta">
                 <div class="article-tags">
-                    <a href="?search=firstname+lastname" class="article-tag">Firstname Lastname</a>
+                    <a href="name-[firstname]-[lastname].html" class="article-tag">[Full Name]</a>
+                    <!-- More name tags -->
                 </div>
-                <time datetime="YYYY-MM-DD" class="article-date">Month DD, YYYY</time>
-                <span class="reading-time">· X min read</span>
+                <time datetime="YYYY-MM-DD" class="article-date">[Month DD, YYYY]</time>
             </div>
-            <h2><a href="firstname-lastname-topic.html">[Headline]</a></h2>
-            <p class="lede">[Copy the article's <p class="lede"> subtitle/tagline exactly]</p>
-            <a href="firstname-lastname-topic.html" class="read-more">Read full article</a>
+            <h2><a href="daily-[month]-[day]-[year].html">[Month Day]: [Theme Headline]</a></h2>
+            <p class="lede">[Same 3-4 sentence lede from article]</p>
+            <a href="daily-[month]-[day]-[year].html" class="read-more">Read full roundup</a>
         </div>
     </div>
 </article>
 ```
 
-**TAG RULES:**
-- `data-tags` attribute: Use lowercase full name with space (e.g., `data-tags="woody allen"`)
-- Visible tag: Use proper capitalization (e.g., `Woody Allen`)
-- Search href: Use `+` for spaces (e.g., `?search=woody+allen`)
-- **ONLY use individual FULL names** - NO last names only, NO company names, NO country names
+**Tag format in `data-tags`:** lowercase full names with spaces (e.g., `data-tags="peter thiel elon musk sergey brin"`)
 
-#### 8b. Add to feed.xml
+### Step 8: Update feed.xml
 
-Add new `<item>` with RFC 822 date format.
+Add new `<item>` with RFC 822 date format:
 
-#### 8c. Update covered-topics.md
-
-Add the new topic to prevent duplicates.
+```xml
+<item>
+    <title>[Month Day]: [Theme Headline]</title>
+    <link>https://epsteinfilesdaily.com/daily-[month]-[day]-[year].html</link>
+    <description>[Lede text]</description>
+    <pubDate>[RFC 822 date]</pubDate>
+    <guid>https://epsteinfilesdaily.com/daily-[month]-[day]-[year].html</guid>
+</item>
+```
 
 ### Step 9: Verify and Publish
 
-**Before committing, run ALL these verification checks:**
+**Run these checks before committing:**
 
 ```bash
 # 1. Thumbnail exists
-ls images/firstname-lastname-topic.png
+ls images/daily-*.png
 
-# 2. Article exists
-ls firstname-lastname-topic.html
+# 2. Roundup HTML exists
+ls daily-*.html
 
-# 3. Article has theme toggle (MUST return 6)
-grep -c "theme-toggle" firstname-lastname-topic.html
+# 3. index.html has the card with thumbnail
+grep "daily-[month]-[day]-[year].png" index.html
 
-# 4. Article has dark theme CSS
-grep -c "var(--bg)" firstname-lastname-topic.html
-
-# 5. Article has correct branding (should show "Epstein Files Daily")
-grep "Epstein Files Daily" firstname-lastname-topic.html | head -1
-
-# 6. index.html has the article card with <img> tag
-grep "firstname-lastname-topic.png" index.html
-
-# 7. ⚠️ CRITICAL: Article has ACTUAL CONTENT (not just template shell)
-# Must have section headers (returns 3+)
-grep -c "<h3>" firstname-lastname-topic.html
-
-# Must have document evidence boxes (returns 2+)
-grep -c "doc-evidence" firstname-lastname-topic.html
-
-# Must have substantial paragraphs (returns 10+)
-grep -c "<p>" firstname-lastname-topic.html
+# 4. Feed has the entry
+grep "daily-[month]-[day]-[year]" feed.xml
 ```
 
-**⚠️ CONTENT CHECK IS CRITICAL**: If the article only has 1-2 `<p>` tags and 0 `<h3>` headers, the article body is EMPTY. This happened before and resulted in a broken article being published. DO NOT SKIP THIS CHECK.
+**Commit and push:**
 
-**If any check fails, DO NOT commit. Fix the issue first.**
-
-**Commit with ALL files:**
 ```bash
-git add firstname-lastname-topic.html index.html feed.xml images/firstname-lastname-topic.png .skills/epstein-article-generator/references/covered-topics.md
-git commit -m "Add article: [headline]"
+git add daily-*.html index.html feed.xml images/daily-*.png
+git commit -m "Daily roundup: [Month Day] - [Theme]"
 git push
 ```
 
 ---
 
-## References
+## Name Pages
 
-- `references/article-template.html` - HTML template (dark theme with light/dark toggle)
-- `references/covered-topics.md` - Previously published topics
-- `references/create_thumbnail.py` - Thumbnail generator script
+Name pages aggregate all roundups mentioning a specific person. These are built from the tags.
 
-## Summary of Key Rules
+**Example:** `name-peter-thiel.html` shows:
+- Profile header (name, title, stats)
+- Key facts from the files
+- All coverage mentioning this person (links to roundups + external sources)
+- Related names
 
-1. **🚨 NO FABRICATED DOCUMENTS**: NEVER invent document IDs, quotes, or evidence. Every claim MUST come from a REAL, VERIFIED DOJ document with a working URL. If you can't find real documents, DON'T WRITE THE STORY.
-2. **FIND DOCUMENTS FIRST**: Always start by browsing https://www.justice.gov/epstein/files and finding real PDFs BEFORE writing anything
-3. **VERIFY ALL LINKS**: Click every DOJ link to confirm it returns HTTP 200, not 404
-4. **TEMPLATE IS MANDATORY**: ALWAYS copy `references/article-template.html` - NEVER write HTML from scratch
-5. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding, AND actual content (3+ `<h3>` headers, 2+ doc-evidence boxes, 10+ `<p>` tags)
-6. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news, NO fabricated search URLs
-7. **Thumbnails**: MANDATORY - **MUST choose style based on article content (NOT always email!)**:
-   - 💰 **Wire Transfer**: payments, investments, donations, financial deals
-   - 📅 **Calendar**: meetings, dinners, visits, appointments
-   - ✈️ **Flight Log**: flights, travel, island trips
-   - 💬 **Text Message**: text conversations, chats
-   - 📧 **Email**: ONLY for actual email correspondence, legal letters
-   **⚠️ DO NOT default to email! Use Wire for money, Calendar for meetings!**
-   All styles have: yellow highlights, dark navy DOJ bar at bottom
-8. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
-9. **Article cards**: MUST include `<img>` thumbnail tag, `.lede` and `.read-more` MUST be INSIDE `article-title-section` (not outside)
-10. **Lede text**: MUST match the article's `<p class="lede">` subtitle/tagline exactly - the compelling hook after the headline, NOT a generic summary
-11. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
+**Create/update name pages when:**
+- A person appears in 3+ roundups
+- There's significant new information about them
 
-## Quick Verification Commands
+---
 
+## Key Rules
+
+1. **3+ links minimum**: Don't publish a roundup with fewer than 3 genuinely new stories
+2. **5-8 links ideal**: Comprehensive but not overwhelming
+3. **Names only for tags**: Build name pages, not category pages
+4. **Real sources only**: Link to actual news coverage, not fabricated articles
+5. **Brief context**: 1-2 sentences per link, not full summaries
+6. **Daily thumbnails**: Auto-generate with date and theme
+
+---
+
+## Quick Reference
+
+**File naming:**
+- Roundup: `daily-feb-9-2026.html`
+- Thumbnail: `images/daily-feb-9-2026.png`
+- Name page: `name-peter-thiel.html`
+
+**Thumbnail generation:**
 ```bash
-# Run these BEFORE every commit:
-grep -c "theme-toggle" article.html        # Must return 6
-grep -c "var(--bg)" article.html           # Must return >0
-grep "Epstein Files Daily" article.html    # Must show matches
-ls images/thumbnail.png                     # Must exist
+python generate_daily_thumb.py "Feb 9, 2026" "Silicon Valley Ties"
 ```
+
+**Tag format:**
+- `data-tags`: lowercase with spaces (`peter thiel elon musk`)
+- Visible tags: proper case (`Peter Thiel`)
+- Links: to name pages (`name-peter-thiel.html`)
+
+**Don't publish if:**
+- Fewer than 3 new links
+- No significant new revelations
+- Just rehashing old news

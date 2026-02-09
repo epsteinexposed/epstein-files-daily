@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Epstein Exposed</title>
-    <link>https://epstein-exposed.com</link>
-    <description>Comprehensive coverage of the Jeffrey Epstein DOJ file releases. In-depth analysis of documents, emails, and court records.</description>
+    <title>Epstein Files Daily</title>
+    <link>https://epsteinfilesdaily.com</link>
+    <description>Daily news roundups covering the Jeffrey Epstein DOJ file releases. Aggregated coverage from multiple sources.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 02 Feb 2026 12:00:00 GMT</lastBuildDate>
-    <atom:link href="https://epstein-exposed.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Sun, 09 Feb 2026 12:00:00 GMT</lastBuildDate>
+    <atom:link href="https://epsteinfilesdaily.com/feed.xml" rel="self" type="application/rss+xml"/>
 
-    </channel>
+    <item>
+      <title>February 9: Silicon Valley's Epstein Problem Gets Worse</title>
+      <link>https://epsteinfilesdaily.com/daily-feb-9-2026.html</link>
+      <description>Today's DOJ document release reveals extensive Silicon Valley connections. Peter Thiel appears in thousands of pages with lunch meetings spanning 2014-2017. Documents show Google co-founder Sergey Brin received outreach from Ghislaine Maxwell after meeting at TED in 2003.</description>
+      <pubDate>Sun, 09 Feb 2026 12:00:00 GMT</pubDate>
+      <guid>https://epsteinfilesdaily.com/daily-feb-9-2026.html</guid>
+    </item>
+
+  </channel>
 </rss>

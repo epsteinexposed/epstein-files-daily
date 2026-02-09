@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epstein Files Daily — Every Story, Every Name, Every Day</title>
+    <meta name="description" content="Your daily hub for all Epstein files coverage. Curated links to every major story, organized by name.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f5f5f5;
+            --bg-card: #fff;
+            --text: #1a1a1a;
+            --text-muted: #555;
+            --accent: #dc2626;
+            --border: #ddd;
+            --link: #0066cc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+        a { color: var(--link); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Header */
+        header {
+            background: #000;
+            border-bottom: 4px solid var(--accent);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            background: var(--accent);
+            padding: 12px 24px;
+            margin-left: -20px;
+            text-decoration: none;
+        }
+        .logo:hover { background: #b91c1c; text-decoration: none; }
+        .logo-text {
+            font-family: 'Oswald', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .logo-text .daily {
+            font-size: 12px;
+            letter-spacing: 3px;
+            display: block;
+            margin-top: 2px;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .header-search input {
+            padding: 8px 12px;
+            border: none;
+            background: #222;
+            color: #fff;
+            font-size: 14px;
+            width: 200px;
+        }
+        .header-search button {
+            padding: 8px 16px;
+            background: #333;
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .header-search button:hover { background: var(--accent); }
+        .subscribe-btn {
+            background: var(--accent);
+            color: #fff;
+            padding: 10px 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        .subscribe-btn:hover { background: #b91c1c; text-decoration: none; }
+
+        /* Breaking bar */
+        .breaking-bar {
+            background: var(--accent);
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Main layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 220px 1fr 300px;
+            gap: 24px;
+        }
+
+        /* Left sidebar - Names */
+        .names-sidebar {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0;
+        }
+        .names-sidebar h2 {
+            background: #000;
+            color: #fff;
+            padding: 12px 16px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .names-list {
+            list-style: none;
+        }
+        .names-list li {
+            border-bottom: 1px solid var(--border);
+        }
+        .names-list a {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 16px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .names-list a:hover {
+            background: #f0f0f0;
+            text-decoration: none;
+            color: var(--accent);
+        }
+        .names-list .count {
+            background: #eee;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        .names-list a:hover .count {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* Main content - Links */
+        .main-content h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .link-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .link-section h2 {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 10px 16px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .link-section h2 a {
+            color: #fff;
+            font-size: 11px;
+            opacity: 0.7;
+        }
+        .link-section h2 a:hover { opacity: 1; }
+
+        .link-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .link-item:last-child { border-bottom: none; }
+        .link-item:hover { background: #fafafa; }
+
+        .link-headline {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+        .link-headline a { color: var(--text); }
+        .link-headline a:hover { color: var(--accent); }
+
+        .link-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .link-source {
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Featured link */
+        .link-item.featured {
+            background: #fffbeb;
+            border-left: 4px solid var(--accent);
+        }
+        .link-item.featured .link-headline {
+            font-size: 17px;
+        }
+
+        /* Right sidebar */
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+        .sidebar-box h3 {
+            background: #000;
+            color: #fff;
+            padding: 10px 16px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .sidebar-box-content {
+            padding: 16px;
+        }
+
+        .newsletter-form input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .newsletter-form button {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .newsletter-form button:hover { background: #b91c1c; }
+
+        .trending-list {
+            list-style: none;
+        }
+        .trending-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .trending-list li:last-child { border-bottom: none; }
+        .trending-list a { color: var(--text); }
+        .trending-list a:hover { color: var(--accent); }
+        .trending-rank {
+            color: var(--accent);
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* DOJ link box */
+        .doj-box {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 16px;
+            text-align: center;
+        }
+        .doj-box p {
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: #aaa;
+        }
+        .doj-box a {
+            display: block;
+            background: var(--accent);
+            color: #fff;
+            padding: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        .doj-box a:hover { background: #b91c1c; text-decoration: none; }
+
+        /* Footer */
+        footer {
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        footer p {
+            font-size: 12px;
+            color: #666;
+        }
+        footer a { color: #888; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .names-sidebar, .right-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">
+            <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
+        </a>
+        <div class="header-right">
+            <form class="header-search">
+                <input type="text" placeholder="Search names...">
+                <button type="submit">GO</button>
+            </form>
+            <a href="#newsletter" class="subscribe-btn">Subscribe</a>
+        </div>
+    </div>
+</header>
+
+<div class="breaking-bar">
+    📰 3.5 MILLION pages released by DOJ — We're tracking every story
+</div>
+
+<div class="container">
+    <!-- Left Sidebar: Names Index -->
+    <aside class="names-sidebar">
+        <h2>📁 Names in the Files</h2>
+        <ul class="names-list">
+            <li><a href="name-peter-thiel.html">Peter Thiel <span class="count">12</span></a></li>
+            <li><a href="name-bill-gates.html">Bill Gates <span class="count">28</span></a></li>
+            <li><a href="name-richard-branson.html">Richard Branson <span class="count">8</span></a></li>
+            <li><a href="name-sergey-brin.html">Sergey Brin <span class="count">6</span></a></li>
+            <li><a href="name-elon-musk.html">Elon Musk <span class="count">34</span></a></li>
+            <li><a href="name-prince-andrew.html">Prince Andrew <span class="count">45</span></a></li>
+            <li><a href="name-bill-clinton.html">Bill Clinton <span class="count">52</span></a></li>
+            <li><a href="name-donald-trump.html">Donald Trump <span class="count">67</span></a></li>
+            <li><a href="name-josh-harris.html">Josh Harris <span class="count">9</span></a></li>
+            <li><a href="name-dr-oz.html">Dr. Oz <span class="count">4</span></a></li>
+            <li><a href="name-leon-black.html">Leon Black <span class="count">19</span></a></li>
+            <li><a href="name-les-wexner.html">Les Wexner <span class="count">23</span></a></li>
+            <li><a href="all-names.html" style="color: var(--accent); font-weight: 700;">View All Names →</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content: Link Feed -->
+    <main class="main-content">
+        <h1>📰 Today's Coverage — February 9, 2026</h1>
+
+        <!-- Featured Story -->
+        <div class="link-section">
+            <h2>🔥 Top Story</h2>
+            <div class="link-item featured">
+                <div class="link-headline">
+                    <a href="https://www.nbcnews.com/tech/tech-news/jeffrey-epstein-files-reveal-deep-tech-ties-musk-gates-rcna257092" target="_blank">
+                        Jeffrey Epstein files reveal deep tech ties, from Musk to Gates — at least 20 tech executives in contact
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">NBC News</span> · 2 hours ago · Tech, Silicon Valley
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech / Silicon Valley -->
+        <div class="link-section">
+            <h2>💻 Tech & Silicon Valley <a href="category-tech.html">See all →</a></h2>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.cnbc.com/2026/02/09/tech-leaders-epstein-records-silicon-valley-sergey-brin-thiel-sinofsky-reid-hoffman-musk-gates.html" target="_blank">
+                        Epstein's Silicon Valley ties extended beyond just Musk and Gates
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">CNBC</span> · 4 hours ago
+                </div>
+            </div>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.sfchronicle.com/food/restaurants/article/jeffrey-epstein-bay-area-restaurants-21331202.php" target="_blank">
+                        Epstein dined at these Bay Area restaurants — including a Michelin-star buyout with Musk, Thiel, Zuckerberg
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">SF Chronicle</span> · 6 hours ago
+                </div>
+            </div>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.mercurynews.com/2026/02/08/epstein-files-silicon-valley-tech-musk-thiel/" target="_blank">
+                        Epstein files show post-conviction ties to Silicon Valley power players
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">Mercury News</span> · Yesterday
+                </div>
+            </div>
+        </div>
+
+        <!-- Politics -->
+        <div class="link-section">
+            <h2>🏛️ Politics <a href="category-politics.html">See all →</a></h2>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.cnn.com/2026/02/03/politics/epstein-files-musk-lutnick-branson-emails" target="_blank">
+                        Breaking down some boldface names in the Epstein files
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">CNN</span> · 3 hours ago
+                </div>
+            </div>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.cbsnews.com/news/bill-gates-elon-musk-epstein-files-what-documents-show/" target="_blank">
+                        Bill Gates, Elon Musk among big names in Epstein files — what documents show
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">CBS News</span> · 5 hours ago
+                </div>
+            </div>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://abcnews.go.com/US/doj-releasing-additional-material-epstein-files/story" target="_blank">
+                        DOJ releasing 3 million pages, 'didn't protect' Trump, deputy AG says
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">ABC News</span> · 8 hours ago
+                </div>
+            </div>
+        </div>
+
+        <!-- Business / Finance -->
+        <div class="link-section">
+            <h2>💰 Business & Finance <a href="category-business.html">See all →</a></h2>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.inquirer.com/news/josh-harris-jeffery-epstein-latest-emails-20260130.html" target="_blank">
+                        New Epstein files show years of email exchanges with Sixers co-owner Josh Harris
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">Philadelphia Inquirer</span> · Yesterday
+                </div>
+            </div>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.alliancemagazine.org/blog/billionaire-philanthropists-face-scrutiny-as-names-emerge-from-epstein-documents/" target="_blank">
+                        Billionaire philanthropists face scrutiny as names emerge from documents
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">Alliance Magazine</span> · 2 days ago
+                </div>
+            </div>
+        </div>
+
+        <!-- International -->
+        <div class="link-section">
+            <h2>🌍 International <a href="category-international.html">See all →</a></h2>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.euronews.com/my-europe/2026/02/04/europe-in-the-epstein-files-how-far-is-the-continents-political-elite-implicated" target="_blank">
+                        Europe in the Epstein files: How far is the continent's political elite implicated?
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">Euronews</span> · 5 days ago
+                </div>
+            </div>
+            <div class="link-item">
+                <div class="link-headline">
+                    <a href="https://www.aljazeera.com/news/2026/1/30/us-department-of-justice-releases-three-million-new-epstein-documents" target="_blank">
+                        US Department of Justice releases 3 million new Epstein files
+                    </a>
+                </div>
+                <div class="link-meta">
+                    <span class="link-source">Al Jazeera</span> · 10 days ago
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="right-sidebar">
+        <!-- Newsletter -->
+        <div class="sidebar-box" id="newsletter">
+            <h3>📧 Daily Digest</h3>
+            <div class="sidebar-box-content">
+                <p style="font-size: 13px; margin-bottom: 12px; color: #666;">Get every new story delivered to your inbox.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="your@email.com" required>
+                    <button type="submit">Subscribe Free</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Trending -->
+        <div class="sidebar-box">
+            <h3>🔥 Most Searched Names</h3>
+            <div class="sidebar-box-content">
+                <ul class="trending-list">
+                    <li><span class="trending-rank">1.</span> <a href="name-bill-gates.html">Bill Gates</a></li>
+                    <li><span class="trending-rank">2.</span> <a href="name-elon-musk.html">Elon Musk</a></li>
+                    <li><span class="trending-rank">3.</span> <a href="name-peter-thiel.html">Peter Thiel</a></li>
+                    <li><span class="trending-rank">4.</span> <a href="name-prince-andrew.html">Prince Andrew</a></li>
+                    <li><span class="trending-rank">5.</span> <a href="name-richard-branson.html">Richard Branson</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- DOJ Link -->
+        <div class="sidebar-box doj-box">
+            <p>Browse the original documents yourself</p>
+            <a href="https://www.justice.gov/epstein/doj-disclosures" target="_blank">DOJ Epstein Library →</a>
+        </div>
+
+        <!-- Ad placeholder -->
+        <div class="sidebar-box">
+            <div style="padding: 40px 16px; text-align: center; color: #999; font-size: 11px; text-transform: uppercase;">
+                Advertisement
+            </div>
+        </div>
+    </aside>
+</div>
+
+<footer>
+    <p>&copy; 2026 Epstein Files Daily · <a href="about.html">About</a> · <a href="privacy.html">Privacy</a> · <a href="contact.html">Tips</a></p>
+</footer>
+
+</body>
+</html>
