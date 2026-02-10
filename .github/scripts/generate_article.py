@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """
 Daily Roundup Generator for Epstein Files Daily
-
-IMPORTANT: This script fetches news from Google News RSS feeds.
-The Claude API CANNOT search the web - do NOT change this to ask Claude to search.
+Calls Claude API to research news and generate a daily roundup.
 """
 
 import os
@@ -11,251 +9,324 @@ import json
 import re
 import random
 import urllib.parse
-import urllib.request
-import xml.etree.ElementTree as ET
-from datetime import datetime, timedelta
+from datetime import datetime
 from anthropic import Anthropic
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
+# Initialize Anthropic client
 client = Anthropic()
 
 def read_file(path):
+    """Read a file and return its contents."""
     with open(path, 'r', encoding='utf-8') as f:
         return f.read()
 
 def write_file(path, content):
+    """Write content to a file."""
     os.makedirs(os.path.dirname(path) if os.path.dirname(path) else '.', exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
 
 def get_existing_roundups():
+    """Get list of existing daily roundup files."""
     roundups = []
     for f in os.listdir('.'):
         if f.startswith('daily-') and f.endswith('.html'):
             roundups.append(f)
     return roundups
 
-def fetch_news_from_rss():
-    """Fetch news from Google News RSS - Claude API cannot search the web."""
-    queries = [
-        "epstein+documents+release",
-        "epstein+files+DOJ",
-        "jeffrey+epstein+investigation",
-        "epstein+connections"
-    ]
-
-    all_articles = []
-    seen_titles = set()
-
-    for query in queries:
-        url = f"https://news.google.com/rss/search?q={query}&hl=en-US&gl=US&ceid=US:en"
-        try:
-            print(f"Fetching: {url}")
-            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-            with urllib.request.urlopen(req, timeout=30) as response:
-                xml_data = response.read().decode('utf-8')
-
-            root = ET.fromstring(xml_data)
-            for item in root.findall('.//item'):
-                title = item.find('title')
-                link = item.find('link')
-                source = item.find('source')
-
-                if title is not None and link is not None:
-                    title_text = title.text or ""
-                    if title_text.lower() not in seen_titles:
-                        seen_titles.add(title_text.lower())
-                        all_articles.append({
-                            'title': title_text,
-                            'url': link.text or "",
-                            'source': source.text if source is not None else "News"
-                        })
-        except Exception as e:
-            print(f"Error fetching {query}: {e}")
-
-    # Filter for relevance
-    relevant = [a for a in all_articles if any(kw in a['title'].lower() for kw in ['epstein', 'ghislaine', 'maxwell', 'doj', 'documents'])]
-    print(f"Found {len(relevant)} relevant articles")
-    return relevant[:15]
-
 def generate_thumbnail(date_str, headline, filename):
-    WIDTH, HEIGHT = 840, 472
+    """Generate newspaper-style thumbnail with paper texture."""
+
+    WIDTH = 840
+    HEIGHT = 472
+
+    # Create aged paper background
     img = Image.new('RGB', (WIDTH, HEIGHT), '#f4ead5')
+    draw = ImageDraw.Draw(img)
     pixels = img.load()
 
+    # Add paper texture - noise
     for y in range(HEIGHT):
         for x in range(WIDTH):
             r, g, b = pixels[x, y]
             noise = random.randint(-8, 8)
             edge_dist = min(x, WIDTH-x, y, HEIGHT-y)
             edge_darken = max(0, 15 - edge_dist // 8)
-            pixels[x, y] = (
-                max(0, min(255, r + noise - edge_darken)),
-                max(0, min(255, g + noise - edge_darken - 3)),
-                max(0, min(255, b + noise - edge_darken - 8))
-            )
+            r = max(0, min(255, r + noise - edge_darken))
+            g = max(0, min(255, g + noise - edge_darken - 3))
+            b = max(0, min(255, b + noise - edge_darken - 8))
+            pixels[x, y] = (r, g, b)
 
+    # Add vignette
     for y in range(HEIGHT):
         for x in range(WIDTH):
             r, g, b = pixels[x, y]
             cx, cy = WIDTH // 2, HEIGHT // 2
             dist = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
-            max_dist = (cx ** 2 + cy ** 2) ** 0.5
+            max_dist = ((cx) ** 2 + (cy) ** 2) ** 0.5
             vignette = 1 - (dist / max_dist) * 0.15
             pixels[x, y] = (int(r * vignette), int(g * vignette), int(b * vignette))
 
     draw = ImageDraw.Draw(img)
-    ink, ink_light = '#1a1816', '#4a4540'
+    ink = '#1a1816'
+    ink_light = '#4a4540'
 
+    # Try to load fonts
     try:
         font_masthead = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 52)
         font_tagline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf", 15)
         font_dateline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf", 12)
         font_headline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 52)
     except:
-        font_masthead = font_tagline = font_dateline = font_headline = ImageFont.load_default()
+        font_masthead = ImageFont.load_default()
+        font_tagline = ImageFont.load_default()
+        font_dateline = ImageFont.load_default()
+        font_headline = ImageFont.load_default()
 
+    # Border
     draw.rectangle([(8, 8), (WIDTH-9, HEIGHT-9)], outline='#c4b89c', width=1)
 
-    masthead = "EPSTEIN FILES DAILY"
-    bbox = draw.textbbox((0, 0), masthead, font=font_masthead)
-    draw.text(((WIDTH - (bbox[2] - bbox[0])) / 2, 28), masthead, fill=ink, font=font_masthead)
+    # Masthead
+    masthead_text = "EPSTEIN FILES DAILY"
+    bbox = draw.textbbox((0, 0), masthead_text, font=font_masthead)
+    text_width = bbox[2] - bbox[0]
+    draw.text(((WIDTH - text_width) / 2, 28), masthead_text, fill=ink, font=font_masthead)
 
-    tagline = "Comprehensive Coverage of the DOJ Document Releases"
-    bbox = draw.textbbox((0, 0), tagline, font=font_tagline)
-    draw.text(((WIDTH - (bbox[2] - bbox[0])) / 2, 90), tagline, fill=ink_light, font=font_tagline)
+    # Tagline
+    tagline_text = "Comprehensive Coverage of the DOJ Document Releases"
+    bbox = draw.textbbox((0, 0), tagline_text, font=font_tagline)
+    text_width = bbox[2] - bbox[0]
+    draw.text(((WIDTH - text_width) / 2, 90), tagline_text, fill=ink_light, font=font_tagline)
 
+    # Line
     draw.line([(50, 118), (WIDTH - 50, 118)], fill=ink, width=1)
 
-    vol_text = f"Vol. I, No. {len(get_existing_roundups()) + 1}"
+    # Date bar
+    vol_num = len(get_existing_roundups()) + 1
+    vol_text = f"Vol. I, No. {vol_num}"
     draw.text((60, 128), vol_text, fill=ink_light, font=font_dateline)
     bbox = draw.textbbox((0, 0), date_str, font=font_dateline)
-    draw.text((WIDTH - (bbox[2] - bbox[0]) - 60, 128), date_str, fill=ink_light, font=font_dateline)
+    text_width = bbox[2] - bbox[0]
+    draw.text((WIDTH - text_width - 60, 128), date_str, fill=ink_light, font=font_dateline)
 
+    # Double line
     draw.line([(50, 152), (WIDTH - 50, 152)], fill=ink, width=1)
     draw.line([(50, 156), (WIDTH - 50, 156)], fill=ink, width=2)
 
+    # Headline (split into lines)
     words = headline.split()
-    lines, current = [], []
+    lines = []
+    current_line = []
     for word in words:
-        test = ' '.join(current + [word])
-        bbox = draw.textbbox((0, 0), test, font=font_headline)
+        test_line = ' '.join(current_line + [word])
+        bbox = draw.textbbox((0, 0), test_line, font=font_headline)
         if bbox[2] - bbox[0] > WIDTH - 100:
-            if current:
-                lines.append(' '.join(current))
-                current = [word]
+            if current_line:
+                lines.append(' '.join(current_line))
+                current_line = [word]
             else:
                 lines.append(word)
+                current_line = []
         else:
-            current.append(word)
-    if current:
-        lines.append(' '.join(current))
+            current_line.append(word)
+    if current_line:
+        lines.append(' '.join(current_line))
 
-    for i, line in enumerate(lines[:3]):
+    # Draw headline centered
+    y_start = 190
+    line_height = 70
+    for i, line in enumerate(lines[:3]):  # Max 3 lines
         bbox = draw.textbbox((0, 0), line, font=font_headline)
-        draw.text(((WIDTH - (bbox[2] - bbox[0])) / 2, 190 + i * 70), line, fill=ink, font=font_headline)
+        text_width = bbox[2] - bbox[0]
+        draw.text(((WIDTH - text_width) / 2, y_start + i * line_height), line, fill=ink, font=font_headline)
 
+    # Slight blur
     img = img.filter(ImageFilter.GaussianBlur(radius=0.3))
+
+    # Save
     os.makedirs('images', exist_ok=True)
     img.save(filename, 'PNG')
     print(f"Created thumbnail: {filename}")
 
-def generate_roundup(articles):
-    """Format fetched articles into roundup using Claude."""
-    if len(articles) < 3:
-        print("Not enough articles")
-        return None
+def generate_roundup():
+    """Call Claude to research and generate a daily roundup."""
 
+    existing = get_existing_roundups()
     today = datetime.now()
-    articles_text = "\n".join([f"- {a['title']} ({a['source']})\n  URL: {a['url']}" for a in articles])
+    day_name = today.strftime('%A')
 
-    prompt = f"""Format these news articles into a daily roundup:
+    prompt = f"""You are a news aggregator for Epstein Files Daily, a site covering the DOJ Epstein file releases.
 
-{articles_text}
+TODAY'S DATE: {day_name}, {today.strftime('%B %d, %Y')}
 
-Return ONLY JSON (no markdown):
+EXISTING ROUNDUPS (don't repeat these stories): {existing}
+
+YOUR TASK:
+1. Search for the latest Epstein-related news from today or the past few days
+2. Find 4-6 distinct news stories from reputable sources
+3. Focus on: DOJ document releases, new revelations about connections, legal developments, investigations
+
+SOURCES TO CHECK:
+- Major news: NBC, CNBC, CNN, PBS, NYT, WSJ, Washington Post
+- Tech news: The Verge, Wired, Ars Technica
+- Local papers: SF Chronicle, Mercury News, Miami Herald
+- Wire services: AP, Reuters
+
+OUTPUT FORMAT - Return a JSON object:
 {{
-    "theme_headline": "Short headline (max 8 words)",
-    "names": ["Person Name 1", "Person Name 2"],
+    "theme_headline": "Short punchy headline describing today's main story (e.g., 'Silicon Valley's Epstein Problem Gets Worse')",
+    "names": ["Full Name 1", "Full Name 2", "Full Name 3"],
     "bullets_short": [
-        {{"name": "Subject", "text": "One sentence summary.", "source": "Source", "url": "url"}}
+        {{"name": "Peter Thiel", "text": "appears in thousands of documents spanning 2014-2017.", "source": "CNBC", "url": "https://..."}},
+        {{"name": "20+ tech executives", "text": "maintained regular contact — far more than previously known.", "source": "NBC News", "url": "https://..."}}
     ],
     "bullets_long": [
-        {{"name": "Subject", "text": "2-4 sentence summary with context.", "source": "Source", "url": "url"}}
+        {{"name": "Peter Thiel", "text": "appears in thousands of documents spanning years of lunch meetings from 2014-2017. Emails show Epstein's team coordinating visits to Thiel's San Francisco office and arranging private dinners at high-end restaurants.", "source": "CNBC", "url": "https://..."}},
+        {{"name": "20+ tech executives", "text": "maintained regular contact with Epstein — far more than previously known. The documents reveal a systematic effort to cultivate Silicon Valley's most powerful figures, with detailed scheduling and follow-up correspondence.", "source": "NBC News", "url": "https://..."}}
     ]
 }}
 
-Use ACTUAL URLs from the articles. Pick 4-6 most significant stories."""
+IMPORTANT RULES:
+1. bullets_short: ONE LINE each (for homepage card - fits next to thumbnail)
+2. bullets_long: 2-4 SENTENCES each (for article page - full context)
+3. 4-6 bullets total
+4. Lead each bullet with a bolded name or subject
+5. Use REAL news sources with REAL URLs
+6. Names array should only contain full person names (for tags)
+7. If you can't find 4+ distinct new stories, return {{"no_news": true}}
+"""
 
-    print("Calling Claude API...")
+    print("Calling Claude API to generate roundup...")
+
     response = client.messages.create(
         model="claude-sonnet-4-20250514",
         max_tokens=4000,
-        messages=[{"role": "user", "content": prompt}]
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
     )
 
-    text = response.content[0].text
-    match = re.search(r'\{.*\}', text, re.DOTALL)
-    if not match:
-        print("No JSON found")
-        return None
+    response_text = response.content[0].text
+
+    # Parse JSON
+    json_match = re.search(r'```json\s*(.*?)\s*```', response_text, re.DOTALL)
+    if json_match:
+        json_str = json_match.group(1)
+    else:
+        json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        if json_match:
+            json_str = json_match.group(0)
+        else:
+            print("ERROR: Could not find JSON in response")
+            return None
 
     try:
-        return json.loads(match.group(0))
+        data = json.loads(json_str)
     except json.JSONDecodeError as e:
-        print(f"JSON error: {e}")
+        print(f"ERROR: Could not parse JSON: {e}")
         return None
 
+    if data.get('no_news'):
+        print("No significant news found today")
+        return None
+
+    return data
+
 def create_article_html(data, today):
+    """Create the full article page HTML."""
+
     date_iso = today.strftime('%Y-%m-%d')
     date_readable = today.strftime('%B %d, %Y')
     month_day = today.strftime('%B %d').replace(' 0', ' ')
+    day_name = today.strftime('%A')
     filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
 
-    bullets_html = "".join([
-        f'\n                <li><strong>{b["name"]}</strong> {b["text"]} <a href="{b["url"]}" target="_blank" class="source-link">{b["source"]} →</a></li>'
-        for b in data['bullets_long']
-    ])
+    # Build bullets HTML for article page (long version)
+    bullets_html = ""
+    for bullet in data['bullets_long']:
+        bullets_html += f'''
+                <li><strong>{bullet['name']}</strong> {bullet['text']} <a href="{bullet['url']}" target="_blank" class="source-link">{bullet['source']} →</a></li>
+'''
 
-    tags_html = "".join([
-        f'                    <a href="index.html?search={urllib.parse.quote_plus(n.lower())}" class="article-tag">{n}</a>\n'
-        for n in data.get('names', [])[:4]
-    ])
+    # Build tags HTML
+    tags_html = ""
+    for name in data['names'][:4]:
+        name_param = urllib.parse.quote_plus(name.lower())
+        tags_html += f'                    <a href="index.html?search={name_param}" class="article-tag">{name}</a>\n'
 
-    html = read_file('daily-feb-9-2026.html')
+    # URL encode for share buttons
+    url = f"https://epsteinfilesdaily.com/{filename}"
+    url_encoded = urllib.parse.quote(url, safe='')
+    headline = f"{month_day}: {data['theme_headline']}"
+    headline_encoded = urllib.parse.quote(headline, safe='')
+
+    # Read template from existing article
+    template = read_file('daily-feb-9-2026.html')
+
+    # Replace content - this is a simplified approach
+    # In production, you'd want a proper templating system
+    html = template
+
+    # Update title
     html = re.sub(r'<title>.*?</title>', f'<title>{month_day}: {data["theme_headline"]} — Epstein Files Daily</title>', html)
+
+    # Update meta description
+    first_bullet = data['bullets_short'][0]
+    meta_desc = f"{first_bullet['name']} {first_bullet['text'][:100]}..."
+    html = re.sub(r'<meta name="description" content=".*?">', f'<meta name="description" content="{meta_desc}">', html)
+
+    # Update article content
     html = re.sub(r'<time datetime=".*?">', f'<time datetime="{date_iso}">', html)
-    html = re.sub(r'>\w+ \d+, 2026</time>', f'>{date_readable}</time>', html)
+    html = re.sub(r'>February \d+, 2026</time>', f'>{date_readable}</time>', html)
+
+    # Update h1
     html = re.sub(r'<h1>.*?</h1>', f'<h1>{month_day}: {data["theme_headline"]}</h1>', html)
-    html = re.sub(r'<div class="article-tags">.*?</div>', f'<div class="article-tags">\n{tags_html}                </div>', html, flags=re.DOTALL)
-    html = re.sub(r'<ul class="lede-bullets">.*?</ul>', f'<ul class="lede-bullets">{bullets_html}\n            </ul>', html, flags=re.DOTALL)
+
+    # Update tags
+    tags_section = '<div class="article-tags">\n' + tags_html + '                </div>'
+    html = re.sub(r'<div class="article-tags">.*?</div>', tags_section, html, flags=re.DOTALL)
+
+    # Update bullets
+    bullets_section = f'<ul class="lede-bullets">{bullets_html}            </ul>'
+    html = re.sub(r'<ul class="lede-bullets">.*?</ul>', bullets_section, html, flags=re.DOTALL)
+
+    # Update share links
     html = re.sub(r'daily-feb-9-2026', filename, html)
+    html = re.sub(r'Feb%209%3A%20Silicon%20Valley%27s%20Epstein%20Problem%20Gets%20Worse', headline_encoded, html)
 
     return html
 
 def update_index_html(data, today):
+    """Add the new roundup card to index.html."""
+
     date_iso = today.strftime('%Y-%m-%d')
     date_readable = today.strftime('%B %d, %Y')
     month_day = today.strftime('%B %d').replace(' 0', ' ')
     filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
 
-    bullets_html = "".join([
-        f'                                <li><strong>{b["name"]}</strong> {b["text"]} <a href="{b["url"]}" target="_blank" class="source-link">{b["source"]} →</a></li>\n'
-        for b in data['bullets_short'][:4]
-    ])
+    # Build short bullets HTML
+    bullets_html = ""
+    for bullet in data['bullets_short'][:4]:
+        bullets_html += f'                                <li><strong>{bullet["name"]}</strong> {bullet["text"]} <a href="{bullet["url"]}" target="_blank" class="source-link">{bullet["source"]} →</a></li>\n'
 
-    names = data.get('names', [])[:4]
-    tags_html = "".join([
-        f'                                    <a href="index.html?search={urllib.parse.quote_plus(n.lower())}" class="article-tag">{n}</a>\n'
-        for n in names
-    ])
+    # Build tags
+    tags_data = ','.join([name.lower() for name in data['names'][:4]])
+    tags_html = ""
+    for name in data['names'][:4]:
+        name_param = urllib.parse.quote_plus(name.lower())
+        tags_html += f'                                    <a href="index.html?search={name_param}" class="article-tag">{name}</a>\n'
+
+    # Get current thumbnail version
+    existing_roundups = get_existing_roundups()
+    thumb_version = len(existing_roundups) + 1
 
     new_card = f'''
                 <!-- DAILY ROUNDUP: {date_readable} -->
-                <article class="article-preview featured" data-tags="{','.join([n.lower() for n in names])}">
+                <article class="article-preview featured" data-tags="{tags_data}">
                     <div class="article-top">
                         <a href="{filename}.html" class="article-thumb">
-                            <img src="images/{filename}.png" alt="{date_readable}" loading="lazy">
+                            <img src="images/{filename}.png?v={thumb_version}" alt="{date_readable} Epstein news roundup" loading="lazy">
                         </a>
                         <div class="article-title-section">
                             <div class="article-meta">
@@ -271,82 +342,106 @@ def update_index_html(data, today):
                 </article>
 '''
 
-    content = read_file('index.html')
+    index_content = read_file('index.html')
+
+    # Insert after articles-container opening
     marker = '<div id="articles-container">'
-    if marker in content:
-        write_file('index.html', content.replace(marker, marker + new_card))
-        print("Updated index.html")
+    if marker in index_content:
+        index_content = index_content.replace(marker, marker + new_card)
+        write_file('index.html', index_content)
+        print("Updated index.html with new roundup card")
+    else:
+        print("WARNING: Could not find articles-container in index.html")
 
 def update_feed_xml(data, today):
+    """Add the new roundup to RSS feed."""
+
     try:
-        content = read_file('feed.xml')
+        feed_content = read_file('feed.xml')
     except FileNotFoundError:
+        print("WARNING: feed.xml not found, skipping RSS update")
         return
 
     month_day = today.strftime('%B %d').replace(' 0', ' ')
     filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
+    url = f"https://epsteinfilesdaily.com/{filename}.html"
+    pub_date = today.strftime('%a, %d %b %Y %H:%M:%S +0000')
+    headline = f"{month_day}: {data['theme_headline']}"
+
+    first_bullet = data['bullets_short'][0]
+    description = f"{first_bullet['name']} {first_bullet['text']}"
 
     new_item = f'''
     <item>
-      <title>{month_day}: {data['theme_headline']}</title>
-      <link>https://epsteinfilesdaily.com/{filename}.html</link>
-      <guid>https://epsteinfilesdaily.com/{filename}.html</guid>
-      <pubDate>{today.strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>
+      <title>{headline}</title>
+      <link>{url}</link>
+      <guid>{url}</guid>
+      <pubDate>{pub_date}</pubDate>
+      <description>{description}</description>
     </item>'''
 
-    if '</language>' in content:
-        write_file('feed.xml', content.replace('</language>', '</language>' + new_item))
+    marker = '</language>'
+    if marker in feed_content:
+        feed_content = feed_content.replace(marker, marker + new_item)
+        write_file('feed.xml', feed_content)
+        print("Updated feed.xml")
+    else:
+        print("WARNING: Could not find insertion point in feed.xml")
 
 def main():
     print("=" * 50)
-    print("EPSTEIN FILES DAILY - Roundup Generator")
+    print("EPSTEIN FILES DAILY - Daily Roundup Generator")
     print("=" * 50)
 
     today = datetime.now()
-    date_str = f"{today.strftime('%A')}, {today.strftime('%B')} {today.day}, {today.year}"
+    day_name = today.strftime('%A')
+    date_str = f"{day_name}, {today.strftime('%B')} {today.day}, {today.year}"
     filename_base = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
 
-    print(f"\nDate: {date_str}")
+    print(f"\nGenerating roundup for: {date_str}")
 
+    # Check if already generated today
     if f"{filename_base}.html" in get_existing_roundups():
-        print(f"Already exists: {filename_base}.html")
+        print(f"Roundup for today already exists: {filename_base}.html")
         return
 
-    # FETCH NEWS FROM RSS - Claude API cannot search the web
-    print("\n--- FETCHING NEWS FROM RSS ---")
-    articles = fetch_news_from_rss()
+    # Generate roundup content
+    roundup_data = generate_roundup()
 
-    if not articles:
-        print("ERROR: No articles fetched")
+    if not roundup_data:
+        print("No roundup generated (not enough news)")
         return
 
-    print(f"Got {len(articles)} articles:")
-    for a in articles[:5]:
-        print(f"  - {a['title'][:50]}...")
+    print(f"\nTheme: {roundup_data['theme_headline']}")
+    print(f"Names: {', '.join(roundup_data['names'])}")
+    print(f"Bullets: {len(roundup_data['bullets_short'])}")
 
-    # FORMAT WITH CLAUDE
-    print("\n--- FORMATTING ---")
-    data = generate_roundup(articles)
+    # Generate thumbnail
+    thumb_filename = f"images/{filename_base}.png"
+    generate_thumbnail(date_str, roundup_data['theme_headline'], thumb_filename)
 
-    if not data:
-        print("Failed to generate")
-        return
+    # Create article HTML
+    article_html = create_article_html(roundup_data, today)
+    write_file(f"{filename_base}.html", article_html)
+    print(f"Created: {filename_base}.html")
 
-    print(f"Headline: {data['theme_headline']}")
+    # Update index.html
+    update_index_html(roundup_data, today)
 
-    # CREATE FILES
-    generate_thumbnail(date_str, data['theme_headline'], f"images/{filename_base}.png")
-    write_file(f"{filename_base}.html", create_article_html(data, today))
-    update_index_html(data, today)
-    update_feed_xml(data, today)
+    # Update RSS feed
+    update_feed_xml(roundup_data, today)
 
-    write_file('latest_article.json', json.dumps({
-        "headline": f"{today.strftime('%B')} {today.day}: {data['theme_headline']}",
+    # Save info for workflow
+    latest_info = {
+        "headline": f"{today.strftime('%B')} {today.day}: {roundup_data['theme_headline']}",
         "slug": filename_base,
         "date": today.strftime('%Y-%m-%d')
-    }))
+    }
+    write_file('latest_article.json', json.dumps(latest_info))
 
-    print("\n✅ SUCCESS")
+    print("\n" + "=" * 50)
+    print("✅ ROUNDUP GENERATED SUCCESSFULLY")
+    print("=" * 50)
 
 if __name__ == "__main__":
     main()
