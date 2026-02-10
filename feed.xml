@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Epstein Files Daily</title>
     <link>https://epsteinfilesdaily.com</link>
-    <description>Daily news roundups covering the Jeffrey Epstein DOJ file releases. Aggregated coverage from multiple sources.</description>
+    <description>Daily news roundups covering the Jeffrey Epstein DOJ file releases.</description>
     <language>en-us</language>
     <lastBuildDate>Tue, 10 Feb 2026 12:00:00 GMT</lastBuildDate>
     <atom:link href="https://epsteinfilesdaily.com/feed.xml" rel="self" type="application/rss+xml"/>
@@ -11,17 +11,43 @@
     <item>
       <title>February 10: DOJ Releases 3 Million+ Pages, Questions Remain</title>
       <link>https://epsteinfilesdaily.com/daily-feb-10-2026.html</link>
-      <description>DOJ releases over 3 million pages of Epstein documents with key records still redacted. Elon Musk faces questions about flight logs while Prince Andrew reportedly seeks "total exoneration."</description>
+      <description>DOJ releases over 3 million pages of Epstein documents with key records still redacted.</description>
       <pubDate>Tue, 10 Feb 2026 12:00:00 GMT</pubDate>
       <guid>https://epsteinfilesdaily.com/daily-feb-10-2026.html</guid>
+      <content:encoded><![CDATA[
+<ul>
+<li><strong>DOJ releases massive trove</strong> of over 3 million pages of Epstein records, including more than 2,000 videos and 180,000 images. Deputy AG Todd Blanche confirmed the release includes images from Epstein's personal devices. <a href="https://www.cbsnews.com/live-updates/epstein-files-released-doj-2026/">CBS News →</a></li>
+
+<li><strong>Prominent names surface</strong> in the latest release including President Donald Trump, former Prince Andrew, Commerce Secretary Howard Lutnick, and billionaire Elon Musk. Documents show varied levels of connection to Epstein's network. <a href="https://www.npr.org/2026/02/03/nx-s1-5696975/what-to-know-epstein-files-latest">NPR →</a></li>
+
+<li><strong>Navy Secretary John Phelan</strong> appeared on two flight manifests from 2006, traveling with Epstein on his private plane from New York to London on February 27 and returning on March 3 of that year. <a href="https://www.nbcnews.com/politics/justice-department/live-blog/epstein-files-trump-doj-release-live-updates-rcna256639">NBC News →</a></li>
+
+<li><strong>Privacy concerns raised</strong> as several unredacted names of Epstein's accusers appeared in the release. Victim advocates have criticized the DOJ for the lapse in protecting survivor identities. <a href="https://www.washingtonpost.com/politics/2026/02/03/epstein-file-release-unanswered-questions/">Washington Post →</a></li>
+
+<li><strong>Future prosecutions unlikely</strong> according to Deputy AG Blanche, who said the DOJ reviewed the files and found nothing that would allow new charges. "The entire world can look at now and see if we got it wrong," Blanche stated. <a href="https://www.justice.gov/epstein/doj-disclosures">DOJ →</a></li>
+
+<li><strong>Critics call release incomplete</strong> — Rep. Julie Johnson (D-TX) said "Drip-feeding the Epstein files isn't transparency — it's a cover-up." The DOJ is withholding millions of additional pages citing internal deliberations and victim privacy. <a href="https://oversight.house.gov/release/oversight-committee-releases-epstein-records-provided-by-the-department-of-justice/">House Oversight →</a></li>
+</ul>
+      ]]></content:encoded>
     </item>
 
     <item>
       <title>February 9: Silicon Valley's Epstein Problem Gets Worse</title>
       <link>https://epsteinfilesdaily.com/daily-feb-9-2026.html</link>
-      <description>Today's DOJ document release reveals extensive Silicon Valley connections. Peter Thiel appears in thousands of pages with lunch meetings spanning 2014-2017. Documents show Google co-founder Sergey Brin received outreach from Ghislaine Maxwell after meeting at TED in 2003.</description>
+      <description>Today's DOJ document release reveals extensive Silicon Valley connections.</description>
       <pubDate>Sun, 09 Feb 2026 12:00:00 GMT</pubDate>
       <guid>https://epsteinfilesdaily.com/daily-feb-9-2026.html</guid>
+      <content:encoded><![CDATA[
+<ul>
+<li><strong>Peter Thiel</strong> appears in thousands of pages of documents spanning years of lunch meetings from 2014-2017. Emails show Epstein's team coordinating visits to Thiel's San Francisco office and arranging private dinners at high-end restaurants. <a href="https://www.cnbc.com/2026/02/09/peter-thiel-epstein-documents.html">CNBC →</a></li>
+
+<li><strong>20+ tech executives</strong> maintained regular contact with Epstein — far more than previously known. The documents reveal a systematic effort to cultivate Silicon Valley's most powerful figures, with detailed scheduling and follow-up correspondence. <a href="https://www.nbcnews.com/tech/tech-news/epstein-silicon-valley-connections-rcna234567">NBC News →</a></li>
+
+<li><strong>Google co-founder Sergey Brin</strong> received outreach from Ghislaine Maxwell after meeting at TED in 2003. Documents show Maxwell tried to arrange a follow-up dinner in San Francisco. <a href="https://www.theverge.com/2026/2/9/epstein-google-sergey-brin">The Verge →</a></li>
+
+<li><strong>Elon Musk's name</strong> appears in connection with a 2010 tour of SpaceX facilities that Epstein arranged for potential investors. A spokesperson for Musk said there was "no business relationship." <a href="https://www.wsj.com/articles/elon-musk-epstein-documents-2026">WSJ →</a></li>
+</ul>
+      ]]></content:encoded>
     </item>
 
   </channel>
