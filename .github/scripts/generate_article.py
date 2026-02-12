@@ -400,7 +400,7 @@ def update_index_html(data, today):
         print("WARNING: Could not find articles-container in index.html")
 
 def update_feed_xml(data, today):
-    """Add the new roundup to RSS feed."""
+    """Add the new roundup to RSS feed with full content for newsletters."""
 
     try:
         feed_content = read_file('feed.xml')
@@ -417,6 +417,11 @@ def update_feed_xml(data, today):
     first_bullet = data['bullets_short'][0]
     description = f"{first_bullet['name']} {first_bullet['text']}"
 
+    # Build full content HTML for newsletters (content:encoded)
+    content_bullets = ""
+    for bullet in data['bullets_long']:
+        content_bullets += f'<li><strong>{bullet["name"]}</strong> {bullet["text"]} <a href="{bullet["url"]}">{bullet["source"]} →</a></li>\n\n'
+
     new_item = f'''
     <item>
       <title>{headline}</title>
@@ -424,15 +429,27 @@ def update_feed_xml(data, today):
       <guid>{url}</guid>
       <pubDate>{pub_date}</pubDate>
       <description>{description}</description>
+      <content:encoded><![CDATA[
+<ul>
+{content_bullets}</ul>
+      ]]></content:encoded>
     </item>'''
 
-    marker = '</language>'
+    # Insert after the atom:link element (proper position in feed)
+    marker = '<atom:link href="https://epsteinfilesdaily.com/feed.xml" rel="self" type="application/rss+xml"/>'
     if marker in feed_content:
         feed_content = feed_content.replace(marker, marker + new_item)
         write_file('feed.xml', feed_content)
-        print("Updated feed.xml")
+        print("Updated feed.xml with full content")
     else:
-        print("WARNING: Could not find insertion point in feed.xml")
+        # Fallback to old marker
+        marker = '</language>'
+        if marker in feed_content:
+            feed_content = feed_content.replace(marker, marker + new_item)
+            write_file('feed.xml', feed_content)
+            print("Updated feed.xml with full content (fallback)")
+        else:
+            print("WARNING: Could not find insertion point in feed.xml")
 
 def main():
     print("=" * 50)
