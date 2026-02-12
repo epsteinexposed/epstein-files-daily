@@ -5,15 +5,27 @@
     <link>https://epsteinfilesdaily.com</link>
     <description>Daily news roundups covering the Jeffrey Epstein DOJ file releases.</description>
     <language>en-us</language>
+    <lastBuildDate>Thu, 12 Feb 2026 12:00:00 GMT</lastBuildDate>
+    <atom:link href="https://epsteinfilesdaily.com/feed.xml" rel="self" type="application/rss+xml"/>
+
     <item>
       <title>February 12: DOJ Completes Epstein Files Release Amid Cover-Up Claims</title>
       <link>https://epsteinfilesdaily.com/daily-feb-12-2026.html</link>
       <guid>https://epsteinfilesdaily.com/daily-feb-12-2026.html</guid>
-      <pubDate>Thu, 12 Feb 2026 11:28:17 +0000</pubDate>
+      <pubDate>Thu, 12 Feb 2026 12:00:00 +0000</pubDate>
       <description>DOJ Release Complete Justice Department concludes Epstein files review with release of 3.5 million records.</description>
+      <content:encoded><![CDATA[
+<ul>
+<li><strong>DOJ Release Complete</strong> The Department of Justice has concluded its review of Jeffrey Epstein files with the release of 3.5 million records. This massive document dump represents the culmination of pressure from lawmakers and the public for transparency regarding the Epstein investigation. <a href="https://www.axios.com/2026/02/12/doj-epstein-files-release-complete">Axios →</a></li>
+
+<li><strong>Bondi Under Fire</strong> Attorney General Pam Bondi faced intense questioning during a heated House hearing over the DOJ's handling of the Epstein files release. Lawmakers criticized the department for releasing unredacted victim information, including nude photos, which compromised survivor privacy. <a href="https://www.pbs.org/newshour/politics/bondi-epstein-files-hearing">PBS →</a></li>
+
+<li><strong>Prince Andrew Evidence</strong> The latest batch of released files contains emails referencing 'The Duke' and photographs of a man who appears to be former Prince Andrew. These materials add to the mounting evidence linking the disgraced royal to Epstein's network. <a href="https://www.cbc.ca/news/world/epstein-files-prince-andrew">CBC →</a></li>
+
+<li><strong>FBI Security Breach</strong> A significant security lapse occurred when the DOJ's file release inadvertently included video footage showing the face of an undercover FBI employee. This exposure potentially compromises ongoing law enforcement operations and the safety of the agent involved. <a href="https://www.cnn.com/2026/02/12/politics/fbi-agent-exposed-epstein-files">CNN →</a></li>
+</ul>
+      ]]></content:encoded>
     </item>
-    <lastBuildDate>Wed, 11 Feb 2026 12:00:00 GMT</lastBuildDate>
-    <atom:link href="https://epsteinfilesdaily.com/feed.xml" rel="self" type="application/rss+xml"/>
 
     <item>
       <title>February 11: DOJ Releases 3 Million Epstein Files, Names Tech Giants</title>
