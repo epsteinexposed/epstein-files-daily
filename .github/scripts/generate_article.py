@@ -84,8 +84,8 @@ def fetch_news_from_rss():
     print(f"Found {len(relevant)} relevant articles from RSS")
     return relevant[:15]
 
-def generate_thumbnail(date_str, headline, filename):
-    """Generate newspaper-style thumbnail with paper texture."""
+def generate_thumbnail(date_str, headline, filename, featured_name=""):
+    """Generate newspaper-style thumbnail with paper texture and featured name."""
 
     WIDTH = 840
     HEIGHT = 472
@@ -119,18 +119,21 @@ def generate_thumbnail(date_str, headline, filename):
     draw = ImageDraw.Draw(img)
     ink = '#1a1816'
     ink_light = '#4a4540'
+    red = '#b91c1c'
 
     # Try to load fonts
     try:
         font_masthead = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 52)
         font_tagline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf", 24)
         font_dateline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf", 12)
-        font_headline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 52)
+        font_headline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 42)
+        font_featured = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 56)
     except:
         font_masthead = ImageFont.load_default()
         font_tagline = ImageFont.load_default()
         font_dateline = ImageFont.load_default()
         font_headline = ImageFont.load_default()
+        font_featured = ImageFont.load_default()
 
     # Border
     draw.rectangle([(8, 8), (WIDTH-9, HEIGHT-9)], outline='#c4b89c', width=1)
@@ -162,6 +165,30 @@ def generate_thumbnail(date_str, headline, filename):
     draw.line([(50, 152), (WIDTH - 50, 152)], fill=ink, width=1)
     draw.line([(50, 156), (WIDTH - 50, 156)], fill=ink, width=2)
 
+    # Featured name in red banner
+    if featured_name:
+        name_upper = featured_name.upper()
+        bbox = draw.textbbox((0, 0), name_upper, font=font_featured)
+        name_width = bbox[2] - bbox[0]
+        name_height = bbox[3] - bbox[1]
+        name_x = (WIDTH - name_width) / 2
+        name_y = 175
+
+        # Draw red banner behind name
+        banner_pad_x = 20
+        banner_pad_y = 8
+        draw.rectangle(
+            [(name_x - banner_pad_x, name_y - banner_pad_y),
+             (name_x + name_width + banner_pad_x, name_y + name_height + banner_pad_y)],
+            fill=red
+        )
+        draw.text((name_x, name_y), name_upper, fill='#ffffff', font=font_featured)
+
+        # Headline below the name (smaller)
+        headline_y_start = name_y + name_height + banner_pad_y + 20
+    else:
+        headline_y_start = 190
+
     # Headline (split into lines)
     words = headline.split()
     lines = []
@@ -182,12 +209,11 @@ def generate_thumbnail(date_str, headline, filename):
         lines.append(' '.join(current_line))
 
     # Draw headline centered
-    y_start = 190
-    line_height = 70
+    line_height = 55
     for i, line in enumerate(lines[:3]):
         bbox = draw.textbbox((0, 0), line, font=font_headline)
         text_width = bbox[2] - bbox[0]
-        draw.text(((WIDTH - text_width) / 2, y_start + i * line_height), line, fill=ink, font=font_headline)
+        draw.text(((WIDTH - text_width) / 2, headline_y_start + i * line_height), line, fill=ink, font=font_headline)
 
     # Slight blur
     img = img.filter(ImageFilter.GaussianBlur(radius=0.3))
@@ -229,7 +255,8 @@ YOUR TASK:
 
 OUTPUT FORMAT - Return a JSON object:
 {{
-    "theme_headline": "Short punchy headline summarizing the day's main story (e.g., 'New Documents Reveal Tech Ties')",
+    "theme_headline": "Short punchy headline that MUST include at least one specific person's name (e.g., 'Prince Andrew Named in New Flight Logs', 'Bill Gates Connection to Epstein Deepens'). NEVER use generic headlines like 'DOJ Releases Files' or 'New Documents Released'. Always lead with the most newsworthy person.",
+    "featured_name": "The most prominent person's name from the headline (e.g., 'Prince Andrew')",
     "names": ["Full Name 1", "Full Name 2", "Full Name 3"],
     "bullets_short": [
         {{"name": "Key Subject", "text": "one-line summary.", "source": "Source Name", "url": "actual URL from article"}},
@@ -769,7 +796,8 @@ def main():
 
     # Generate thumbnail
     thumb_filename = f"images/{filename_base}.png"
-    generate_thumbnail(date_str, roundup_data['theme_headline'], thumb_filename)
+    featured_name = roundup_data.get('featured_name', roundup_data['names'][0] if roundup_data['names'] else '')
+    generate_thumbnail(date_str, roundup_data['theme_headline'], thumb_filename, featured_name)
 
     # Create article HTML
     article_html = create_article_html(roundup_data, today)
