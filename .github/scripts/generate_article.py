@@ -85,7 +85,7 @@ def fetch_news_from_rss():
     return relevant[:15]
 
 def generate_thumbnail(date_str, headline, filename, featured_name=""):
-    """Generate newspaper-style thumbnail with paper texture and featured name."""
+    """Generate newspaper-style thumbnail with paper texture."""
 
     WIDTH = 840
     HEIGHT = 472
@@ -119,21 +119,18 @@ def generate_thumbnail(date_str, headline, filename, featured_name=""):
     draw = ImageDraw.Draw(img)
     ink = '#1a1816'
     ink_light = '#4a4540'
-    red = '#b91c1c'
 
     # Try to load fonts
     try:
         font_masthead = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 52)
         font_tagline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf", 24)
         font_dateline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf", 12)
-        font_headline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 42)
-        font_featured = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 56)
+        font_headline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 52)
     except:
         font_masthead = ImageFont.load_default()
         font_tagline = ImageFont.load_default()
         font_dateline = ImageFont.load_default()
         font_headline = ImageFont.load_default()
-        font_featured = ImageFont.load_default()
 
     # Border
     draw.rectangle([(8, 8), (WIDTH-9, HEIGHT-9)], outline='#c4b89c', width=1)
@@ -165,29 +162,8 @@ def generate_thumbnail(date_str, headline, filename, featured_name=""):
     draw.line([(50, 152), (WIDTH - 50, 152)], fill=ink, width=1)
     draw.line([(50, 156), (WIDTH - 50, 156)], fill=ink, width=2)
 
-    # Featured name in red banner
-    if featured_name:
-        name_upper = featured_name.upper()
-        bbox = draw.textbbox((0, 0), name_upper, font=font_featured)
-        name_width = bbox[2] - bbox[0]
-        name_height = bbox[3] - bbox[1]
-        name_x = (WIDTH - name_width) / 2
-        name_y = 175
-
-        # Draw red banner behind name
-        banner_pad_x = 20
-        banner_pad_y = 8
-        draw.rectangle(
-            [(name_x - banner_pad_x, name_y - banner_pad_y),
-             (name_x + name_width + banner_pad_x, name_y + name_height + banner_pad_y)],
-            fill=red
-        )
-        draw.text((name_x, name_y), name_upper, fill='#ffffff', font=font_featured)
-
-        # Headline below the name (smaller)
-        headline_y_start = name_y + name_height + banner_pad_y + 20
-    else:
-        headline_y_start = 190
+    # Headline starts below double line
+    headline_y_start = 190
 
     # Headline (split into lines)
     words = headline.split()
