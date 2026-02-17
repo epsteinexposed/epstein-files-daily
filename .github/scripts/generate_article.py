@@ -804,7 +804,7 @@ Return ONLY the bio text, no quotes or labels."""
         html.light-mode .person-bio{{background:#fff}}
         html.light-mode .theme-toggle{{background:#e0e0e0;color:#1a1a1a}}
 
-        @media(max-width:900px){{.page-wrapper{{grid-template-columns:1fr}}.sidebar{{display:none}}.article-preview{{grid-template-columns:1fr}}.header-center{{display:none}}.header-inner{{padding:0}}}}
+        @media(max-width:900px){{.page-wrapper{{grid-template-columns:1fr}}.sidebar{{display:none}}.article-preview{{grid-template-columns:1fr}}.header-center{{display:none}}.header-inner{{padding:0}}.theme-toggle{{display:none}}}}
     </style>
 </head>
 <body>
