@@ -51,7 +51,7 @@ jobs:
           git config --local user.name "Article Generator Bot"
           # IMPORTANT: Only add generated files, NOT the script itself
           # This prevents race conditions where old script overwrites fixes
-          git add daily-*.html images/daily-*.png index.html feed.xml sitemap.xml names/*.html latest_article.json 2>/dev/null || true
+          git add daily-*.html images/daily-*.png index.html feed.xml sitemap.xml names/*.html name-bios.json latest_article.json 2>/dev/null || true
           # Only commit if there are staged changes
           git diff --staged --quiet || git commit -m "Add daily article $(date +%Y-%m-%d)"
           git push origin main

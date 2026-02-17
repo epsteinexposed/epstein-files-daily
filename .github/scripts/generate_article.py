@@ -589,6 +589,42 @@ def regenerate_name_pages():
     # Create names directory
     os.makedirs('names', exist_ok=True)
 
+    # Load existing bios
+    bios_file = 'name-bios.json'
+    try:
+        bios = json.loads(read_file(bios_file))
+    except:
+        bios = {}
+
+    # Generate bios for any new names via Claude
+    new_names = [n for n in tag_index.keys() if slugify(n) not in bios]
+    if new_names:
+        print(f"Generating bios for {len(new_names)} new names: {new_names}")
+        for new_name in new_names:
+            try:
+                bio_response = client.messages.create(
+                    model="claude-sonnet-4-20250514",
+                    max_tokens=300,
+                    messages=[{
+                        "role": "user",
+                        "content": f"""Write a 2-4 sentence factual bio about {new_name}'s documented connection to Jeffrey Epstein for a news aggregation website.
+Only include publicly verified information from court documents, flight logs, or credible news reporting.
+Use hedging language where appropriate ("according to documents," "has denied," "allegedly").
+Do NOT speculate. If the connection is minimal or unclear, say so.
+Return ONLY the bio text, no quotes or labels."""
+                    }]
+                )
+                bio_text = bio_response.content[0].text.strip()
+                bios[slugify(new_name)] = bio_text
+                print(f"  Generated bio for {new_name}")
+            except Exception as e:
+                print(f"  Failed to generate bio for {new_name}: {e}")
+                bios[slugify(new_name)] = f"{new_name} has been referenced in documents related to the Jeffrey Epstein case. Their name appears in the Epstein Files Daily coverage."
+
+        # Save updated bios
+        write_file(bios_file, json.dumps(bios, indent=2))
+        print(f"Saved {len(bios)} bios to {bios_file}")
+
     # Generate each name page
     for name, name_articles in tag_index.items():
         slug = slugify(name)
@@ -629,6 +665,19 @@ def regenerate_name_pages():
             for tag, tag_articles in sorted_tags[:50]
         ])
 
+        # Get bio for this person
+        person_bio = bios.get(slug, '')
+        if person_bio:
+            meta_desc = person_bio[:155].rsplit(' ', 1)[0] + '...'
+            bio_section = f'''
+            <div class="person-bio">
+                <p>{person_bio}</p>
+            </div>
+'''
+        else:
+            meta_desc = f'All articles mentioning {name} in the Epstein Files.'
+            bio_section = ''
+
         html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -643,11 +692,16 @@ def regenerate_name_pages():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{name} - Epstein Files Daily</title>
-    <meta name="description" content="All articles mentioning {name} in the Epstein Files.">
+    <meta name="description" content="{meta_desc}">
     <link rel="canonical" href="https://epsteinfilesdaily.com/names/{slug}.html">
     <meta property="og:title" content="{name} - Epstein Files Daily">
+    <meta property="og:description" content="{meta_desc}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://epsteinfilesdaily.com/names/{slug}.html">
+    <meta property="og:image" content="https://epsteinfilesdaily.com/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{name} - Epstein Files Daily">
+    <meta name="twitter:description" content="{meta_desc}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
@@ -678,6 +732,8 @@ def regenerate_name_pages():
         .page-header{{margin-bottom:32px}}
         .page-header h1{{font-family:'Oswald',sans-serif;font-size:42px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}}
         .page-header p{{color:var(--text-muted)}}
+        .person-bio{{background:var(--bg-card);border-left:3px solid var(--accent);padding:16px 20px;margin-bottom:32px;font-size:14px;line-height:1.7;color:var(--text-muted)}}
+        .person-bio p{{margin:0}}
         .articles-grid{{display:flex;flex-direction:column;gap:24px}}
         .article-preview{{display:grid;grid-template-columns:200px 1fr;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--border)}}
         .article-thumb{{aspect-ratio:16/9;overflow:hidden;background:#333}}
@@ -713,7 +769,7 @@ def regenerate_name_pages():
                 <h1>{name}</h1>
                 <p>{len(name_articles)} article{'' if len(name_articles) == 1 else 's'} mentioning this name</p>
             </div>
-            <div class="articles-grid">{''.join(article_cards)}</div>
+{bio_section}            <div class="articles-grid">{''.join(article_cards)}</div>
         </main>
     </div>
 </body>
