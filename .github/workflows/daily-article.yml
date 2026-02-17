@@ -66,3 +66,38 @@ jobs:
           # Ping Bing via IndexNow (also covers Yandex, Seznam, etc.)
           curl -s "https://www.bing.com/indexnow?url=https://epsteinfilesdaily.com/${{ steps.generate.outputs.slug }}&key=epsteinfilesdaily"
           echo "Pinged Bing IndexNow"
+
+      - name: Publish to Substack
+        if: steps.generate.outputs.article_generated == 'true' && vars.SUBSTACK_EMAIL != ''
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SUBSTACK_EMAIL: ${{ vars.SUBSTACK_EMAIL }}
+          FROM_EMAIL: ${{ secrets.SMTP_USER }}
+        run: |
+          python3 -c "
+          import json, smtplib, os
+          from email.mime.multipart import MIMEMultipart
+          from email.mime.text import MIMEText
+
+          with open('latest_article.json') as f:
+              info = json.load(f)
+
+          msg = MIMEMultipart('alternative')
+          msg['Subject'] = info['substack_subject']
+          msg['From'] = os.environ['FROM_EMAIL']
+          msg['To'] = os.environ['SUBSTACK_EMAIL']
+          msg.attach(MIMEText(info['substack_html'], 'html'))
+
+          try:
+              server = smtplib.SMTP(os.environ['SMTP_HOST'], int(os.environ['SMTP_PORT']))
+              server.starttls()
+              server.login(os.environ['SMTP_USER'], os.environ['SMTP_PASS'])
+              server.sendmail(os.environ['FROM_EMAIL'], os.environ['SUBSTACK_EMAIL'], msg.as_string())
+              server.quit()
+              print('Published to Substack via email')
+          except Exception as e:
+              print(f'WARNING: Substack publish failed: {e}')
+          "

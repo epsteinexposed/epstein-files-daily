@@ -960,6 +960,54 @@ def update_sitemap(data, today):
     else:
         print("WARNING: Could not find insertion point in sitemap.xml")
 
+def generate_substack_post(data, today):
+    """Generate a Substack-ready version of the daily roundup.
+
+    This is a shorter, rewritten version that links back to the full article
+    on epsteinfilesdaily.com to avoid duplicate content issues with Google.
+    """
+    month_day = today.strftime('%B %d').replace(' 0', ' ')
+    filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
+    full_url = f"https://epsteinfilesdaily.com/{filename}.html"
+
+    subject = f"{month_day}: {data['theme_headline']}"
+
+    # Build a summary version (not the full article) to avoid SEO duplicate content
+    bullets_html = ""
+    for bullet in data['bullets_short'][:5]:
+        name_slug = bullet['name'].lower().replace(' ', '-').replace('.', '').replace("'", '')
+        bullets_html += f'<li><strong>{bullet["name"]}</strong> — {bullet["text"]}</li>\n'
+
+    # Build name links
+    names_html = ""
+    for name in data['names'][:6]:
+        name_slug = name.lower().replace(' ', '-').replace('.', '').replace("'", '')
+        names_html += f'<a href="https://epsteinfilesdaily.com/names/{name_slug}.html">{name}</a> · '
+    names_html = names_html.rstrip(' · ')
+
+    html = f"""<p><em>This is a summary of today's Epstein Files Daily roundup. <a href="{full_url}">Read the full article with all sources →</a></em></p>
+
+<h2>Today's Key Developments</h2>
+
+<ul>
+{bullets_html}</ul>
+
+<h2>Names in Today's Report</h2>
+
+<p>{names_html}</p>
+
+<hr>
+
+<p><strong><a href="{full_url}">Read the full roundup with sources and details →</a></strong></p>
+
+<p>Visit <a href="https://epsteinfilesdaily.com">epsteinfilesdaily.com</a> for daily coverage tracking every name, every document, and every development in the Epstein files.</p>"""
+
+    return {
+        'subject': subject,
+        'html': html
+    }
+
+
 def main():
     print("=" * 50)
     print("EPSTEIN FILES DAILY - Daily Roundup Generator")
@@ -1019,11 +1067,16 @@ def main():
     # Regenerate name pages
     regenerate_name_pages()
 
+    # Generate Substack cross-post content
+    substack_content = generate_substack_post(roundup_data, today)
+
     # Save info for workflow
     latest_info = {
         "headline": f"{today.strftime('%B')} {today.day}: {roundup_data['theme_headline']}",
         "slug": filename_base,
-        "date": today.strftime('%Y-%m-%d')
+        "date": today.strftime('%Y-%m-%d'),
+        "substack_subject": substack_content['subject'],
+        "substack_html": substack_content['html']
     }
     write_file('latest_article.json', json.dumps(latest_info))
 
