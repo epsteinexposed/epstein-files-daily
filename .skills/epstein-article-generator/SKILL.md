@@ -25,13 +25,32 @@ Each "article" is a **daily roundup** containing:
 
 ### Step 1: Find Today's News
 
-Search for recent Epstein-related news coverage:
+Search for recent Epstein-related news coverage. **Prioritize stories about specific INDIVIDUALS over generic government process stories.**
+
+**Search queries to use (in order of priority):**
+- Specific people: "epstein prince andrew", "epstein bill gates", "epstein les wexner", "epstein jean-luc brunel"
+- Victims/survivors: "epstein victim survivor lawsuit"
+- Specific evidence: "epstein flight logs names", "epstein island little st james"
+- International: "epstein europe investigation", "epstein intelligence FBI CIA"
+- Broader: "jeffrey epstein investigation new", "epstein connections revealed billionaire", "epstein documents unsealed names"
 
 **Sources to check:**
-- Major news outlets (NBC, CNBC, NYT, WSJ, PBS, etc.)
-- Local newspapers covering specific angles
-- Congressional/government releases
-- Court document releases
+- International outlets (Al Jazeera, BBC, CNN International, Reuters) — European investigations often have the most interesting individual stories
+- Investigative journalism (ProPublica, The Intercept, local newspapers)
+- Legal/court filings and victim advocate organizations
+- Major US outlets (NBC, CNBC, NYT, WSJ, PBS) — but look past the DOJ headlines to find the individual stories within
+
+**STORY SELECTION PRIORITIES (in order):**
+1. Stories naming specific individuals connected to Epstein (associates, visitors, flight log names, accusers, victims, enablers)
+2. Lawsuits, investigations, or legal actions against specific people
+3. International angles (European investigations, foreign connections, charges abroad)
+4. Victim/survivor stories and advocacy efforts
+5. **LAST RESORT:** Government process stories (DOJ releases, AG statements) — include AT MOST ONE of these per roundup
+
+**AVOID:**
+- Do NOT lead with Pam Bondi or DOJ release process stories — these have been covered extensively
+- Do NOT make "files released" or "documents unsealed" the main theme
+- If the only stories available are about DOJ/Bondi, dig deeper into WHO is named in those documents rather than the release process itself
 
 **Minimum requirement:** You need **3+ genuinely new links** to publish a daily roundup. If there aren't enough new stories, don't publish that day.
 
@@ -263,8 +282,17 @@ curl -s "https://www.bing.com/indexnow?url=https://epsteinfilesdaily.com/daily-[
 
 **Thumbnail headline rules:**
 - MUST include at least one specific person's name
-- NEVER use generic "DOJ Releases Files" or "New Documents Released"
+- NEVER use generic "DOJ Releases Files", "Bondi Claims...", or "New Documents Released"
+- Always lead with the most newsworthy INDIVIDUAL, not a government agency
 - Each day's headline should be distinct from recent ones
+- Good examples: "Wexner Faces Congress as Jagland Charged in Norway", "Prince Andrew Faces New Pressure in Document Dump"
+- Bad examples: "DOJ Releases More Epstein Files", "Bondi Claims All Files Released"
+
+**Content diversity rules:**
+- AT MOST ONE bullet about DOJ/Bondi/government process per roundup
+- Prioritize lesser-known stories about specific individuals over mainstream DOJ coverage
+- Include international angles when available (European investigations, foreign charges)
+- Feature victims/survivors and their advocacy efforts
 
 **SEO checklist for each article:**
 - `<link rel="canonical">` with full URL
