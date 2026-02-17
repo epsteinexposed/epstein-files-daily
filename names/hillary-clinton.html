@@ -26,11 +26,45 @@
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
         a{color:inherit;text-decoration:none}
-        header{background:var(--sidebar-bg);padding:12px 24px;border-bottom:3px solid var(--accent);display:flex;justify-content:space-between;align-items:center}
-        .logo{display:flex;align-items:center;gap:12px}
-        .logo-icon{width:40px;height:40px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
-        .logo-text{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;letter-spacing:2px}
-        .logo-text .daily{display:block;font-size:12px;letter-spacing:4px;color:var(--text-muted)}
+
+        /* BOLD HEADER */
+        header[role="banner"]{background:#000;border-bottom:4px solid var(--accent);position:sticky;top:0;z-index:100}
+        .header-inner{display:flex;align-items:center;justify-content:space-between;padding:0}
+        .header-controls{display:flex;gap:12px;align-items:center;padding-right:20px}
+        .theme-toggle{background:#333;color:#fff;border:none;padding:10px 14px;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.2s}
+        .theme-toggle:hover{background:var(--accent)}
+        .theme-toggle svg{width:16px;height:16px}
+
+        /* LOGO */
+        .logo{display:flex;align-items:center;gap:0;text-decoration:none;background:var(--accent);padding:12px 24px;transition:background 0.2s;flex-shrink:0}
+        .logo:hover{background:#b91c1c}
+        .logo-icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center}
+        .logo-icon svg{width:56px;height:56px}
+        .logo-text{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;color:#fff;display:flex;flex-direction:column;line-height:1;text-transform:uppercase;letter-spacing:1px}
+        .logo-text .daily{font-size:14px;font-weight:600;letter-spacing:3px;opacity:0.9;margin-top:2px}
+
+        /* HEADER CENTER */
+        .header-center{flex:1;display:flex;align-items:center;gap:24px;padding:0 24px}
+        .header-search-wrapper{position:relative;flex:1;max-width:400px}
+        .header-search{display:flex;gap:0}
+        .header-search input{flex:1;padding:10px 14px;border:none;background:var(--search-bg);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;width:100%}
+        .header-search input:focus{outline:none;background:var(--bg-card)}
+        .header-search input::placeholder{color:var(--text-light)}
+        .header-search button{background:#333;color:#fff;border:none;padding:10px 16px;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+        .header-search button:hover{background:var(--accent)}
+        .search-dropdown{display:none;position:absolute;top:100%;left:0;right:0;background:#252525;border:1px solid var(--border);border-top:none;padding:12px;z-index:200}
+        .search-dropdown.visible{display:block}
+        .search-dropdown-label{font-size:10px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+        .search-dropdown-names{display:flex;gap:6px;flex-wrap:wrap}
+        .trending-name{background:#333;color:#fff;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;border:none;font-family:'Inter',sans-serif}
+        .trending-name:hover{background:var(--accent)}
+        .header-email{display:flex;align-items:center;gap:12px}
+        .header-email-label{font-size:12px;color:#999;font-weight:500;white-space:nowrap}
+        .header-email-form{display:flex;gap:0}
+        .header-email-form input{padding:10px 14px;border:none;background:var(--search-bg);color:var(--text);font-size:14px;font-family:'Inter',sans-serif;width:280px}
+        .header-email-form input:focus{outline:none;background:var(--bg-card)}
+        .header-email-form input::placeholder{color:var(--text-light)}
+        .header-email-form button{background:var(--accent);color:#fff;border:none;padding:10px 16px;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
         .page-wrapper{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 80px)}
         .sidebar{background:var(--sidebar-bg);border-right:1px solid var(--border);padding:0;overflow-y:auto;max-height:calc(100vh - 80px);position:sticky;top:0}
         .sidebar-section{padding:16px 20px;border-bottom:1px solid var(--border)}
@@ -44,7 +78,7 @@
         .back-link{display:block;padding:16px 20px;color:var(--text-muted);font-size:13px;border-bottom:1px solid var(--border)}
         .back-link:hover{color:var(--accent)}
         main{padding:32px}
-        .page-header{margin-bottom:32px}
+        .page-
         .page-header h1{font-family:'Oswald',sans-serif;font-size:42px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
         .page-header p{color:var(--text-muted)}
         .articles-grid{display:flex;flex-direction:column;gap:24px}
@@ -59,14 +93,31 @@
         .article-title{font-family:'Oswald',sans-serif;font-size:22px;font-weight:600;line-height:1.2;text-transform:uppercase}
         .article-title a:hover{color:var(--accent)}
         .article-excerpt{font-size:14px;color:var(--text-muted);line-height:1.5}
-        @media(max-width:900px){.page-wrapper{grid-template-columns:1fr}.sidebar{display:none}.article-preview{grid-template-columns:1fr}}
+
+        @media(max-width:900px){
+            .page-wrapper{grid-template-columns:1fr}
+            .sidebar{display:none}
+            .article-preview{grid-template-columns:1fr}
+            .header-center{display:none}
+            .header-inner{padding:0}
+        }
     
         .person-bio{background:var(--bg-card);border-left:3px solid var(--accent);padding:16px 20px;margin-bottom:32px;font-size:16px;line-height:1.7;color:var(--text-muted)}
         .person-bio p{margin:0}
 
         /* Light mode */
         html.light-mode{--bg:#f5f5f5;--bg-card:#fff;--text:#1a1a1a;--text-muted:#555;--text-light:#777;--border:#ddd;--search-bg:#fff;--sidebar-bg:#eee}
-        html.light-mode header{background:#fff;border-bottom-color:var(--accent)}
+        html.light-mode header[role="banner"]{background:#fff;border-bottom-color:var(--accent)}
+        html.light-mode .logo{background:var(--accent)}
+        html.light-mode .header-search input{background:#f0f0f0;color:#1a1a1a}
+        html.light-mode .header-search input:focus{background:#fff}
+        html.light-mode .header-search input::placeholder{color:#888}
+        html.light-mode .header-email-form input{background:#f0f0f0;color:#1a1a1a}
+        html.light-mode .header-email-form input:focus{background:#fff}
+        html.light-mode .header-email-form input::placeholder{color:#888}
+        html.light-mode .trending-name{background:#e0e0e0;color:#1a1a1a}
+        html.light-mode .theme-toggle{background:#e0e0e0;color:#1a1a1a}
+        html.light-mode
         html.light-mode .sidebar{background:#eee;border-right-color:#ddd}
         html.light-mode .sidebar-section{border-bottom-color:#ddd}
         html.light-mode .tag-filter{color:#555}
@@ -76,25 +127,56 @@
         html.light-mode .article-preview{border-bottom-color:#ddd}
         html.light-mode .article-thumb{background:#ddd}
         html.light-mode .person-bio{background:#fff}
-        html.light-mode .theme-toggle{background:#e0e0e0;color:#1a1a1a}
-
-        .theme-toggle{background:#333;color:#fff;border:none;padding:10px 14px;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.2s}
-        .theme-toggle:hover{background:var(--accent)}
-        .theme-toggle svg{width:16px;height:16px}
+        html.light-mode
     </style>
 </head>
 <body>
-    <header>
-        <a href="/" class="logo">
-            <div class="logo-icon">EF</div>
-            <div class="logo-text">Epstein Files<span class="daily">Daily</span></div>
-        </a>
-
-        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark mode">
-            <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-            <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-            <span id="theme-text">LIGHT</span>
-        </button>
+    <header role="banner">
+        <div class="header-inner">
+            <a href="/" class="logo" aria-label="Epstein Files Daily - Home">
+                <div class="logo-icon" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="42" cy="42" r="32" fill="#1a1a1a" stroke="white" stroke-width="3"/>
+                        <text x="42" y="48" font-size="28" font-family="Arial,sans-serif" font-weight="bold" fill="white" text-anchor="middle">EF</text>
+                        <rect x="18" y="52" width="48" height="6" fill="#fff"/>
+                        <line x1="66" y1="66" x2="88" y2="88" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
+            </a>
+            <div class="header-center">
+                <div class="header-search-wrapper">
+                    <div class="header-search">
+                        <input type="text" id="header-search-input" placeholder="Search names..." aria-label="Search articles">
+                        <button type="button" id="header-search-btn">GO</button>
+                    </div>
+                    <div class="search-dropdown" id="search-dropdown">
+                        <div class="search-dropdown-label">Trending Names</div>
+                        <div class="search-dropdown-names">
+                            <button class="trending-name" data-name="peter thiel">THIEL</button>
+                            <button class="trending-name" data-name="elon musk">MUSK</button>
+                            <button class="trending-name" data-name="sergey brin">BRIN</button>
+                            <button class="trending-name" data-name="bill gates">GATES</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-email">
+                    <span class="header-email-label">Get updates:</span>
+                    <form class="header-email-form" action="https://epstein-exposed.us13.list-manage.com/subscribe/post?u=dbf04846cbc14c3a4d734f311&amp;id=a2f4925a23&amp;f_id=00cdace2f0" method="post" target="_blank">
+                        <input type="email" name="EMAIL" placeholder="your@email.com" required>
+                        <div style="position:absolute;left:-5000px" aria-hidden="true"><input type="text" name="b_dbf04846cbc14c3a4d734f311_a2f4925a23" tabindex="-1" value=""></div>
+                        <button type="submit">GO</button>
+                    </form>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark mode">
+                    <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <span id="theme-text">LIGHT</span>
+                </button>
+            </div>
+        </div>
     </header>
     <div class="page-wrapper">
         <aside class="sidebar">
@@ -169,6 +251,42 @@
 
     <script>
         const html = document.documentElement;
+
+        // Header search functionality
+        const searchInput = document.getElementById('header-search-input');
+        const searchBtn = document.getElementById('header-search-btn');
+        const searchDropdown = document.getElementById('search-dropdown');
+
+        function slugify(name) {
+            return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        }
+
+        function doSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                window.location.href = '/names/' + slugify(query) + '.html';
+            }
+        }
+
+        searchBtn.addEventListener('click', doSearch);
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') doSearch();
+        });
+
+        searchInput.addEventListener('focus', () => {
+            searchDropdown.classList.add('visible');
+        });
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.header-search-wrapper')) {
+                searchDropdown.classList.remove('visible');
+            }
+        });
+
+        document.querySelectorAll('.trending-name').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.location.href = '/names/' + slugify(btn.dataset.name) + '.html';
+            });
+        });
         const themeToggle = document.getElementById('theme-toggle');
         const themeText = document.getElementById('theme-text');
         const themeIconDark = document.getElementById('theme-icon-dark');
