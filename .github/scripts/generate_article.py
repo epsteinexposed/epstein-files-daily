@@ -41,10 +41,22 @@ def get_existing_roundups():
 def fetch_news_from_rss():
     """Fetch news from Google News RSS - Claude API cannot search the web."""
     queries = [
-        "epstein+documents+release",
-        "epstein+files+DOJ",
-        "jeffrey+epstein+investigation",
-        "epstein+connections+revealed"
+        # Specific individuals - cast a wide net for lesser-known stories
+        "epstein+prince+andrew",
+        "epstein+bill+gates",
+        "epstein+ghislaine+maxwell+trial",
+        "epstein+les+wexner",
+        "epstein+jean-luc+brunel",
+        "epstein+victim+survivor+lawsuit",
+        "epstein+flight+logs+names",
+        "epstein+island+little+st+james",
+        # Broader but still distinct from DOJ headlines
+        "jeffrey+epstein+investigation+new",
+        "epstein+connections+revealed+billionaire",
+        "epstein+documents+unsealed+names",
+        # International angles
+        "epstein+europe+investigation",
+        "epstein+intelligence+FBI+CIA",
     ]
 
     all_articles = []
@@ -78,11 +90,13 @@ def fetch_news_from_rss():
         except Exception as e:
             print(f"Error fetching {query}: {e}")
 
-    # Filter for relevance
-    keywords = ['epstein', 'ghislaine', 'maxwell', 'doj', 'documents', 'files', 'release']
+    # Filter for relevance - broad keywords to capture diverse stories
+    keywords = ['epstein', 'ghislaine', 'maxwell', 'prince andrew', 'wexner', 'brunel',
+                'trafficking', 'victim', 'survivor', 'unsealed', 'flight log',
+                'little st james', 'pedophile island']
     relevant = [a for a in all_articles if any(kw in a['title'].lower() for kw in keywords)]
     print(f"Found {len(relevant)} relevant articles from RSS")
-    return relevant[:15]
+    return relevant[:20]
 
 def generate_thumbnail(date_str, headline, filename, featured_name=""):
     """Generate newspaper-style thumbnail with paper texture."""
@@ -226,12 +240,25 @@ HERE ARE THE NEWS ARTICLES FETCHED FROM RSS (these are REAL articles with REAL U
 
 YOUR TASK:
 1. Select 4-6 of the most newsworthy and distinct stories
-2. Format them for the website
-3. Extract names of notable people mentioned
+2. PRIORITIZE stories about specific INDIVIDUALS (victims, associates, enablers, investigators) over generic DOJ/government process stories
+3. Format them for the website
+4. Extract names of notable people mentioned
+
+STORY SELECTION PRIORITIES (in order):
+- Stories naming specific individuals connected to Epstein (associates, visitors, flight log names, accusers, victims, enablers)
+- Lawsuits, investigations, or legal actions against specific people
+- International angles (European investigations, foreign connections)
+- Victim/survivor stories and advocacy efforts
+- LAST RESORT: Government process stories (DOJ releases, AG statements, congressional hearings) — include AT MOST ONE of these per roundup
+
+AVOID:
+- Do NOT lead with Pam Bondi or DOJ release process stories — these have been covered extensively
+- Do NOT make "files released" or "documents unsealed" the main theme
+- If the only stories available are about DOJ/Bondi, dig deeper into WHO is named in those documents rather than the release process itself
 
 OUTPUT FORMAT - Return a JSON object:
 {{
-    "theme_headline": "Short punchy headline that MUST include at least one specific person's name (e.g., 'Prince Andrew Named in New Flight Logs', 'Bill Gates Connection to Epstein Deepens'). NEVER use generic headlines like 'DOJ Releases Files' or 'New Documents Released'. Always lead with the most newsworthy person.",
+    "theme_headline": "Short punchy headline that MUST include at least one specific person's name (e.g., 'Prince Andrew Named in New Flight Logs', 'Les Wexner Faces New Lawsuit', 'Victims Push for Accountability Against Maxwell Associates'). NEVER use generic headlines like 'DOJ Releases Files' or 'Bondi Claims All Files Released'. Always lead with the most newsworthy INDIVIDUAL, not a government agency.",
     "featured_name": "The most prominent person's name from the headline (e.g., 'Prince Andrew')",
     "names": ["Full Name 1", "Full Name 2", "Full Name 3"],
     "bullets_short": [
@@ -252,6 +279,7 @@ RULES:
 5. Use the ACTUAL URLs from the articles above - do not make up URLs
 6. Names array should only contain full person names (for tags)
 7. If fewer than 4 distinct newsworthy stories, return {{"no_news": true}}
+8. AT MOST ONE bullet about DOJ/Bondi/government process per roundup — focus on the PEOPLE in the files
 """
 
     print("Calling Claude API to format roundup...")
