@@ -747,6 +747,22 @@ Return ONLY the bio text, no quotes or labels."""
         .article-title a:hover{{color:var(--accent)}}
         .article-excerpt{{font-size:14px;color:var(--text-muted);line-height:1.5}}
         @media(max-width:900px){{.page-wrapper{{grid-template-columns:1fr}}.sidebar{{display:none}}.article-preview{{grid-template-columns:1fr}}}}
+
+        html.light-mode{{--bg:#f5f5f5;--bg-card:#fff;--text:#1a1a1a;--text-muted:#555;--text-light:#777;--border:#ddd;--search-bg:#fff;--sidebar-bg:#eee}}
+        html.light-mode header{{background:#fff;border-bottom-color:var(--accent)}}
+        html.light-mode .sidebar{{background:#eee;border-right-color:#ddd}}
+        html.light-mode .sidebar-section{{border-bottom-color:#ddd}}
+        html.light-mode .tag-filter{{color:#555}}
+        html.light-mode .tag-filter:hover{{background:#ddd;color:#1a1a1a}}
+        html.light-mode .tag-filter .count{{background:#ddd;color:#555}}
+        html.light-mode .back-link{{border-bottom-color:#ddd}}
+        html.light-mode .article-preview{{border-bottom-color:#ddd}}
+        html.light-mode .article-thumb{{background:#ddd}}
+        html.light-mode .person-bio{{background:#fff}}
+        html.light-mode .theme-toggle{{background:#e0e0e0;color:#1a1a1a}}
+        .theme-toggle{{background:#333;color:#fff;border:none;padding:10px 14px;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.2s}}
+        .theme-toggle:hover{{background:var(--accent)}}
+        .theme-toggle svg{{width:16px;height:16px}}
     </style>
 </head>
 <body>
@@ -755,6 +771,11 @@ Return ONLY the bio text, no quotes or labels."""
             <div class="logo-icon">EF</div>
             <div class="logo-text">Epstein Files<span class="daily">Daily</span></div>
         </a>
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark mode">
+            <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+            <span id="theme-text">LIGHT</span>
+        </button>
     </header>
     <div class="page-wrapper">
         <aside class="sidebar">
@@ -772,6 +793,28 @@ Return ONLY the bio text, no quotes or labels."""
 {bio_section}            <div class="articles-grid">{''.join(article_cards)}</div>
         </main>
     </div>
+    <script>
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeText = document.getElementById('theme-text');
+        const themeIconDark = document.getElementById('theme-icon-dark');
+        const themeIconLight = document.getElementById('theme-icon-light');
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {{
+            html.classList.add('light-mode');
+            themeText.textContent = 'DARK';
+            themeIconDark.style.display = 'none';
+            themeIconLight.style.display = 'block';
+        }}
+        themeToggle.addEventListener('click', () => {{
+            html.classList.toggle('light-mode');
+            const isLight = html.classList.contains('light-mode');
+            themeText.textContent = isLight ? 'DARK' : 'LIGHT';
+            themeIconDark.style.display = isLight ? 'none' : 'block';
+            themeIconLight.style.display = isLight ? 'block' : 'none';
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }});
+    </script>
 </body>
 </html>'''
 
