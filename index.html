@@ -277,8 +277,12 @@
         @media(max-width:900px){
             .page-wrapper{grid-template-columns:1fr}
             .sidebar{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;overflow-y:auto}
-            .sidebar.mobile-open{display:flex}
+            .sidebar.mobile-open{display:flex;flex-direction:column}
             .mobile-filter-toggle{display:block}
+            .sidebar-mobile-bar{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:2px solid var(--accent);background:var(--sidebar-bg);position:sticky;top:0;z-index:10}
+            .sidebar-mobile-bar a{color:var(--accent);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1px}
+            .sidebar-mobile-close{background:none;border:none;color:var(--text-muted);font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px}
+            .sidebar-mobile-close:hover{color:#fff}
             .logo-text{font-size:24px}
             .logo-text .daily{font-size:11px}
             .header-center{display:none}
@@ -355,6 +359,10 @@
     <div class="page-wrapper">
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
+            <div class="sidebar-mobile-bar" style="display:none">
+                <a href="/">← HOME</a>
+                <button class="sidebar-mobile-close" id="sidebar-mobile-close">✕ CLOSE</button>
+            </div>
             <!-- Search Section -->
             <div class="sidebar-section">
                 <h3><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg> SEARCH</h3>
@@ -958,10 +966,20 @@
             // Mobile filter toggle
             const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
             const sidebar = document.getElementById('sidebar');
+            const sidebarMobileBar = document.querySelector('.sidebar-mobile-bar');
+            const sidebarMobileClose = document.getElementById('sidebar-mobile-close');
+            function closeSidebar() {
+                sidebar.classList.remove('mobile-open');
+                mobileFilterToggle.textContent = '☰ FILTER';
+                if (sidebarMobileBar) sidebarMobileBar.style.display = 'none';
+            }
             mobileFilterToggle.addEventListener('click', () => {
                 sidebar.classList.toggle('mobile-open');
-                mobileFilterToggle.textContent = sidebar.classList.contains('mobile-open') ? '✕ CLOSE' : '☰ FILTER';
+                const isOpen = sidebar.classList.contains('mobile-open');
+                mobileFilterToggle.textContent = isOpen ? '✕ CLOSE' : '☰ FILTER';
+                if (sidebarMobileBar) sidebarMobileBar.style.display = isOpen ? 'flex' : 'none';
             });
+            if (sidebarMobileClose) sidebarMobileClose.addEventListener('click', closeSidebar);
 
             const searchInput = document.getElementById('search-input');
             const searchBtn = document.getElementById('search-btn');
