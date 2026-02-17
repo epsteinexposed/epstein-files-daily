@@ -732,7 +732,7 @@ Return ONLY the bio text, no quotes or labels."""
         .page-header{{margin-bottom:32px}}
         .page-header h1{{font-family:'Oswald',sans-serif;font-size:42px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}}
         .page-header p{{color:var(--text-muted)}}
-        .person-bio{{background:var(--bg-card);border-left:3px solid var(--accent);padding:16px 20px;margin-bottom:32px;font-size:14px;line-height:1.7;color:var(--text-muted)}}
+        .person-bio{{background:var(--bg-card);border-left:3px solid var(--accent);padding:16px 20px;margin-bottom:32px;font-size:16px;line-height:1.7;color:var(--text-muted)}}
         .person-bio p{{margin:0}}
         .articles-grid{{display:flex;flex-direction:column;gap:24px}}
         .article-preview{{display:grid;grid-template-columns:200px 1fr;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--border)}}
