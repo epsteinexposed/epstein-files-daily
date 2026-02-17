@@ -185,7 +185,7 @@ def generate_thumbnail(date_str, headline, filename, featured_name=""):
         lines.append(' '.join(current_line))
 
     # Draw headline centered
-    line_height = 55
+    line_height = 70
     for i, line in enumerate(lines[:3]):
         bbox = draw.textbbox((0, 0), line, font=font_headline)
         text_width = bbox[2] - bbox[0]
