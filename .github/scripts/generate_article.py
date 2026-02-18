@@ -1026,35 +1026,53 @@ def generate_substack_post(data, today):
 
     subject = f"{month_day}: {data['theme_headline']}"
 
-    # Build a summary version (not the full article) to avoid SEO duplicate content
+    # Build styled bullets matching website design
     bullets_html = ""
     for bullet in data['bullets_short'][:5]:
         name_slug = bullet['name'].lower().replace(' ', '-').replace('.', '').replace("'", '')
-        bullets_html += f'<li><strong>{bullet["name"]}</strong> — {bullet["text"]}</li>\n'
+        source_url = bullet.get('url', full_url)
+        source_name = bullet.get('source', 'Source')
+        bullets_html += f'''            <li>
+                <strong>{bullet["name"]}</strong> &mdash; {bullet["text"]}
+                <br><a href="{source_url}" class="source-link">{source_name} &rarr;</a>
+            </li>
+'''
 
-    # Build name links
-    names_html = ""
+    # Build name tags
+    name_tags_html = ""
     for name in data['names'][:6]:
         name_slug = name.lower().replace(' ', '-').replace('.', '').replace("'", '')
-        names_html += f'<a href="https://epsteinfilesdaily.com/names/{name_slug}.html">{name}</a> · '
-    names_html = names_html.rstrip(' · ')
+        name_tags_html += f'                <a href="https://epsteinfilesdaily.com/names/{name_slug}.html" class="name-tag">{name}</a>\n'
 
-    html = f"""<p><em>This is a summary of today's Epstein Files Daily roundup. <a href="{full_url}">Read the full article with all sources →</a></em></p>
-
-<h2>Today's Key Developments</h2>
-
-<ul>
-{bullets_html}</ul>
-
-<h2>Names in Today's Report</h2>
-
-<p>{names_html}</p>
-
-<hr>
-
-<p><strong><a href="{full_url}">Read the full roundup with sources and details →</a></strong></p>
-
-<p>Visit <a href="https://epsteinfilesdaily.com">epsteinfilesdaily.com</a> for daily coverage tracking every name, every document, and every development in the Epstein files.</p>"""
+    html = f"""<div class="header">
+        <h1>Epstein Files Daily</h1>
+        <div class="subtitle">Comprehensive Coverage of the DOJ Document Releases</div>
+    </div>
+    <div class="container">
+        <div class="date-bar">
+            <span>Daily Roundup</span>
+            <span>{month_day}, {today.year}</span>
+        </div>
+        <div class="intro">
+            This is a summary of today's Epstein Files Daily roundup. <a href="{full_url}">Read the full article with all sources &rarr;</a>
+        </div>
+        <div class="headline">{data['theme_headline']}</div>
+        <h2>Today's Key Developments</h2>
+        <ul class="bullets">
+{bullets_html}        </ul>
+        <div class="names-section">
+            <h2>Names in Today's Report</h2>
+            <div class="name-tags">
+{name_tags_html}            </div>
+        </div>
+        <div class="cta">
+            <a href="{full_url}" class="cta-btn">Read the Full Roundup &rarr;</a>
+            <p>Visit <a href="https://epsteinfilesdaily.com">epsteinfilesdaily.com</a> for daily coverage tracking every name, every document, and every development.</p>
+        </div>
+        <div class="footer">
+            <p><a href="https://epsteinfilesdaily.com">Epstein Files Daily</a> &mdash; Every name. Every document. Every day.</p>
+        </div>
+    </div>"""
 
     return {
         'subject': subject,
