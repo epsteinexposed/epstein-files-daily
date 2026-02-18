@@ -16,7 +16,8 @@ import random
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timedelta
+from email.utils import parsedate_to_datetime
 from anthropic import Anthropic
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
@@ -90,12 +91,34 @@ def fetch_news_from_rss():
         except Exception as e:
             print(f"Error fetching {query}: {e}")
 
+    # Filter by date - only articles from the last 48 hours
+    cutoff = datetime.now().astimezone() - timedelta(hours=48)
+    recent = []
+    undated = []
+    for a in all_articles:
+        if a['date']:
+            try:
+                pub_dt = parsedate_to_datetime(a['date'])
+                if pub_dt >= cutoff:
+                    recent.append(a)
+                else:
+                    print(f"  Skipping old article ({a['date']}): {a['title'][:60]}")
+            except Exception:
+                undated.append(a)  # Keep articles with unparseable dates
+        else:
+            undated.append(a)
+
+    print(f"Found {len(recent)} articles from last 48 hours, {len(undated)} undated")
+
+    # Use recent articles first, fall back to undated if needed
+    filtered = recent + undated
+
     # Filter for relevance - broad keywords to capture diverse stories
     keywords = ['epstein', 'ghislaine', 'maxwell', 'prince andrew', 'wexner', 'brunel',
                 'trafficking', 'victim', 'survivor', 'unsealed', 'flight log',
                 'little st james', 'pedophile island']
-    relevant = [a for a in all_articles if any(kw in a['title'].lower() for kw in keywords)]
-    print(f"Found {len(relevant)} relevant articles from RSS")
+    relevant = [a for a in filtered if any(kw in a['title'].lower() for kw in keywords)]
+    print(f"Found {len(relevant)} relevant recent articles from RSS")
     return relevant[:20]
 
 def generate_thumbnail(date_str, headline, filename, featured_name=""):
@@ -223,9 +246,9 @@ def generate_roundup(articles):
     existing = get_existing_roundups()
     today = datetime.now()
 
-    # Format articles for Claude
+    # Format articles for Claude — include publish date so it can verify recency
     articles_text = "\n".join([
-        f"- {a['title']} (Source: {a['source']}, URL: {a['url']})"
+        f"- {a['title']} (Source: {a['source']}, Published: {a['date'] or 'Unknown'}, URL: {a['url']})"
         for a in articles
     ])
 
@@ -251,10 +274,17 @@ STORY SELECTION PRIORITIES (in order):
 - Victim/survivor stories and advocacy efforts
 - LAST RESORT: Government process stories (DOJ releases, AG statements, congressional hearings) — include AT MOST ONE of these per roundup
 
+CRITICAL DATE RULE:
+- Today's date is {today.strftime('%B %d, %Y')}
+- ONLY use articles published TODAY or YESTERDAY. Check the "Published:" date on each article.
+- If an article's publish date is more than 2 days old, DO NOT include it.
+- If you cannot verify the date, skip the article.
+
 AVOID:
 - Do NOT lead with Pam Bondi or DOJ release process stories — these have been covered extensively
 - Do NOT make "files released" or "documents unsealed" the main theme
 - If the only stories available are about DOJ/Bondi, dig deeper into WHO is named in those documents rather than the release process itself
+- Do NOT include articles older than 2 days — this is a daily news roundup, not a recap
 
 OUTPUT FORMAT - Return a JSON object:
 {{
