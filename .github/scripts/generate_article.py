@@ -1015,67 +1015,51 @@ def update_sitemap(data, today):
         print("WARNING: Could not find insertion point in sitemap.xml")
 
 def generate_substack_post(data, today):
-    """Generate a Substack-ready version of the daily roundup.
+    """Generate Substack post content matching the live Substack format.
 
-    This is a shorter, rewritten version that links back to the full article
-    on epsteinfilesdaily.com to avoid duplicate content issues with Google.
+    Structure:
+    - Title: date only (e.g. "February 18, 2026")
+    - Subtitle: "Today's Epstein Files Daily roundup."
+    - Cover image: branded 1920x1080 thumbnail (generated separately)
+    - Intro: link to full article
+    - Bold headline
+    - "Today's Key Developments" with bullets
+    - "Read the Full Roundup" CTA
     """
     month_day = today.strftime('%B %d').replace(' 0', ' ')
+    date_full = f"{month_day}, {today.year}"
     filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
     full_url = f"https://epsteinfilesdaily.com/{filename}.html"
 
-    subject = f"{month_day}: {data['theme_headline']}"
+    # Substack title is just the date
+    title = date_full
+    subtitle = "Today's Epstein Files Daily roundup."
 
-    # Build styled bullets matching website design
+    # Build bullets - plain HTML that works when pasted into Substack
     bullets_html = ""
     for bullet in data['bullets_short'][:5]:
-        name_slug = bullet['name'].lower().replace(' ', '-').replace('.', '').replace("'", '')
         source_url = bullet.get('url', full_url)
         source_name = bullet.get('source', 'Source')
-        bullets_html += f'''            <li>
-                <strong>{bullet["name"]}</strong> &mdash; {bullet["text"]}
-                <br><a href="{source_url}" class="source-link">{source_name} &rarr;</a>
-            </li>
-'''
+        bullets_html += f"""<p><strong>{bullet["name"]}</strong> — {bullet["text"]}</p>
+<p><a href="{source_url}">{source_name} →</a></p>
+"""
 
-    # Build name tags
-    name_tags_html = ""
-    for name in data['names'][:6]:
-        name_slug = name.lower().replace(' ', '-').replace('.', '').replace("'", '')
-        name_tags_html += f'                <a href="https://epsteinfilesdaily.com/names/{name_slug}.html" class="name-tag">{name}</a>\n'
+    # Plain HTML body content (Substack strips CSS, so keep it simple)
+    html = f"""<p>Today's Epstein Files Daily roundup. <a href="{full_url}">Read the full article with all sources →</a></p>
 
-    html = f"""<div class="header">
-        <h1>Epstein Files</h1>
-        <div class="subtitle">Daily</div>
-    </div>
-    <div class="container">
-        <div class="date-bar">
-            <span>Daily Roundup</span>
-            <span>{month_day}, {today.year}</span>
-        </div>
-        <div class="intro">
-            This is a summary of today's Epstein Files Daily roundup. <a href="{full_url}">Read the full article with all sources &rarr;</a>
-        </div>
-        <div class="headline">{data['theme_headline']}</div>
-        <h2>Today's Key Developments</h2>
-        <ul class="bullets">
-{bullets_html}        </ul>
-        <div class="names-section">
-            <h2>Names in Today's Report</h2>
-            <div class="name-tags">
-{name_tags_html}            </div>
-        </div>
-        <div class="cta">
-            <a href="{full_url}" class="cta-btn">Read the Full Roundup &rarr;</a>
-            <p>Visit <a href="https://epsteinfilesdaily.com">epsteinfilesdaily.com</a> for daily coverage tracking every name, every document, and every development.</p>
-        </div>
-        <div class="footer">
-            <p><a href="https://epsteinfilesdaily.com">Epstein Files Daily</a> &mdash; Every name. Every document. Every day.</p>
-        </div>
-    </div>"""
+<h2>{data['theme_headline']}</h2>
+
+<h3>Today's Key Developments</h3>
+
+{bullets_html}
+<hr>
+
+<p><strong><a href="{full_url}">Read the Full Roundup →</a></strong></p>"""
 
     return {
-        'subject': subject,
+        'title': title,
+        'subtitle': subtitle,
+        'subject': f"{month_day}: {data['theme_headline']}",
         'html': html
     }
 
@@ -1147,8 +1131,12 @@ def main():
         "headline": f"{today.strftime('%B')} {today.day}: {roundup_data['theme_headline']}",
         "slug": filename_base,
         "date": today.strftime('%Y-%m-%d'),
+        "substack_title": substack_content['title'],
+        "substack_subtitle": substack_content['subtitle'],
         "substack_subject": substack_content['subject'],
-        "substack_html": substack_content['html']
+        "substack_html": substack_content['html'],
+        "theme_headline": roundup_data['theme_headline'],
+        "names": roundup_data.get('names', [])[:4]
     }
     write_file('latest_article.json', json.dumps(latest_info))
 

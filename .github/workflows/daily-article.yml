@@ -44,60 +44,112 @@ jobs:
             echo "article_generated=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Save Substack draft
+      - name: Save Substack draft and thumbnail
         if: steps.generate.outputs.article_generated == 'true'
         run: |
           python3 << 'PYEOF'
-          import json, os
+          import json, os, random
+          from PIL import Image, ImageDraw, ImageFont
+
           with open('latest_article.json') as f:
               info = json.load(f)
           os.makedirs('substack', exist_ok=True)
           slug = info.get('slug', 'latest')
-          filepath = f'substack/{slug}.html'
 
-          CSS = """@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: 'Inter', sans-serif; background: #1a1a1a; color: #fff; line-height: 1.7; }
-          .header { background: #b91c1c; padding: 40px 24px 36px; text-align: center; }
-          .header h1 { font-size: 42px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #fff; line-height: 1.1; }
-          .header .subtitle { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 6px; text-transform: uppercase; margin-top: 4px; }
-          .container { max-width: 680px; margin: 0 auto; padding: 32px 20px; }
-          .date-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 24px; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-          .intro { font-size: 14px; color: #b0b0b0; margin-bottom: 24px; padding: 16px; background: #252525; border-left: 3px solid #b91c1c; border-radius: 0 4px 4px 0; }
-          .intro a { color: #b91c1c; font-weight: 700; text-decoration: none; }
-          h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #b91c1c; margin: 32px 0 16px; }
-          .headline { font-size: 28px; font-weight: 700; line-height: 1.3; margin-bottom: 24px; color: #fff; }
-          .bullets { list-style: none; padding: 0; }
-          .bullets li { padding: 16px; margin-bottom: 12px; background: #252525; border-radius: 4px; border-left: 3px solid #b91c1c; font-size: 15px; line-height: 1.6; color: #ddd; }
-          .bullets li strong { color: #fff; font-weight: 700; }
-          .source-link { display: inline-block; margin-top: 6px; color: #b91c1c; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; }
-          .names-section { margin: 32px 0; }
-          .name-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-          .name-tag { background: #b91c1c; color: #fff; padding: 6px 14px; font-size: 12px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; }
-          .cta { margin: 40px 0; padding: 24px; background: #252525; border: 1px solid #333; border-radius: 4px; text-align: center; }
-          .cta a.cta-btn { display: inline-block; background: #b91c1c; color: #fff; padding: 12px 28px; font-weight: 700; font-size: 14px; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-          .cta p { color: #888; font-size: 13px; margin-top: 12px; }
-          .cta p a { color: #b91c1c; text-decoration: none; }
-          .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; text-align: center; font-size: 12px; color: #666; }
-          .footer a { color: #b91c1c; text-decoration: none; }
-          .copy-instructions { background: #0a3622; border: 1px solid #166534; border-radius: 6px; padding: 16px 20px; margin: 16px 20px; font-size: 13px; color: #86efac; }
-          .copy-instructions strong { color: #4ade80; }"""
+          # --- Save plain text draft for easy copy-paste into Substack ---
+          draft_path = f'substack/{slug}.txt'
+          title = info.get('substack_title', info['date'])
+          subtitle = info.get('substack_subtitle', "Today's Epstein Files Daily roundup.")
+          headline = info.get('theme_headline', info['headline'])
 
-          html = f'''<!DOCTYPE html>
-          <html lang="en"><head><meta charset="utf-8">
-          <title>{info["substack_subject"]}</title>
-          <style>{CSS}</style></head>
-          <body>
-          <div class="copy-instructions">
-              <strong>SUBSTACK DRAFT — {info["substack_subject"].split(":")[0]}</strong><br>
-              Copy everything below this box into your Substack editor.
-          </div>
-          {info["substack_html"]}
-          </body></html>'''
+          draft = f"""SUBSTACK POST DRAFT
+          ====================
+          Title: {title}
+          Subtitle: {subtitle}
+          Cover image: images/substack-{slug}.png
 
-          with open(filepath, 'w') as f:
-              f.write(html)
-          print(f'Substack draft saved to {filepath}')
+          --- PASTE BELOW INTO SUBSTACK EDITOR ---
+
+          {info['substack_html']}
+          """
+          with open(draft_path, 'w') as f:
+              f.write(draft)
+          print(f'Substack draft saved to {draft_path}')
+
+          # --- Generate 1920x1080 Substack thumbnail ---
+          WIDTH = 1920
+          HEIGHT = 1080
+          img = Image.new('RGB', (WIDTH, HEIGHT), (185, 28, 28))
+          draw = ImageDraw.Draw(img)
+          try:
+              font_main = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 72)
+              font_sub = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 30)
+              font_date = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 20)
+              font_hl = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 36)
+              font_url = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+          except:
+              font_main = font_sub = font_date = font_hl = font_url = ImageFont.load_default()
+
+          cx = WIDTH // 2
+          content_height = 390
+          base_y = (HEIGHT - content_height) // 2
+          y = base_y
+
+          # "EPSTEIN FILES"
+          txt = "EPSTEIN FILES"
+          bb = draw.textbbox((0,0), txt, font=font_main)
+          draw.text(((WIDTH - bb[2] + bb[0]) / 2, y), txt, fill='#fff', font=font_main)
+          y += 82
+
+          # "DAILY"
+          txt = "D  A  I  L  Y"
+          bb = draw.textbbox((0,0), txt, font=font_sub)
+          draw.text(((WIDTH - bb[2] + bb[0]) / 2, y), txt, fill='#fff', font=font_sub)
+          y += 45
+
+          # Line
+          draw.line([(cx - 200, y), (cx + 200, y)], fill=(255, 200, 200), width=1)
+          y += 18
+
+          # Date
+          txt = f"DAILY ROUNDUP — {title.upper()}"
+          bb = draw.textbbox((0,0), txt, font=font_date)
+          draw.text(((WIDTH - bb[2] + bb[0]) / 2, y), txt, fill='#ffcccc', font=font_date)
+          y += 40
+
+          # Headline
+          words = headline.split()
+          lines = []
+          cur = []
+          for w in words:
+              test = ' '.join(cur + [w])
+              bb = draw.textbbox((0,0), test, font=font_hl)
+              if bb[2] - bb[0] > 900:
+                  if cur:
+                      lines.append(' '.join(cur))
+                      cur = [w]
+                  else:
+                      lines.append(w)
+                      cur = []
+              else:
+                  cur.append(w)
+          if cur:
+              lines.append(' '.join(cur))
+
+          for line in lines[:4]:
+              bb = draw.textbbox((0,0), line, font=font_hl)
+              draw.text(((WIDTH - bb[2] + bb[0]) / 2, y), line, fill='#fff', font=font_hl)
+              y += 48
+          y += 20
+
+          # URL
+          txt = "epsteinfilesdaily.com"
+          bb = draw.textbbox((0,0), txt, font=font_url)
+          draw.text(((WIDTH - bb[2] + bb[0]) / 2, y), txt, fill='#ffcccc', font=font_url)
+
+          thumb_path = f'images/substack-{slug}.png'
+          img.save(thumb_path, quality=95)
+          print(f'Substack thumbnail saved to {thumb_path}')
           PYEOF
 
       - name: Commit and push
@@ -107,7 +159,7 @@ jobs:
           git config --local user.name "Article Generator Bot"
           # IMPORTANT: Only add generated files, NOT the script itself
           # This prevents race conditions where old script overwrites fixes
-          git add daily-*.html images/daily-*.png index.html feed.xml sitemap.xml names/*.html name-bios.json latest_article.json substack/*.html 2>/dev/null || true
+          git add daily-*.html images/daily-*.png images/substack-*.png index.html feed.xml sitemap.xml names/*.html name-bios.json latest_article.json substack/*.txt 2>/dev/null || true
           # Only commit if there are staged changes
           git diff --staged --quiet || git commit -m "Add daily article $(date +%Y-%m-%d)"
           git pull --rebase origin main
