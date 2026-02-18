@@ -284,31 +284,55 @@ RULES:
 
     print("Calling Claude API to format roundup...")
 
-    response = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=4000,
-        messages=[{"role": "user", "content": prompt}]
-    )
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        print(f"API attempt {attempt}/{max_retries}...")
 
-    response_text = response.content[0].text
+        response = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=4000,
+            messages=[{"role": "user", "content": prompt}]
+        )
 
-    # Parse JSON
-    json_match = re.search(r'```json\s*(.*?)\s*```', response_text, re.DOTALL)
-    if json_match:
-        json_str = json_match.group(1)
-    else:
-        json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        response_text = response.content[0].text
+
+        # Parse JSON
+        json_match = re.search(r'```json\s*(.*?)\s*```', response_text, re.DOTALL)
         if json_match:
-            json_str = json_match.group(0)
+            json_str = json_match.group(1)
         else:
-            print("ERROR: Could not find JSON in response")
-            return None
+            json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+            if json_match:
+                json_str = json_match.group(0)
+            else:
+                print(f"Attempt {attempt}: Could not find JSON in response")
+                if attempt < max_retries:
+                    continue
+                print("ERROR: No JSON found after all retries")
+                return None
 
-    try:
-        data = json.loads(json_str)
-    except json.JSONDecodeError as e:
-        print(f"ERROR: Could not parse JSON: {e}")
-        return None
+        try:
+            data = json.loads(json_str)
+            break  # Success
+        except json.JSONDecodeError as e:
+            print(f"Attempt {attempt}: JSON parse error: {e}")
+            # Try to repair common JSON issues
+            try:
+                # Fix trailing commas before } or ]
+                repaired = re.sub(r',\s*([}\]])', r'\1', json_str)
+                # Fix missing commas between objects/strings
+                repaired = re.sub(r'"\s*\n\s*"', '",\n"', repaired)
+                repaired = re.sub(r'}\s*\n\s*{', '},\n{', repaired)
+                data = json.loads(repaired)
+                print("JSON repaired successfully")
+                break
+            except json.JSONDecodeError:
+                if attempt < max_retries:
+                    print("JSON repair failed, retrying API call...")
+                    continue
+                print("ERROR: Could not parse JSON after all retries")
+                print(f"Raw response (first 500 chars): {response_text[:500]}")
+                return None
 
     if data.get('no_news'):
         print("No significant news found today")
