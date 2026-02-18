@@ -86,6 +86,7 @@ jobs:
           git add daily-*.html images/daily-*.png index.html feed.xml sitemap.xml names/*.html name-bios.json latest_article.json substack/*.html 2>/dev/null || true
           # Only commit if there are staged changes
           git diff --staged --quiet || git commit -m "Add daily article $(date +%Y-%m-%d)"
+          git pull --rebase origin main
           git push origin main
 
       - name: Ping search engines
