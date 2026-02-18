@@ -1045,8 +1045,8 @@ def generate_substack_post(data, today):
         name_tags_html += f'                <a href="https://epsteinfilesdaily.com/names/{name_slug}.html" class="name-tag">{name}</a>\n'
 
     html = f"""<div class="header">
-        <h1>Epstein Files Daily</h1>
-        <div class="subtitle">Comprehensive Coverage of the DOJ Document Releases</div>
+        <h1>Epstein Files</h1>
+        <div class="subtitle">Daily</div>
     </div>
     <div class="container">
         <div class="date-bar">
