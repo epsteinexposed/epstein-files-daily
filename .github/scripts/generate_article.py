@@ -1035,32 +1035,31 @@ def generate_substack_post(data, today):
     title = date_full
     subtitle = "Today's Epstein Files Daily roundup."
 
-    # Build bullets - plain HTML that works when pasted into Substack
-    bullets_html = ""
+    # Build plain text bullets
+    bullets_text = ""
     for bullet in data['bullets_short'][:5]:
         source_url = bullet.get('url', full_url)
         source_name = bullet.get('source', 'Source')
-        bullets_html += f"""<p><strong>{bullet["name"]}</strong> — {bullet["text"]}</p>
-<p><a href="{source_url}">{source_name} →</a></p>
-"""
+        bullets_text += f"• {bullet['name']} — {bullet['text']}\n  Source: {source_name} ({source_url})\n\n"
 
-    # Plain HTML body content (Substack strips CSS, so keep it simple)
-    html = f"""<p>Today's Epstein Files Daily roundup. <a href="{full_url}">Read the full article with all sources →</a></p>
+    # Plain text body for easy copy-paste into Substack editor
+    plain_text = f"""Today's Epstein Files Daily roundup. Read the full article with all sources:
+{full_url}
 
-<h2>{data['theme_headline']}</h2>
+{data['theme_headline']}
 
-<h3>Today's Key Developments</h3>
+Today's Key Developments
 
-{bullets_html}
-<hr>
+{bullets_text}---
 
-<p><strong><a href="{full_url}">Read the Full Roundup →</a></strong></p>"""
+Read the Full Roundup:
+{full_url}"""
 
     return {
         'title': title,
         'subtitle': subtitle,
         'subject': f"{month_day}: {data['theme_headline']}",
-        'html': html
+        'plain_text': plain_text
     }
 
 
@@ -1134,7 +1133,7 @@ def main():
         "substack_title": substack_content['title'],
         "substack_subtitle": substack_content['subtitle'],
         "substack_subject": substack_content['subject'],
-        "substack_html": substack_content['html'],
+        "substack_plain_text": substack_content['plain_text'],
         "theme_headline": roundup_data['theme_headline'],
         "names": roundup_data.get('names', [])[:4]
     }

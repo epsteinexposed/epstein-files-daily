@@ -63,15 +63,15 @@ jobs:
           headline = info.get('theme_headline', info['headline'])
 
           draft = f"""SUBSTACK POST DRAFT
-          ====================
-          Title: {title}
-          Subtitle: {subtitle}
-          Cover image: images/substack-{slug}.png
+====================
+Title: {title}
+Subtitle: {subtitle}
+Cover image: images/substack-{slug}.png
 
-          --- PASTE BELOW INTO SUBSTACK EDITOR ---
+--- PASTE BELOW INTO SUBSTACK EDITOR ---
 
-          {info['substack_html']}
-          """
+{info.get('substack_plain_text', info.get('substack_html', ''))}
+"""
           with open(draft_path, 'w') as f:
               f.write(draft)
           print(f'Substack draft saved to {draft_path}')
