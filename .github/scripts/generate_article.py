@@ -1035,25 +1035,32 @@ def generate_substack_post(data, today):
     title = date_full
     subtitle = "Today's Epstein Files Daily roundup."
 
-    # Build plain text bullets
+    # Build plain text bullets using long descriptions to match live Substack format
     bullets_text = ""
-    for bullet in data['bullets_short'][:5]:
-        source_url = bullet.get('url', full_url)
-        source_name = bullet.get('source', 'Source')
-        bullets_text += f"• {bullet['name']} — {bullet['text']}\n  Source: {source_name} ({source_url})\n\n"
+    for bullet in data['bullets_long'][:5]:
+        source_name = bullet.get('source', '')
+        bullets_text += f"\u2022 {bullet['name']} \u2014 {bullet['text']}\n"
+        if source_name:
+            bullets_text += f"Source: {source_name}\n"
+        bullets_text += "\n"
 
-    # Plain text body for easy copy-paste into Substack editor
-    plain_text = f"""Today's Epstein Files Daily roundup. Read the full article with all sources:
-{full_url}
+    # Build names list
+    names_list = ", ".join(data.get('names', [])[:6])
+
+    # Plain text body matching the live Substack article format
+    plain_text = f"""Today's Epstein Files Daily roundup. Read the full article with all sources \u2192 {full_url}
 
 {data['theme_headline']}
 
 Today's Key Developments
 
-{bullets_text}---
+{bullets_text}Names in Today's Report: {names_list}
 
-Read the Full Roundup:
-{full_url}"""
+---
+
+Read the Full Roundup \u2192 {full_url}
+
+Visit epsteinfilesdaily.com for daily coverage tracking every name, every document, and every development in the Epstein files."""
 
     return {
         'title': title,
