@@ -56,24 +56,11 @@ jobs:
           os.makedirs('substack', exist_ok=True)
           slug = info.get('slug', 'latest')
 
-          # --- Save plain text draft for easy copy-paste into Substack ---
-          draft_path = f'substack/{slug}.txt'
-          title = info.get('substack_title', info['date'])
-          subtitle = info.get('substack_subtitle', "Today's Epstein Files Daily roundup.")
-          headline = info.get('theme_headline', info['headline'])
-
-          draft = f"""SUBSTACK POST DRAFT
-====================
-Title: {title}
-Subtitle: {subtitle}
-Cover image: images/substack-{slug}.png
-
---- PASTE BELOW INTO SUBSTACK EDITOR ---
-
-{info.get('substack_plain_text', info.get('substack_html', ''))}
-"""
+          # --- Save copyable HTML draft for Substack ---
+          draft_path = f'substack/{slug}.html'
+          draft_html = info.get('substack_draft_html', '')
           with open(draft_path, 'w') as f:
-              f.write(draft)
+              f.write(draft_html)
           print(f'Substack draft saved to {draft_path}')
 
           # --- Generate 1920x1080 Substack thumbnail ---
@@ -159,7 +146,7 @@ Cover image: images/substack-{slug}.png
           git config --local user.name "Article Generator Bot"
           # IMPORTANT: Only add generated files, NOT the script itself
           # This prevents race conditions where old script overwrites fixes
-          git add daily-*.html images/daily-*.png images/substack-*.png index.html feed.xml sitemap.xml names/*.html name-bios.json latest_article.json substack/*.txt 2>/dev/null || true
+          git add daily-*.html images/daily-*.png images/substack-*.png index.html feed.xml sitemap.xml names/*.html name-bios.json latest_article.json substack/*.html 2>/dev/null || true
           # Only commit if there are staged changes
           git diff --staged --quiet || git commit -m "Add daily article $(date +%Y-%m-%d)"
           git pull --rebase origin main

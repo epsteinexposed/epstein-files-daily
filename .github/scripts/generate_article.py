@@ -1035,38 +1035,73 @@ def generate_substack_post(data, today):
     title = date_full
     subtitle = "Today's Epstein Files Daily roundup."
 
-    # Build plain text bullets using long descriptions to match live Substack format
-    bullets_text = ""
+    # Build HTML bullets using long descriptions
+    bullets_html = ""
     for bullet in data['bullets_long'][:5]:
         source_name = bullet.get('source', '')
-        bullets_text += f"\u2022 {bullet['name']} \u2014 {bullet['text']}\n"
-        if source_name:
-            bullets_text += f"Source: {source_name}\n"
-        bullets_text += "\n"
+        source_url = bullet.get('url', full_url)
+        source_link = f'\n<a style="display:block;font-size:14px;margin-top:4px" href="{source_url}">{source_name} →</a>' if source_name else ''
+        bullets_html += f'<li><strong>{bullet["name"]}</strong> — {bullet["text"]}{source_link}</li>\n\n'
 
-    # Build names list
-    names_list = ", ".join(data.get('names', [])[:6])
+    # Build names with links
+    names_html = " · ".join(
+        f'<a href="https://epsteinfilesdaily.com/names/{n.lower().replace(" ", "-").replace(".", "").replace(chr(39), "")}.html">{n}</a>'
+        for n in data.get('names', [])[:6]
+    )
 
-    # Plain text body matching the live Substack article format
-    plain_text = f"""Today's Epstein Files Daily roundup. Read the full article with all sources \u2192 {full_url}
+    # Copyable HTML file — open in browser, select all below instructions, paste into Substack
+    draft_html = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Substack Draft — {date_full}</title>
+<style>
+body {{ font-family: Georgia, serif; max-width: 640px; margin: 40px auto; padding: 0 20px; line-height: 1.7; color: #222; }}
+.instructions {{ background: #f0f7f0; border: 1px solid #b5d5b5; border-radius: 6px; padding: 14px 18px; margin-bottom: 30px; font-family: sans-serif; font-size: 13px; color: #2d5a2d; }}
+.instructions strong {{ color: #1a4a1a; }}
+h2 {{ font-size: 22px; margin-top: 24px; }}
+h3 {{ font-size: 18px; margin-top: 20px; }}
+ul {{ padding-left: 20px; }}
+li {{ margin-bottom: 16px; }}
+a {{ color: #b91c1c; }}
+hr {{ margin: 30px 0; }}
+</style>
+</head>
+<body>
 
-{data['theme_headline']}
+<div class="instructions">
+<strong>SUBSTACK DRAFT — {date_full}</strong><br>
+Title: {date_full}<br>
+Subtitle: Today's Epstein Files Daily roundup.<br>
+Cover image: images/substack-{filename}.png<br><br>
+Select everything below this box, copy, and paste into Substack's editor.
+</div>
 
-Today's Key Developments
+<p>Today's Epstein Files Daily roundup. <a href="{full_url}">Read the full article with all sources →</a></p>
 
-{bullets_text}Names in Today's Report: {names_list}
+<h2>{data['theme_headline']}</h2>
 
----
+<h3>Today's Key Developments</h3>
 
-Read the Full Roundup \u2192 {full_url}
+<ul>
+{bullets_html}</ul>
 
-Visit epsteinfilesdaily.com for daily coverage tracking every name, every document, and every development in the Epstein files."""
+<p><strong>Names in Today's Report:</strong> {names_html}</p>
+
+<hr>
+
+<p><strong><a href="{full_url}">Read the Full Roundup →</a></strong></p>
+
+<p>Visit <a href="https://epsteinfilesdaily.com">epsteinfilesdaily.com</a> for daily coverage tracking every name, every document, and every development in the Epstein files.</p>
+
+</body>
+</html>"""
 
     return {
         'title': title,
         'subtitle': subtitle,
         'subject': f"{month_day}: {data['theme_headline']}",
-        'plain_text': plain_text
+        'draft_html': draft_html
     }
 
 
@@ -1140,7 +1175,7 @@ def main():
         "substack_title": substack_content['title'],
         "substack_subtitle": substack_content['subtitle'],
         "substack_subject": substack_content['subject'],
-        "substack_plain_text": substack_content['plain_text'],
+        "substack_draft_html": substack_content['draft_html'],
         "theme_headline": roundup_data['theme_headline'],
         "names": roundup_data.get('names', [])[:4]
     }
