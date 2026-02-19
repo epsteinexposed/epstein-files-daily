@@ -5,7 +5,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://epsteinfilesdaily.com/</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -19,6 +19,21 @@
   </url>
 
   <!-- Daily Articles -->
+  <url>
+    <loc>https://epsteinfilesdaily.com/daily-feb-19-2026.html</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.9</priority>
+    <news:news>
+      <news:publication>
+        <news:name>Epstein Files Daily</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-02-19</news:publication_date>
+      <news:title>Former Prince Andrew Arrested Over Epstein Ties</news:title>
+    </news:news>
+  </url>
+
   <url>
     <loc>https://epsteinfilesdaily.com/daily-feb-18-2026.html</loc>
     <lastmod>2026-02-18</lastmod>
