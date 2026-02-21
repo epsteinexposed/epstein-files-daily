@@ -42,22 +42,30 @@ def get_existing_roundups():
 def fetch_news_from_rss():
     """Fetch news from Google News RSS - Claude API cannot search the web."""
     queries = [
-        # Specific individuals - cast a wide net for lesser-known stories
+        # Specific individuals - spread across many names for diversity
         "epstein+prince+andrew",
         "epstein+bill+gates",
-        "epstein+ghislaine+maxwell+trial",
+        "epstein+ghislaine+maxwell",
         "epstein+les+wexner",
         "epstein+jean-luc+brunel",
+        "epstein+elon+musk",
+        "epstein+bill+clinton",
+        "epstein+donald+trump",
+        "epstein+peter+thiel+reid+hoffman",
+        # Victims, legal, accountability
         "epstein+victim+survivor+lawsuit",
+        "epstein+trafficking+charges+arrest",
+        "epstein+settlement+lawsuit+court",
+        # Documents and investigations
         "epstein+flight+logs+names",
+        "epstein+documents+unsealed+names",
         "epstein+island+little+st+james",
-        # Broader but still distinct from DOJ headlines
         "jeffrey+epstein+investigation+new",
         "epstein+connections+revealed+billionaire",
-        "epstein+documents+unsealed+names",
         # International angles
         "epstein+europe+investigation",
         "epstein+intelligence+FBI+CIA",
+        "epstein+UK+Israel+international",
     ]
 
     all_articles = []
@@ -252,12 +260,32 @@ def generate_roundup(articles):
         for a in articles
     ])
 
+    # Load yesterday's article to inform diversity rules
+    yesterday_names = []
+    yesterday_headline = ""
+    try:
+        with open('latest_article.json', 'r') as f:
+            yesterday = json.loads(f.read())
+            yesterday_names = yesterday.get('names', [])
+            yesterday_headline = yesterday.get('theme_headline', yesterday.get('headline', ''))
+    except Exception:
+        pass
+
+    yesterday_context = ""
+    if yesterday_names or yesterday_headline:
+        yesterday_context = f"""
+YESTERDAY'S ARTICLE (DO NOT REPEAT):
+- Headline: {yesterday_headline}
+- Featured names: {', '.join(yesterday_names)}
+- You MUST choose a DIFFERENT lead name/angle today. If yesterday led with Prince Andrew, today should lead with someone else.
+"""
+
     prompt = f"""You are formatting a news roundup for Epstein Files Daily.
 
 TODAY'S DATE: {today.strftime('%A, %B %d, %Y')}
 
 EXISTING ROUNDUPS (avoid repeating old headlines): {existing}
-
+{yesterday_context}
 HERE ARE THE NEWS ARTICLES FETCHED FROM RSS (these are REAL articles with REAL URLs):
 {articles_text}
 
@@ -274,6 +302,13 @@ STORY SELECTION PRIORITIES (in order):
 - Victim/survivor stories and advocacy efforts
 - LAST RESORT: Government process stories (DOJ releases, AG statements, congressional hearings) — include AT MOST ONE of these per roundup
 
+CRITICAL DIVERSITY RULES:
+- Each day's roundup MUST feature a DIFFERENT lead person/angle than the previous day
+- If the same person (e.g., Prince Andrew) has been the lead story recently, you MUST find a different angle or person to lead with today — even if that person is still in the news. You can still include them as one bullet, but NOT as the headline or first bullet.
+- Aim for at LEAST 3 different named individuals across your 4-6 bullets. Do not make the entire roundup about one person.
+- If most available articles are about the same person, find the articles about OTHER people — even if they seem less prominent — and lead with those. Variety matters more than raw newsworthiness when stories are repetitive.
+- Look for stories about: financial connections, enablers, lawyers, corporate resignations, victim advocacy, international investigations, new names surfacing, institutional accountability — not just the biggest headline.
+
 CRITICAL DATE RULE:
 - Today's date is {today.strftime('%B %d, %Y')}
 - ONLY use articles published TODAY or YESTERDAY. Check the "Published:" date on each article.
@@ -281,6 +316,7 @@ CRITICAL DATE RULE:
 - If you cannot verify the date, skip the article.
 
 AVOID:
+- Do NOT lead with the same person as yesterday's headline
 - Do NOT lead with Pam Bondi or DOJ release process stories — these have been covered extensively
 - Do NOT make "files released" or "documents unsealed" the main theme
 - If the only stories available are about DOJ/Bondi, dig deeper into WHO is named in those documents rather than the release process itself
@@ -288,8 +324,8 @@ AVOID:
 
 OUTPUT FORMAT - Return a JSON object:
 {{
-    "theme_headline": "Short punchy headline that MUST include at least one specific person's name (e.g., 'Prince Andrew Named in New Flight Logs', 'Les Wexner Faces New Lawsuit', 'Victims Push for Accountability Against Maxwell Associates'). NEVER use generic headlines like 'DOJ Releases Files' or 'Bondi Claims All Files Released'. Always lead with the most newsworthy INDIVIDUAL, not a government agency.",
-    "featured_name": "The most prominent person's name from the headline (e.g., 'Prince Andrew')",
+    "theme_headline": "Short punchy headline that MUST include at least one specific person's name AND must be a DIFFERENT person than yesterday's headline. (e.g., 'Les Wexner Faces New Lawsuit', 'Victims Push for Accountability Against Maxwell Associates', 'Ghislaine Maxwell Appeal Rejected'). NEVER use generic headlines like 'DOJ Releases Files'. Always lead with the most newsworthy INDIVIDUAL who was NOT yesterday's lead.",
+    "featured_name": "The most prominent person's name from the headline — MUST be different from yesterday's featured name",
     "names": ["Full Name 1", "Full Name 2", "Full Name 3"],
     "bullets_short": [
         {{"name": "Key Subject", "text": "one-line summary.", "source": "Source Name", "url": "actual URL from article"}},
@@ -304,12 +340,13 @@ OUTPUT FORMAT - Return a JSON object:
 RULES:
 1. bullets_short: ONE LINE each (for homepage card)
 2. bullets_long: 2-4 SENTENCES each (for article page)
-3. 4-6 bullets total
+3. 4-6 bullets total with AT LEAST 3 different named individuals
 4. Lead each bullet with a bolded name or subject
 5. Use the ACTUAL URLs from the articles above - do not make up URLs
 6. Names array should only contain full person names (for tags)
 7. If fewer than 4 distinct newsworthy stories, return {{"no_news": true}}
 8. AT MOST ONE bullet about DOJ/Bondi/government process per roundup — focus on the PEOPLE in the files
+9. The headline and first bullet MUST feature a DIFFERENT person than yesterday
 """
 
     print("Calling Claude API to format roundup...")
